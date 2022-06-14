@@ -1,0 +1,15 @@
+{
+	"compileOnSave": true,
+	"compilerOptions": {
+		"target": "ES2018",
+		"module": "ES2015",
+		"sourceMap": true,
+		"outDir": "javascript",
+		"typeRoots": ["./node_modules/@types", "./types"],
+		"strictNullChecks": false
+	},
+	// "include": [
+	//     "**/*.ts",
+	// ],
+	"exclude": ["node_modules", "/node_modules", "**/*.spec.ts"]
+}
