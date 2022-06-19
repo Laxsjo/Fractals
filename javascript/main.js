@@ -4,11 +4,11 @@ const canvas = document.querySelector("#mainCanvas");
 const posXInput = document.querySelector("#posXInput");
 const posYInput = document.querySelector("#posYInput");
 const zoomInput = document.querySelector("#zoomInput");
-initializeCanvas();
+const resetButton = document.querySelector("#resetButton");
+updateCanvasSize();
 let posBuffer;
 let program;
 let zoom = 0;
-let transform;
 let [finalPosX, finalPosY] = [0, 0];
 let finalZoom = getFinalZoom(zoom);
 let [posX, posY] = shaderToCanvasSpace(finalPosX, finalPosY);
@@ -100,17 +100,18 @@ function initializeWithSources(vertexSource, fragSource) {
     initializeLoop();
     renderFrame();
 }
-function initializeCanvas() {
-    canvas.style.width = canvas.width + "px";
-    canvas.style.height = canvas.height + "px";
-    canvas.width *= SAMPL_MULT;
-    canvas.height *= SAMPL_MULT;
-}
+// function initializeCanvas() {
+// 	canvas.style.width = canvas.width + "px";
+// 	canvas.style.height = canvas.height + "px";
+// 	canvas.width *= SAMPL_MULT;
+// 	canvas.height *= SAMPL_MULT;
+// }
 function initializeLoop() {
     updateWithInput(null, true);
     posXInput.addEventListener("change", updateWithInput);
     posYInput.addEventListener("change", updateWithInput);
     zoomInput.addEventListener("change", updateWithInput);
+    resetButton.addEventListener("click", resetTransform);
     canvas.addEventListener("wheel", handleScroll);
     canvas.addEventListener("mousedown", enterDrag);
 }
@@ -141,8 +142,22 @@ function updateDisplays() {
     if (Number(zoomInput.value) !== finalZoom)
         zoomInput.value = String(finalZoom);
 }
+function resetTransform() {
+    [finalPosX, finalPosY] = [0, 0];
+    [posX, posY] = shaderToCanvasSpace(finalPosX, finalPosY);
+    zoom = 0;
+    finalZoom = getFinalZoom(zoom);
+    renderFrame();
+}
+function updateCanvasSize() {
+    let width = canvas.clientWidth;
+    let height = canvas.clientHeight;
+    canvas.width = width * SAMPL_MULT;
+    canvas.height = height * SAMPL_MULT;
+}
 function renderFrame() {
     // TODO: Resize canvas size to element size
+    updateCanvasSize();
     gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
     gl.clearColor(0, 0, 0, 0);
     gl.clear(gl.COLOR_BUFFER_BIT);

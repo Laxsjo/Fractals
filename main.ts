@@ -7,15 +7,14 @@ const canvas = document.querySelector("#mainCanvas") as HTMLCanvasElement;
 const posXInput = document.querySelector("#posXInput") as HTMLInputElement;
 const posYInput = document.querySelector("#posYInput") as HTMLInputElement;
 const zoomInput = document.querySelector("#zoomInput") as HTMLInputElement;
+const resetButton = document.querySelector("#resetButton") as HTMLButtonElement;
 
-initializeCanvas();
+updateCanvasSize();
 
 let posBuffer: WebGLBuffer;
 let program: WebGLProgram;
 
 let zoom: number = 0;
-
-let transform: Matrix2x2;
 
 let [finalPosX, finalPosY] = [0, 0];
 let finalZoom: number = getFinalZoom(zoom);
@@ -145,12 +144,12 @@ function initializeWithSources(vertexSource: string, fragSource: string) {
 	renderFrame();
 }
 
-function initializeCanvas() {
-	canvas.style.width = canvas.width + "px";
-	canvas.style.height = canvas.height + "px";
-	canvas.width *= SAMPL_MULT;
-	canvas.height *= SAMPL_MULT;
-}
+// function initializeCanvas() {
+// 	canvas.style.width = canvas.width + "px";
+// 	canvas.style.height = canvas.height + "px";
+// 	canvas.width *= SAMPL_MULT;
+// 	canvas.height *= SAMPL_MULT;
+// }
 
 function initializeLoop() {
 	updateWithInput(null, true);
@@ -158,6 +157,8 @@ function initializeLoop() {
 	posXInput.addEventListener("change", updateWithInput);
 	posYInput.addEventListener("change", updateWithInput);
 	zoomInput.addEventListener("change", updateWithInput);
+
+	resetButton.addEventListener("click", resetTransform);
 
 	canvas.addEventListener("wheel", handleScroll);
 
@@ -195,8 +196,28 @@ function updateDisplays() {
 		zoomInput.value = String(finalZoom);
 }
 
+function resetTransform() {
+	[finalPosX, finalPosY] = [0, 0];
+	[posX, posY] = shaderToCanvasSpace(finalPosX, finalPosY);
+
+	zoom = 0;
+	finalZoom = getFinalZoom(zoom);
+
+	renderFrame();
+}
+
+function updateCanvasSize() {
+	let width = canvas.clientWidth;
+	let height = canvas.clientHeight;
+
+	canvas.width = width * SAMPL_MULT;
+	canvas.height = height * SAMPL_MULT;
+}
+
 function renderFrame() {
 	// TODO: Resize canvas size to element size
+
+	updateCanvasSize();
 
 	gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
 
