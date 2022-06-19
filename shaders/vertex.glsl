@@ -11,5 +11,6 @@ void main() {
     // is responsible for setting
     gl_Position = a_position;
 
-    v_texCoord = (a_position.xy + vec2(1)) * 0.5;
+    // v_texCoord = (a_position.xy + vec2(1)) * 0.5;
+    v_texCoord = a_position.xy;
 }

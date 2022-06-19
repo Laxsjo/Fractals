@@ -1,0 +1,19 @@
+{
+  "name": "fractals",
+  "version": "1.0.0",
+  "description": "My attempt at creating fractal art",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Laxsjo/Fractals.git"
+  },
+  "author": "Rasmus Söderhielm <rasmus.soderhielm@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Laxsjo/Fractals/issues"
+  },
+  "homepage": "https://github.com/Laxsjo/Fractals#readme"
+}
