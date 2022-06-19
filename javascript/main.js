@@ -9,6 +9,7 @@ const resetButton = document.querySelector("#resetButton");
 updateCanvasSize();
 let posBuffer;
 let program;
+let failed = false;
 let zoom = 0;
 let iterations = 500;
 let [finalPosX, finalPosY] = [0, 0];
@@ -86,7 +87,12 @@ function handleMouseMove(event) {
     renderFrame();
 }
 function initializeWithSources(vertexSource, fragSource) {
-    program = webgl.createProgramFromSources(gl, vertexSource, fragSource);
+    try {
+        program = webgl.createProgramFromSources(gl, vertexSource, fragSource);
+    }
+    catch (e) {
+        failCompilation(String(e));
+    }
     posBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, posBuffer);
     // prettier-ignore
@@ -167,7 +173,17 @@ function updateCanvasSize() {
     canvas.width = width * SAMPL_MULT;
     canvas.height = height * SAMPL_MULT;
 }
+function failCompilation(reason) {
+    failed = true;
+    const containerElement = document.querySelector(".container");
+    containerElement.classList.add("failed");
+    const reasonElement = containerElement.querySelector(".errorReason");
+    reasonElement.innerText = reason;
+}
 function renderFrame() {
+    if (failed) {
+        return;
+    }
     // TODO: Resize canvas size to element size
     updateCanvasSize();
     gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);

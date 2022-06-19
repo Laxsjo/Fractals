@@ -47,8 +47,10 @@ void main() {
 
 	vec2 coords = (texCoord - Offset) / Scale;
 
-	// float value = mandelbrot(coords, vec2(0), 2.0);
 	float value = mandelbrot(coords);
+
+	// outColor = vec4(dFdx(coords.x), dFdy(coords.y), 0, 1);
+	// outColor = vec4(value, dFdx(value) 0, 1);
 
 	outColor = vec4(0, 0.5, 1, 1) * value;
 	// outColor = vec4(coords, 0, 1) * value;

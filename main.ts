@@ -17,6 +17,8 @@ updateCanvasSize();
 let posBuffer: WebGLBuffer;
 let program: WebGLProgram;
 
+let failed = false;
+
 let zoom: number = 0;
 let iterations: number = 500;
 
@@ -122,7 +124,11 @@ function handleMouseMove(event: MouseEvent) {
 }
 
 function initializeWithSources(vertexSource: string, fragSource: string) {
-	program = webgl.createProgramFromSources(gl, vertexSource, fragSource);
+	try {
+		program = webgl.createProgramFromSources(gl, vertexSource, fragSource);
+	} catch (e) {
+		failCompilation(String(e));
+	}
 
 	posBuffer = gl.createBuffer();
 	gl.bindBuffer(gl.ARRAY_BUFFER, posBuffer);
@@ -231,7 +237,22 @@ function updateCanvasSize() {
 	canvas.height = height * SAMPL_MULT;
 }
 
+function failCompilation(reason: string) {
+	failed = true;
+
+	const containerElement = document.querySelector<HTMLElement>(".container");
+	containerElement.classList.add("failed");
+
+	const reasonElement =
+		containerElement.querySelector<HTMLElement>(".errorReason");
+	reasonElement.innerText = reason;
+}
+
 function renderFrame() {
+	if (failed) {
+		return;
+	}
+
 	// TODO: Resize canvas size to element size
 
 	updateCanvasSize();

@@ -105,6 +105,36 @@
 				justify-self: stretch;
 				max-width: 10ch;
 			}
+
+			.container:not(.failed) .failedDisplay {
+				display: none;
+			}
+			.failedDisplay {
+				display: flex;
+				flex-direction: column;
+				gap: 0.4rem;
+
+				position: absolute;
+				align-self: start;
+
+				margin: 0.4rem;
+				padding: 0.6rem;
+
+				color: white;
+
+				border-radius: 0.6rem;
+
+				background-color: hsl(0 0% 30% / 0.8);
+			}
+			.failedDisplay .errorLabel {
+				font-size: 1.5rem;
+				font-weight: 700;
+
+				color: crimson;
+			}
+			.failedDisplay .errorReason {
+				font-size: 1.1rem;
+			}
 		</style>
 	</head>
 	<body>
@@ -128,6 +158,10 @@
 					<button id="resetButton">Reset</button>
 				</li>
 			</ul>
+			<div class="failedDisplay">
+				<span class="errorLabel">Error:</span>
+				<span class="errorReason">Test</span>
+			</div>
 		</div>
 	</body>
 </html>
