@@ -1,8 +1,8 @@
+#version 300 es
 // an attribute will receive data from a buffer
-attribute vec4 a_position;
-attribute vec2 a_texCoord;
+in vec4 a_position;
 
-varying vec2 v_texCoord;
+out vec2 texCoord;
 
 // all shaders have a main function
 void main() {
@@ -11,6 +11,6 @@ void main() {
     // is responsible for setting
     gl_Position = a_position;
 
-    // v_texCoord = (a_position.xy + vec2(1)) * 0.5;
-    v_texCoord = a_position.xy;
+    // texCoord = (a_position.xy + vec2(1)) * 0.5;
+    texCoord = a_position.xy;
 }

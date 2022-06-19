@@ -1,8 +1,10 @@
 import * as webgl from "./webGLUtils.js";
+const SAMPL_MULT = 2;
 const canvas = document.querySelector("#mainCanvas");
 const posXInput = document.querySelector("#posXInput");
 const posYInput = document.querySelector("#posYInput");
 const zoomInput = document.querySelector("#zoomInput");
+initializeCanvas();
 let posBuffer;
 let program;
 let zoom = 0;
@@ -15,10 +17,16 @@ let dragOffsetY;
 let dragMouseStartX;
 let dragMouseStartY;
 function canvasToShaderSpace(x, y) {
-    return [(x / canvas.width) * 2 - 1, 1 - (y / canvas.height) * 2];
+    return [
+        (x / (canvas.width / SAMPL_MULT)) * 2 - 1,
+        1 - (y / (canvas.height / SAMPL_MULT)) * 2,
+    ];
 }
 function shaderToCanvasSpace(x, y) {
-    return [((x + 1) / 2) * canvas.width, ((1 - y) * canvas.height) / 2];
+    return [
+        ((x + 1) / 2) * (canvas.width / SAMPL_MULT),
+        ((1 - y) * (canvas.height / SAMPL_MULT)) / 2,
+    ];
 }
 function getFinalMousePos(x, y) {
     return canvasToShaderSpace(x, y);
@@ -27,7 +35,7 @@ function getFinalZoom(zoom) {
     return Math.pow(Math.E, zoom / 54 / 5);
 }
 function getInverseZoom(finalZoom) {
-    return Math.log(finalZoom) * 50;
+    return Math.log(finalZoom) * 54 * 5;
 }
 function zoomTo(newZoom, aroundX, aroundY) {
     let oldZoom = finalZoom;
@@ -38,7 +46,6 @@ function zoomTo(newZoom, aroundX, aroundY) {
     x = (x - aroundX) * deltaZoom + aroundX;
     y = (y - aroundY) * deltaZoom + aroundY;
     [posX, posY] = shaderToCanvasSpace(x, y);
-    console.log(aroundX, aroundY, ",", deltaZoom);
     [finalPosX, finalPosY] = getFinalMousePos(posX, posY);
     renderFrame();
 }
@@ -93,14 +100,21 @@ function initializeWithSources(vertexSource, fragSource) {
     initializeLoop();
     renderFrame();
 }
+function initializeCanvas() {
+    canvas.style.width = canvas.width + "px";
+    canvas.style.height = canvas.height + "px";
+    canvas.width *= SAMPL_MULT;
+    canvas.height *= SAMPL_MULT;
+}
 function initializeLoop() {
+    updateWithInput(null, true);
     posXInput.addEventListener("change", updateWithInput);
     posYInput.addEventListener("change", updateWithInput);
     zoomInput.addEventListener("change", updateWithInput);
     canvas.addEventListener("wheel", handleScroll);
     canvas.addEventListener("mousedown", enterDrag);
 }
-function updateWithInput(event) {
+function updateWithInput(event, simpleZoom = false) {
     if (!isNaN(Number(posXInput.value))) {
         finalPosX = Number(posXInput.value);
     }
@@ -109,9 +123,14 @@ function updateWithInput(event) {
     }
     [posX, posY] = shaderToCanvasSpace(finalPosX, finalPosY);
     if (!isNaN(Number(zoomInput.value))) {
-        zoomTo(getInverseZoom(Number(zoomInput.value)), 0.5, 0);
+        if (simpleZoom) {
+            finalZoom = Number(zoomInput.value);
+            zoom = getInverseZoom(finalZoom);
+        }
+        else {
+            zoomTo(getInverseZoom(Number(zoomInput.value)), 0, 0);
+        }
     }
-    console.log(finalPosX, posX);
     renderFrame();
 }
 function updateDisplays() {
@@ -141,7 +160,7 @@ function renderFrame() {
     gl.drawArrays(gl.TRIANGLES, 0, 6);
     updateDisplays();
 }
-const gl = canvas.getContext("webgl");
+const gl = canvas.getContext("webgl2");
 gl.clearColor(0.0, 0.0, 0.0, 1.0);
 gl.clear(gl.COLOR_BUFFER_BIT);
 let vertexSource = null;
