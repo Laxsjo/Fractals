@@ -63,12 +63,13 @@
 				grid:
 					auto
 					auto
-					/ auto auto 1fr;
+					auto
+					/ auto auto auto 1fr;
 
 				position: absolute;
 				/* left: 0;
 				top: 0; */
-				align-self: flex-end;
+				align-self: end;
 
 				margin: 0.4rem;
 				padding: 0.6rem;
@@ -88,13 +89,21 @@
 			}
 			.display li button {
 				justify-self: end;
+
+				grid-column: span 4;
 			}
 			.display .value {
 				font-size: 1.3rem;
 				font-weight: 400;
 			}
 			.together {
-				grid-column: span 2;
+				grid-column: span 3;
+			}
+
+			#iterationInput {
+				width: 100%;
+				justify-self: stretch;
+				max-width: 10ch;
 			}
 		</style>
 	</head>
@@ -112,6 +121,10 @@
 				<li>
 					Zoom:
 					<input type="number" id="zoomInput" step="any" />
+					Iterations:
+					<input type="number" id="iterationInput" step="100" />
+				</li>
+				<li>
 					<button id="resetButton">Reset</button>
 				</li>
 			</ul>

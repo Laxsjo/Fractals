@@ -12,7 +12,8 @@ uniform mat2 Transform;
 uniform vec2 Offset;
 uniform float Scale;
 
-const int ITERATIONS = 1000;
+uniform int Iterations;
+
 const float ESCAPE_RADIUS = 2.0;
 
 vec2 cMult(vec2 c1, vec2 c2) {
@@ -30,10 +31,10 @@ float mandelbrot(vec2 pos) {
 
 	float outValue = 1.0;
 
-	for(int i = 0; i < ITERATIONS; i++) {
+	for(int i = 0; i < Iterations; i++) {
 		z = cMult(z, z) + c;
 		if(length(z) > ESCAPE_RADIUS) {
-			// outValue = float(i) / float(ITERATIONS);
+			// outValue = float(i) / float(Iterations);
 			outValue = length(z) / (2.0 * ESCAPE_RADIUS);
 			break;
 		}

@@ -7,6 +7,9 @@ const canvas = document.querySelector("#mainCanvas") as HTMLCanvasElement;
 const posXInput = document.querySelector("#posXInput") as HTMLInputElement;
 const posYInput = document.querySelector("#posYInput") as HTMLInputElement;
 const zoomInput = document.querySelector("#zoomInput") as HTMLInputElement;
+const iterationInput = document.querySelector(
+	"#iterationInput"
+) as HTMLInputElement;
 const resetButton = document.querySelector("#resetButton") as HTMLButtonElement;
 
 updateCanvasSize();
@@ -15,6 +18,7 @@ let posBuffer: WebGLBuffer;
 let program: WebGLProgram;
 
 let zoom: number = 0;
+let iterations: number = 500;
 
 let [finalPosX, finalPosY] = [0, 0];
 let finalZoom: number = getFinalZoom(zoom);
@@ -66,8 +70,6 @@ function zoomTo(newZoom: number, aroundX: number, aroundY: number) {
 	[posX, posY] = shaderToCanvasSpace(x, y);
 
 	[finalPosX, finalPosY] = getFinalMousePos(posX, posY);
-
-	renderFrame();
 }
 
 // function getTransformMatrix(): Matrix2x2{
@@ -80,6 +82,7 @@ function handleScroll(event: WheelEvent) {
 	let [x, y] = canvasToShaderSpace(event.x, event.y);
 
 	zoomTo(zoom - event.deltaY, x, y);
+	renderFrame();
 }
 
 function enterDrag(event: MouseEvent) {
@@ -157,6 +160,7 @@ function initializeLoop() {
 	posXInput.addEventListener("change", updateWithInput);
 	posYInput.addEventListener("change", updateWithInput);
 	zoomInput.addEventListener("change", updateWithInput);
+	iterationInput.addEventListener("change", updateWithInput);
 
 	resetButton.addEventListener("click", resetTransform);
 
@@ -182,18 +186,29 @@ function updateWithInput(event?: Event, simpleZoom: boolean = false) {
 			zoomTo(getInverseZoom(Number(zoomInput.value)), 0, 0);
 		}
 	}
+	console.log(iterationInput.value, Number(iterationInput.value));
+
+	if (!isNaN(Number(iterationInput.value))) {
+		iterations = Number(iterationInput.value);
+	}
 
 	renderFrame();
 }
 
 function updateDisplays() {
-	if (Number(posXInput.value) !== finalPosX)
+	if (Number(posXInput.value) !== finalPosX && posXInput.value !== "")
 		posXInput.value = String(finalPosX);
-	if (Number(posYInput.value) !== finalPosY)
+	if (Number(posYInput.value) !== finalPosY && posYInput.value !== "")
 		posYInput.value = String(finalPosY);
 
-	if (Number(zoomInput.value) !== finalZoom)
+	if (Number(zoomInput.value) !== finalZoom && zoomInput.value !== "")
 		zoomInput.value = String(finalZoom);
+	console.trace(iterationInput.value);
+	if (
+		Number(iterationInput.value) !== iterations &&
+		iterationInput.value !== ""
+	)
+		iterationInput.value = String(iterations);
 }
 
 function resetTransform() {
@@ -202,6 +217,8 @@ function resetTransform() {
 
 	zoom = 0;
 	finalZoom = getFinalZoom(zoom);
+
+	iterations = 500;
 
 	renderFrame();
 }
@@ -238,8 +255,8 @@ function renderFrame() {
 	let scaleLocation = gl.getUniformLocation(program, "Scale");
 	gl.uniform1f(scaleLocation, finalZoom);
 
-	let transformLocation = gl.getUniformLocation(program, "Transform");
-	// gl.uniformMatrix2fv(transformLocation, false)
+	let iterationsLocation = gl.getUniformLocation(program, "Iterations");
+	gl.uniform1i(iterationsLocation, iterations);
 
 	gl.drawArrays(gl.TRIANGLES, 0, 6);
 
