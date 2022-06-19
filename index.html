@@ -6,136 +6,15 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>Fractal Display</title>
 
+		<link rel="icon" type="image/svg+xml" href="/icon.svg" />
+
+		<link rel="stylesheet" href="/css/style.css" />
+
 		<!-- <script
 			src="/node_modules/mathjs/lib/browser/math.js"
 			type="text/javascript"
 		></script> -->
 		<script src="/javascript/main.js" type="module"></script>
-
-		<style>
-			:root {
-				font-family: monospace;
-			}
-
-			button {
-				padding-inline: 0.5rem;
-
-				font-family: inherit;
-
-				color: lightgray;
-
-				border-radius: 0.4rem;
-				border: 2px solid hsl(0 0% 45%);
-
-				background-color: hsl(0 0% 30%);
-			}
-
-			input {
-				font-family: inherit;
-
-				color: lightgray;
-
-				border-radius: 0.4rem;
-				border: 2px solid hsl(0 0% 55%);
-
-				background-color: hsl(0 0% 40%);
-			}
-
-			.container {
-				display: grid;
-				position: relative;
-
-				width: 100%;
-				aspect-ratio: 1;
-			}
-
-			canvas {
-				width: 100%;
-				aspect-ratio: 1;
-
-				border: 1px solid black;
-			}
-
-			.display {
-				display: grid;
-				/* flex-direction: column; */
-				gap: 0.6ch;
-				grid:
-					auto
-					auto
-					auto
-					/ auto auto auto 1fr;
-
-				position: absolute;
-				/* left: 0;
-				top: 0; */
-				align-self: end;
-
-				margin: 0.4rem;
-				padding: 0.6rem;
-
-				font-weight: 600;
-				color: white;
-
-				border-radius: 0.6rem;
-
-				background-color: hsl(0 0% 30% / 0.8);
-			}
-			.display li {
-				/* display: flex;
-				align-items: center;
-				gap: 0.8ch; */
-				display: contents;
-			}
-			.display li button {
-				justify-self: end;
-
-				grid-column: span 4;
-			}
-			.display .value {
-				font-size: 1.3rem;
-				font-weight: 400;
-			}
-			.together {
-				grid-column: span 3;
-			}
-
-			#iterationInput {
-				width: 100%;
-				justify-self: stretch;
-				max-width: 10ch;
-			}
-
-			.container:not(.failed) .failedDisplay {
-				display: none;
-			}
-			.failedDisplay {
-				display: flex;
-				flex-direction: column;
-				gap: 0.4rem;
-
-				position: absolute;
-				align-self: start;
-
-				margin: 0.4rem;
-				padding: 0.6rem;
-
-				color: white;
-
-				border-radius: 0.6rem;
-
-				background-color: hsl(0 0% 30% / 0.8);
-			}
-			.failedDisplay .errorLabel {
-				font-size: 1.5rem;
-				font-weight: 700;
-
-				color: crimson;
-			}
-			.failedDisplay .errorReason {
-				font-size: 1.1rem;
-			}
-		</style>
 	</head>
 	<body>
 		<div class="container">

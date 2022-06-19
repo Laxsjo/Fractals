@@ -33,15 +33,18 @@ let dragMouseStartX: number;
 let dragMouseStartY: number;
 
 function canvasToShaderSpace(x: number, y: number): [number, number] {
+	let aspectRatio = canvas.width / canvas.height;
 	return [
 		(x / (canvas.width / SAMPL_MULT)) * 2 - 1,
-		1 - (y / (canvas.height / SAMPL_MULT)) * 2,
+		(1 - (y / (canvas.height / SAMPL_MULT)) * 2) / aspectRatio,
 	];
 }
 function shaderToCanvasSpace(x: number, y: number): [number, number] {
+	let aspectRatio = canvas.width / canvas.height;
+
 	return [
 		((x + 1) / 2) * (canvas.width / SAMPL_MULT),
-		((1 - y) * (canvas.height / SAMPL_MULT)) / 2,
+		((1 - y * aspectRatio) * (canvas.height / SAMPL_MULT)) / 2,
 	];
 }
 
@@ -123,6 +126,14 @@ function handleMouseMove(event: MouseEvent) {
 	renderFrame();
 }
 
+function handleResize() {
+	updateCanvasSize();
+
+	[finalPosX, finalPosY] = getFinalMousePos(posX, posY);
+
+	renderFrame();
+}
+
 function initializeWithSources(vertexSource: string, fragSource: string) {
 	try {
 		program = webgl.createProgramFromSources(gl, vertexSource, fragSource);
@@ -173,6 +184,8 @@ function initializeLoop() {
 	canvas.addEventListener("wheel", handleScroll);
 
 	canvas.addEventListener("mousedown", enterDrag);
+
+	window.addEventListener("resize", handleResize);
 }
 
 function updateWithInput(event?: Event, simpleZoom: boolean = false) {
@@ -192,7 +205,6 @@ function updateWithInput(event?: Event, simpleZoom: boolean = false) {
 			zoomTo(getInverseZoom(Number(zoomInput.value)), 0, 0);
 		}
 	}
-	console.log(iterationInput.value, Number(iterationInput.value));
 
 	if (!isNaN(Number(iterationInput.value))) {
 		iterations = Number(iterationInput.value);
@@ -209,7 +221,7 @@ function updateDisplays() {
 
 	if (Number(zoomInput.value) !== finalZoom && zoomInput.value !== "")
 		zoomInput.value = String(finalZoom);
-	console.trace(iterationInput.value);
+
 	if (
 		Number(iterationInput.value) !== iterations &&
 		iterationInput.value !== ""
@@ -253,10 +265,6 @@ function renderFrame() {
 		return;
 	}
 
-	// TODO: Resize canvas size to element size
-
-	updateCanvasSize();
-
 	gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
 
 	gl.clearColor(0, 0, 0, 0);
@@ -269,6 +277,9 @@ function renderFrame() {
 
 	gl.bindBuffer(gl.ARRAY_BUFFER, posBuffer);
 	gl.vertexAttribPointer(posAttrLocation, 2, gl.FLOAT, false, 0, 0);
+
+	let aspectRatioLocation = gl.getUniformLocation(program, "AspectRatio");
+	gl.uniform1f(aspectRatioLocation, canvas.width / canvas.height);
 
 	let offsetLocation = gl.getUniformLocation(program, "Offset");
 	gl.uniform2f(offsetLocation, finalPosX, finalPosY);

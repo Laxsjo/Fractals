@@ -1,0 +1,136 @@
+:root {
+	font-family: monospace;
+}
+
+body {
+	width: 100vw;
+	height: 100vh;
+	margin: 0;
+	padding: 1rem;
+	box-sizing: border-box;
+}
+
+button {
+	padding-inline: 0.5rem;
+
+	font-family: inherit;
+
+	color: lightgray;
+
+	border-radius: 0.4rem;
+	border: 2px solid hsl(0 0% 45%);
+
+	background-color: hsl(0 0% 30%);
+}
+
+input {
+	font-family: inherit;
+
+	color: lightgray;
+
+	border-radius: 0.4rem;
+	border: 2px solid hsl(0 0% 55%);
+
+	background-color: hsl(0 0% 40%);
+}
+
+.container {
+	display: grid;
+	position: relative;
+
+	width: 100%;
+	height: 100%;
+	/* aspect-ratio: 1; */
+}
+
+canvas {
+	width: 100%;
+	height: 100%;
+	box-sizing: border-box;
+
+	border: 1px solid black;
+}
+
+.display {
+	display: grid;
+	/* flex-direction: column; */
+	gap: 0.6ch;
+	grid:
+		auto
+		auto
+		auto
+		/ auto auto auto 1fr;
+
+	position: absolute;
+	/* left: 0;
+				top: 0; */
+	align-self: end;
+
+	margin: 0.4rem;
+	padding: 0.6rem;
+
+	font-weight: 600;
+	color: white;
+
+	border-radius: 0.6rem;
+
+	background-color: hsl(0 0% 30% / 0.8);
+
+	li {
+		/* display: flex;
+				align-items: center;
+				gap: 0.8ch; */
+		display: contents;
+
+		button {
+			justify-self: end;
+
+			grid-column: span 4;
+		}
+	}
+	.value {
+		font-size: 1.3rem;
+		font-weight: 400;
+	}
+}
+
+.together {
+	grid-column: span 3;
+}
+
+#iterationInput {
+	width: 100%;
+	justify-self: stretch;
+	max-width: 10ch;
+}
+
+.container:not(.failed) .failedDisplay {
+	display: none;
+}
+.failedDisplay {
+	display: flex;
+	flex-direction: column;
+	gap: 0.4rem;
+
+	position: absolute;
+	align-self: start;
+
+	margin: 0.4rem;
+	padding: 0.6rem;
+
+	color: white;
+
+	border-radius: 0.6rem;
+
+	background-color: hsl(0 0% 30% / 0.8);
+
+	.errorLabel {
+		font-size: 1.5rem;
+		font-weight: 700;
+
+		color: crimson;
+	}
+	.errorReason {
+		font-size: 1.1rem;
+	}
+}
