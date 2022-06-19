@@ -226,4 +226,34 @@ fetch("/shaders/vertex.glsl").then(async (response) => {
         initializeWithSources(vertexSource, fragSource);
     }
 });
+/* integers per arbitrary-precision number */
+const vals = 10; // ints per value
+/* power of 10 one larger than maximum value per int
+   A value of 10000 seems to work the best
+   */
+const limit = 10000;
+const limitFlt = limit;
+let result = Array(vals);
+function loadFloat(f) {
+    for (let i = vals - 1; i >= 0; i--) {
+        let fCurr = parseInt(f.toFixed());
+        result[i] = fCurr;
+        f -= fCurr;
+        f *= limitFlt;
+    }
+}
+function unloadFloat(a) {
+    let fResult = 0;
+    for (let i = 0; i < vals; i++) {
+        fResult /= limitFlt;
+        fResult += a[i];
+    }
+    return fResult;
+}
+// let test = 0.12345678901234567890123456789;
+let test = 1.000000000000001;
+console.log(test);
+loadFloat(test);
+test = unloadFloat(result);
+console.log(test, "<=", result);
 //# sourceMappingURL=main.js.map
