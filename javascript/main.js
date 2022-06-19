@@ -24,7 +24,7 @@ function getFinalMousePos(x, y) {
     return canvasToShaderSpace(x, y);
 }
 function getFinalZoom(zoom) {
-    return Math.pow(Math.E, zoom / 50);
+    return Math.pow(Math.E, zoom / 54 / 5);
 }
 function getInverseZoom(finalZoom) {
     return Math.log(finalZoom) * 50;
@@ -78,8 +78,6 @@ function handleMouseMove(event) {
 }
 function initializeWithSources(vertexSource, fragSource) {
     program = webgl.createProgramFromSources(gl, vertexSource, fragSource);
-    // console.log(vertexSource);
-    // console.log(fragSource);
     posBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, posBuffer);
     // prettier-ignore
@@ -111,8 +109,6 @@ function updateWithInput(event) {
     }
     [posX, posY] = shaderToCanvasSpace(finalPosX, finalPosY);
     if (!isNaN(Number(zoomInput.value))) {
-        // finalZoom = Number(zoomInput.value);
-        // zoom = getInverseZoom(Number(zoomInput.value));
         zoomTo(getInverseZoom(Number(zoomInput.value)), 0.5, 0);
     }
     console.log(finalPosX, posX);
