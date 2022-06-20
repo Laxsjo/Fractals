@@ -212,6 +212,9 @@ function renderFrame() {
 const gl = canvas.getContext("webgl2");
 gl.clearColor(0.0, 0.0, 0.0, 1.0);
 gl.clear(gl.COLOR_BUFFER_BIT);
+console.log(gl.getShaderPrecisionFormat(gl.FRAGMENT_SHADER, gl.LOW_FLOAT));
+console.log(gl.getShaderPrecisionFormat(gl.FRAGMENT_SHADER, gl.MEDIUM_FLOAT));
+console.log(gl.getShaderPrecisionFormat(gl.FRAGMENT_SHADER, gl.HIGH_FLOAT));
 let vertexSource = null;
 let fragSource = null;
 fetch("/shaders/frag.glsl").then(async (response) => {
