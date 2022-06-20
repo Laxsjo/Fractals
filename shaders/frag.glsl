@@ -33,9 +33,39 @@ vec2 cMult(vec2 c1, vec2 c2) {
 	return outC;
 }
 
-vec3 colorPalette(vec3 a, vec3 b, vec3 c, vec3 d, float t) {
+vec3 genColorPalette(vec3 a, vec3 b, vec3 c, vec3 d, float t) {
+	a /= 2.0;
+	b /= 2.0;
 	// From here: https://iquilezles.org/articles/palettes/
 	return a + b * cos(TWO_PI * (c * t + d));
+}
+
+/**
+* Interpolate between three colors with colorB placed at point w
+*/
+vec3 colorRamp(vec3 colorA, vec3 colorB, vec3 colorC, float w, float t) {
+	return mix(mix(colorA, colorB, min(t / w, 1.0)), colorC, max((t - w) / (1.0 - w), 0.0));
+}
+
+vec3 colorPalette(float value) {
+	vec3 color;
+
+	// vec3 aColor = vec3(0.81, 0.8, 0.59);
+	// vec3 bColor = vec3(0.81, 1, 0.4) * 1.0;
+	// vec3 cColor = vec3(1.1, 1, 0.0);
+	// vec3 dColor = vec3(0.5, 0.65, 0.5);
+
+	// dColor += 0.0;
+
+	// color = genColorPalette(aColor, bColor, cColor, dColor, value);
+
+	vec3 colorA = vec3(1, 0.18, 0.47);
+	vec3 colorB = vec3(1, 0.79, 0.2);
+	vec3 colorC = vec3(0);
+
+	color = mix(colorRamp(colorA, colorB, colorC, 0.3, pow(1.0 - value, 5.0)), vec3(0), pow(value, 2.0));
+
+	return color;
 }
 
 float mandelbrot(vec2 coords, int gradientType) {
@@ -54,7 +84,7 @@ float mandelbrot(vec2 coords, int gradientType) {
 					outValue = (length(z) - ESCAPE_RADIUS) / (ESCAPE_RADIUS);
 					break;
 				case GRADIENT_ESCAPE_ANGLE:
-					outValue = atan(z.y, z.x) / PI + 1.0;
+					outValue = atan(z.y, z.x) / PI;
 					break;
 			}
 			break;
@@ -71,23 +101,26 @@ void main() {
 
 	float value = mandelbrot(coords, GRADIENT_ESCAPE_RADIUS);
 	value %= mandelbrot(coords, GRADIENT_ESCAPE_ANGLE);
+	value += mandelbrot(coords, GRADIENT_COUNT_ITERATIONS);
 
-	// outColor = vec4(dFdx(value), dFdy(value), value, 1);
+	// value = atan(coords.y, coords.x) / PI;
+	// value = float(value < 0.001);
+
+	// outColor = vec4(dFdx(value), dFdy(value), 0, 1);
 
 	// color = vec3(1, 1, 1) * value;
 	// vec3 aColor = vec3(0.5, 0.5, 0.5);
 	// vec3 bColor = vec3(0.5, 0.5, 0.5);
 	// vec3 cColor = vec3(1, 1, 1);
 	// vec3 dColor = vec3(0.3, 0.2, 0.1);
-	vec3 aColor = vec3(0.5, 0.5, 0.5);
-	vec3 bColor = vec3(0.5, 0.5, 0.5);
-	vec3 cColor = vec3(0.5, 0.5, 0.5);
-	vec3 dColor = vec3(0.5, 0.5, 0.5);
 
 	if(screenCoord.y < 0.93) {
-		color = colorPalette(aColor, bColor, cColor, dColor, value);
+		// color = colorPalette(aColor, bColor, cColor, dColor, value);
+		color = colorPalette(value);
+
+		// color = vec3(value < 0.05);
 	} else {
-		color = colorPalette(aColor, bColor, cColor, dColor, screenCoord.x);
+		color = colorPalette(screenCoord.x);
 	}
 
 	outColor = vec4(color, 1);
