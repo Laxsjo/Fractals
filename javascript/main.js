@@ -5,6 +5,7 @@ const canvas = document.querySelector("#mainCanvas");
 const posXInput = document.querySelector("#posXInput");
 const posYInput = document.querySelector("#posYInput");
 const zoomInput = document.querySelector("#zoomInput");
+const escapeInput = document.querySelector("#escapeInput");
 const iterationInput = document.querySelector("#iterationInput");
 const saveButton = document.querySelector("#saveButton");
 const loadButton = document.querySelector("#loadButton");
@@ -14,6 +15,7 @@ let posBuffer;
 let program;
 let failed = false;
 let zoom = 0;
+let escapeRadius = 100;
 let iterations = 500;
 let [finalPosX, finalPosY] = [0, 0];
 let finalZoom = getFinalZoom(zoom);
@@ -40,6 +42,7 @@ function loadCookies() {
     let posX = cookies.get("posX");
     let posY = cookies.get("posY");
     let zoom = cookies.get("zoom");
+    let escapeRadius = cookies.get("escapeRadius");
     let iterations = cookies.get("iterations");
     if (posX)
         posXInput.value = posX;
@@ -47,6 +50,8 @@ function loadCookies() {
         posYInput.value = posY;
     if (zoom)
         zoomInput.value = zoom;
+    if (escapeRadius)
+        escapeInput.value = escapeRadius;
     if (iterations)
         iterationInput.value = iterations;
     updateWithInput(null, true);
@@ -55,6 +60,7 @@ function storeCookies() {
     cookies.set("posX", String(finalPosX));
     cookies.set("posY", String(finalPosY));
     cookies.set("zoom", String(finalZoom));
+    cookies.set("escapeRadius", String(escapeRadius));
     cookies.set("iterations", String(iterations));
 }
 function getFinalMousePos(x, y) {
@@ -151,6 +157,7 @@ function initializeLoop() {
     posXInput.addEventListener("change", updateWithInput);
     posYInput.addEventListener("change", updateWithInput);
     zoomInput.addEventListener("change", updateWithInput);
+    escapeInput.addEventListener("change", updateWithInput);
     iterationInput.addEventListener("change", updateWithInput);
     saveButton.addEventListener("click", storeCookies);
     loadButton.addEventListener("click", loadCookies);
@@ -179,6 +186,9 @@ function updateWithInput(event, simpleZoom = false) {
     if (!isNaN(Number(iterationInput.value))) {
         iterations = Number(iterationInput.value);
     }
+    if (!isNaN(Number(escapeInput.value))) {
+        escapeRadius = Number(escapeInput.value);
+    }
     // storeCookies();
     renderFrame();
 }
@@ -192,6 +202,8 @@ function updateDisplays() {
     if (Number(iterationInput.value) !== iterations &&
         iterationInput.value !== "")
         iterationInput.value = String(iterations);
+    if (Number(escapeInput.value) !== escapeRadius && escapeInput.value !== "")
+        escapeInput.value = String(escapeRadius);
 }
 function resetTransform() {
     [finalPosX, finalPosY] = [0, 0];
@@ -234,6 +246,9 @@ function renderFrame() {
     gl.uniform1f(scaleLocation, finalZoom);
     let iterationsLocation = gl.getUniformLocation(program, "Iterations");
     gl.uniform1i(iterationsLocation, iterations);
+    let escapeLocation = gl.getUniformLocation(program, "EscapeRadius");
+    gl.uniform1f(escapeLocation, escapeRadius);
+    console.log(escapeRadius);
     gl.drawArrays(gl.TRIANGLES, 0, 6);
     updateDisplays();
 }

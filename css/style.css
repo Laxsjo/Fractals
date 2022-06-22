@@ -8,7 +8,7 @@ body {
   margin: 0;
   padding: 1rem;
   box-sizing: border-box;
-  font-size: calc(0.6rem + 0.8vh);
+  font-size: calc(0.68rem + 0.75vh);
 }
 
 button {
@@ -50,6 +50,7 @@ canvas {
   /* flex-direction: column; */
   gap: 0.6ch;
   grid: auto auto auto/auto auto auto 1fr;
+  align-items: center;
   position: absolute;
   /* left: 0;
   			top: 0; */
@@ -76,6 +77,11 @@ canvas {
 }
 
 .together {
+  grid-column: span 3;
+}
+
+#zoomInput {
+  justify-self: start;
   grid-column: span 3;
 }
 

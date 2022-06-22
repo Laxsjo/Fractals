@@ -15,7 +15,9 @@ uniform float Scale;
 
 uniform int Iterations;
 
-const float ESCAPE_RADIUS = 300.0;
+uniform float EscapeRadius;
+
+// const float ESCAPE_RADIUS = 300.0;
 
 const float PI = 3.141592653589793238462643;
 const float TWO_PI = PI * 2.0;
@@ -84,22 +86,24 @@ float mandelbrot(vec2 coords, int gradientType) {
 
 	for(int i = 0; i < Iterations; i++) {
 		z = cMult(z, z) + c;
-		if(length(z) > ESCAPE_RADIUS) {
+		if(length(z) > EscapeRadius) {
 			switch(gradientType) {
 				case GRADIENT_COUNT_ITERATIONS:
 					outValue = float(i) / float(Iterations);
 					break;
 				case GRADIENT_CONTINUOUS_ITERATIONS:
+					// Appease the math overlords
 					z = cMult(z, z) + c;
 					i++;
 					z = cMult(z, z) + c;
 					i++;
+
 					float modulus = sqrt(z.x * z.x + z.y * z.y);
 					float mu = float(i) - log(log(modulus)) / log(2.0);
-					outValue = mu / float(ESCAPE_RADIUS);
+					outValue = mu / float(EscapeRadius);
 					break;
 				case GRADIENT_ESCAPE_RADIUS:
-					outValue = (length(z) - ESCAPE_RADIUS) / (ESCAPE_RADIUS * ESCAPE_RADIUS);
+					outValue = (length(z) - EscapeRadius) / (EscapeRadius * EscapeRadius);
 					break;
 				case GRADIENT_ESCAPE_ANGLE:
 					outValue = atan(z.y, z.x) / PI;

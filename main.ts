@@ -8,6 +8,7 @@ const canvas = document.querySelector("#mainCanvas") as HTMLCanvasElement;
 const posXInput = document.querySelector("#posXInput") as HTMLInputElement;
 const posYInput = document.querySelector("#posYInput") as HTMLInputElement;
 const zoomInput = document.querySelector("#zoomInput") as HTMLInputElement;
+const escapeInput = document.querySelector("#escapeInput") as HTMLInputElement;
 const iterationInput = document.querySelector(
 	"#iterationInput"
 ) as HTMLInputElement;
@@ -24,6 +25,7 @@ let program: WebGLProgram;
 let failed = false;
 
 let zoom: number = 0;
+let escapeRadius: number = 100;
 let iterations: number = 500;
 
 let [finalPosX, finalPosY] = [0, 0];
@@ -56,11 +58,13 @@ function loadCookies() {
 	let posX = cookies.get("posX");
 	let posY = cookies.get("posY");
 	let zoom = cookies.get("zoom");
+	let escapeRadius = cookies.get("escapeRadius");
 	let iterations = cookies.get("iterations");
 
 	if (posX) posXInput.value = posX;
 	if (posY) posYInput.value = posY;
 	if (zoom) zoomInput.value = zoom;
+	if (escapeRadius) escapeInput.value = escapeRadius;
 	if (iterations) iterationInput.value = iterations;
 
 	updateWithInput(null, true);
@@ -70,6 +74,7 @@ function storeCookies() {
 	cookies.set("posX", String(finalPosX));
 	cookies.set("posY", String(finalPosY));
 	cookies.set("zoom", String(finalZoom));
+	cookies.set("escapeRadius", String(escapeRadius));
 	cookies.set("iterations", String(iterations));
 }
 
@@ -203,6 +208,7 @@ function initializeLoop() {
 	posXInput.addEventListener("change", updateWithInput);
 	posYInput.addEventListener("change", updateWithInput);
 	zoomInput.addEventListener("change", updateWithInput);
+	escapeInput.addEventListener("change", updateWithInput);
 	iterationInput.addEventListener("change", updateWithInput);
 
 	saveButton.addEventListener("click", storeCookies);
@@ -237,6 +243,9 @@ function updateWithInput(event?: Event, simpleZoom: boolean = false) {
 	if (!isNaN(Number(iterationInput.value))) {
 		iterations = Number(iterationInput.value);
 	}
+	if (!isNaN(Number(escapeInput.value))) {
+		escapeRadius = Number(escapeInput.value);
+	}
 
 	// storeCookies();
 
@@ -257,6 +266,8 @@ function updateDisplays() {
 		iterationInput.value !== ""
 	)
 		iterationInput.value = String(iterations);
+	if (Number(escapeInput.value) !== escapeRadius && escapeInput.value !== "")
+		escapeInput.value = String(escapeRadius);
 }
 
 function resetTransform() {
@@ -319,6 +330,10 @@ function renderFrame() {
 
 	let iterationsLocation = gl.getUniformLocation(program, "Iterations");
 	gl.uniform1i(iterationsLocation, iterations);
+
+	let escapeLocation = gl.getUniformLocation(program, "EscapeRadius");
+	gl.uniform1f(escapeLocation, escapeRadius);
+	console.log(escapeRadius);
 
 	gl.drawArrays(gl.TRIANGLES, 0, 6);
 
