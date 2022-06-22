@@ -38,6 +38,12 @@ function shaderToCanvasSpace(x, y) {
         ((1 - y * aspectRatio) * (canvas.height / SAMPL_MULT)) / 2,
     ];
 }
+function activateAnimation(element, className) {
+    element.classList.add(className);
+    element.addEventListener("animationend", (e) => {
+        element.classList.remove(className);
+    }, { once: true });
+}
 function loadCookies() {
     let posX = cookies.get("posX");
     let posY = cookies.get("posY");
@@ -55,6 +61,7 @@ function loadCookies() {
     if (iterations)
         iterationInput.value = iterations;
     updateWithInput(null, true);
+    activateAnimation(loadButton, "popup");
 }
 function storeCookies() {
     cookies.set("posX", String(finalPosX));
@@ -62,6 +69,7 @@ function storeCookies() {
     cookies.set("zoom", String(finalZoom));
     cookies.set("escapeRadius", String(escapeRadius));
     cookies.set("iterations", String(iterations));
+    activateAnimation(saveButton, "popup");
 }
 function getFinalMousePos(x, y) {
     return canvasToShaderSpace(x, y);
@@ -212,6 +220,7 @@ function resetTransform() {
     finalZoom = getFinalZoom(zoom);
     iterations = 500;
     renderFrame();
+    activateAnimation(resetButton, "popup");
 }
 function updateCanvasSize() {
     let width = canvas.clientWidth;

@@ -75,7 +75,7 @@ vec3 colorPalette(float value) {
 	vec3 colorTemp = vec3(0.77, 0.78, 1);
 	color = mix(color, colorTemp, pow(value, 100.0));
 
-	// return vec3(value);
+	// return vec3(isnan(value));
 	return color;
 }
 

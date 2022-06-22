@@ -24,6 +24,15 @@ button {
 	border: 2px solid hsl(0 0% 45%);
 
 	background-color: hsl(0 0% 30%);
+
+	&:hover,
+	&:focus-visible {
+		background-color: hsl(0 0% 35%);
+	}
+
+	&:active {
+		background-color: hsl(0 0% 25%);
+	}
 }
 
 input {
@@ -55,6 +64,51 @@ canvas {
 	border: 1px solid black;
 }
 
+@keyframes fadeOut {
+	100% {
+		opacity: 0;
+	}
+}
+
+.popupButton {
+	position: relative;
+
+	.popupLabel {
+		display: none;
+	}
+
+	&.popup .popupLabel {
+		pointer-events: none;
+
+		display: block;
+		position: absolute;
+
+		margin-bottom: 0.4rem;
+		padding-inline: 0.2rem;
+		bottom: 100%;
+		left: 50%;
+
+		color: hsl(120 100% 67%);
+
+		border-radius: 0.4rem;
+		border: 2px solid hsl(120 15% 50%);
+
+		background-color: hsl(120 11% 27%);
+		opacity: 1;
+
+		transform: translateX(-50%);
+
+		animation: fadeOut ease-out forwards 1s;
+	}
+
+	&.popup.warning .popupLabel {
+		color: hsl(0 100% 67%);
+
+		border: 2px solid hsl(0 15% 50%);
+		background-color: hsl(0 11% 27%);
+	}
+}
+
 .display {
 	display: grid;
 	/* flex-direction: column; */
@@ -82,9 +136,6 @@ canvas {
 	background-color: hsl(0 0% 30% / 0.8);
 
 	li {
-		/* display: flex;
-				align-items: center;
-				gap: 0.8ch; */
 		display: contents;
 
 		button {

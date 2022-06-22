@@ -38,9 +38,18 @@
 					<input type="number" id="iterationInput" step="100" />
 				</li>
 				<li>
-					<button id="saveButton">Save</button>
-					<button id="loadButton">Load</button>
-					<button id="resetButton">Reset</button>
+					<button class="popupButton" id="saveButton">
+						Save
+						<span class="popupLabel">Saved!</span>
+					</button>
+					<button class="popupButton" id="loadButton">
+						Load
+						<span class="popupLabel">Loaded!</span>
+					</button>
+					<button class="popupButton warning" id="resetButton">
+						Reset
+						<span class="popupLabel">Reset!</span>
+					</button>
 				</li>
 			</ul>
 			<div class="failedDisplay">

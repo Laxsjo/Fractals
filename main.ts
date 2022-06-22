@@ -54,6 +54,18 @@ function shaderToCanvasSpace(x: number, y: number): [number, number] {
 	];
 }
 
+function activateAnimation(element: HTMLElement, className: string) {
+	element.classList.add(className);
+
+	element.addEventListener(
+		"animationend",
+		(e) => {
+			element.classList.remove(className);
+		},
+		{ once: true }
+	);
+}
+
 function loadCookies() {
 	let posX = cookies.get("posX");
 	let posY = cookies.get("posY");
@@ -68,6 +80,8 @@ function loadCookies() {
 	if (iterations) iterationInput.value = iterations;
 
 	updateWithInput(null, true);
+
+	activateAnimation(loadButton, "popup");
 }
 
 function storeCookies() {
@@ -76,6 +90,8 @@ function storeCookies() {
 	cookies.set("zoom", String(finalZoom));
 	cookies.set("escapeRadius", String(escapeRadius));
 	cookies.set("iterations", String(iterations));
+
+	activateAnimation(saveButton, "popup");
 }
 
 function getFinalMousePos(x: number, y: number): [number, number] {
@@ -280,6 +296,8 @@ function resetTransform() {
 	iterations = 500;
 
 	renderFrame();
+
+	activateAnimation(resetButton, "popup");
 }
 
 function updateCanvasSize() {
