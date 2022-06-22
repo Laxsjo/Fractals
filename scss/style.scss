@@ -141,6 +141,10 @@ canvas {
 		button {
 			justify-self: start;
 		}
+
+		& > :first-child {
+			grid-column: 1;
+		}
 	}
 	.value {
 		font-size: 1.3rem;
@@ -155,7 +159,7 @@ canvas {
 #zoomInput {
 	justify-self: start;
 
-	grid-column: span 3;
+	grid-column: 1 span 3;
 }
 
 #resetButton {

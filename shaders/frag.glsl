@@ -16,6 +16,7 @@ uniform float Scale;
 uniform int Iterations;
 
 uniform float EscapeRadius;
+uniform float SecondaryEscapeRadius;
 
 // const float ESCAPE_RADIUS = 300.0;
 
@@ -76,6 +77,8 @@ vec3 colorPalette(float value) {
 	color = mix(color, colorTemp, pow(value, 100.0));
 
 	// return vec3(isnan(value));
+	// return vec3(value);
+
 	return color;
 }
 
@@ -92,15 +95,26 @@ float mandelbrot(vec2 coords, int gradientType) {
 					outValue = float(i) / float(Iterations);
 					break;
 				case GRADIENT_CONTINUOUS_ITERATIONS:
+					// From here: http://linas.org/art-gallery/escape/escape.html
+
 					// Appease the math overlords
-					z = cMult(z, z) + c;
-					i++;
-					z = cMult(z, z) + c;
-					i++;
+					// z = cMult(z, z) + c;
+					// i++;
+					// z = cMult(z, z) + c;
+					// i++;
 
 					float modulus = sqrt(z.x * z.x + z.y * z.y);
 					float mu = float(i) - log(log(modulus)) / log(2.0);
 					outValue = mu / float(EscapeRadius);
+
+					float inf = 1. / 0.;
+
+					//              inf - 1000000000000000000000000000000000000000.;
+					float smaller = inf - 1100000000000000000000000000000000000000.;
+
+					// outValue = float(isinf(z.x * z.x + z.y * z.y));
+					// outValue = float(isinf(smaller));
+					// outValue = float((z.x * z.x + z.y * z.y) <= smaller);
 					break;
 				case GRADIENT_ESCAPE_RADIUS:
 					outValue = (length(z) - EscapeRadius) / (EscapeRadius * EscapeRadius);

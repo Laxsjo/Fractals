@@ -1,12 +1,18 @@
 import * as webgl from "./webGLUtils.js";
+import { UniformInputs, UniformType } from "./uniformInputs.js";
 import * as cookies from "./cookies.js";
 const SAMPL_MULT = 2;
 const canvas = document.querySelector("#mainCanvas");
 const posXInput = document.querySelector("#posXInput");
 const posYInput = document.querySelector("#posYInput");
 const zoomInput = document.querySelector("#zoomInput");
-const escapeInput = document.querySelector("#escapeInput");
-const iterationInput = document.querySelector("#iterationInput");
+// const escapeInput = document.querySelector("#escapeInput") as HTMLInputElement;
+// const iterationInput = document.querySelector(
+// 	"#iterationInput"
+// ) as HTMLInputElement;
+UniformInputs.registerUniform("escapeRadius", UniformType.Float, 300);
+UniformInputs.registerUniform("secondaryEscapeRadius", UniformType.Float, 800);
+UniformInputs.registerUniform("iterations", UniformType.Int, 500);
 const saveButton = document.querySelector("#saveButton");
 const loadButton = document.querySelector("#loadButton");
 const resetButton = document.querySelector("#resetButton");
@@ -15,8 +21,8 @@ let posBuffer;
 let program;
 let failed = false;
 let zoom = 0;
-let escapeRadius = 100;
-let iterations = 500;
+// let escapeRadius: number = 100;
+// let iterations: number = 500;
 let [finalPosX, finalPosY] = [0, 0];
 let finalZoom = getFinalZoom(zoom);
 let [posX, posY] = shaderToCanvasSpace(finalPosX, finalPosY);
@@ -48,18 +54,21 @@ function loadCookies() {
     let posX = cookies.get("posX");
     let posY = cookies.get("posY");
     let zoom = cookies.get("zoom");
-    let escapeRadius = cookies.get("escapeRadius");
-    let iterations = cookies.get("iterations");
+    // let escapeRadius = cookies.get("escapeRadius");
+    // let iterations = cookies.get("iterations");
     if (posX)
         posXInput.value = posX;
     if (posY)
         posYInput.value = posY;
     if (zoom)
         zoomInput.value = zoom;
-    if (escapeRadius)
-        escapeInput.value = escapeRadius;
-    if (iterations)
-        iterationInput.value = iterations;
+    // if (escapeRadius) escapeInput.value = escapeRadius;
+    // if (iterations) iterationInput.value = iterations;
+    for (const input of UniformInputs.getInputs()) {
+        let value = cookies.get(input.name);
+        if (value)
+            input.input.value = value;
+    }
     updateWithInput(null, true);
     activateAnimation(loadButton, "popup");
 }
@@ -67,8 +76,11 @@ function storeCookies() {
     cookies.set("posX", String(finalPosX));
     cookies.set("posY", String(finalPosY));
     cookies.set("zoom", String(finalZoom));
-    cookies.set("escapeRadius", String(escapeRadius));
-    cookies.set("iterations", String(iterations));
+    for (const input of UniformInputs.getInputs()) {
+        cookies.set(input.name, String(input.value));
+    }
+    // cookies.set("escapeRadius", String(escapeRadius));
+    // cookies.set("iterations", String(iterations));
     activateAnimation(saveButton, "popup");
 }
 function getFinalMousePos(x, y) {
@@ -165,8 +177,11 @@ function initializeLoop() {
     posXInput.addEventListener("change", updateWithInput);
     posYInput.addEventListener("change", updateWithInput);
     zoomInput.addEventListener("change", updateWithInput);
-    escapeInput.addEventListener("change", updateWithInput);
-    iterationInput.addEventListener("change", updateWithInput);
+    for (const input of UniformInputs.getInputs()) {
+        input.input.addEventListener("change", updateWithInput);
+    }
+    // escapeInput.addEventListener("change", updateWithInput);
+    // iterationInput.addEventListener("change", updateWithInput);
     saveButton.addEventListener("click", storeCookies);
     loadButton.addEventListener("click", loadCookies);
     resetButton.addEventListener("click", resetTransform);
@@ -175,14 +190,14 @@ function initializeLoop() {
     window.addEventListener("resize", handleResize);
 }
 function updateWithInput(event, simpleZoom = false) {
-    if (!isNaN(Number(posXInput.value))) {
+    if (!isNaN(Number(posXInput.value)) && posXInput.value !== "") {
         finalPosX = Number(posXInput.value);
     }
-    if (!isNaN(Number(posYInput.value))) {
+    if (!isNaN(Number(posYInput.value)) && posYInput.value !== "") {
         finalPosY = Number(posYInput.value);
     }
     [posX, posY] = shaderToCanvasSpace(finalPosX, finalPosY);
-    if (!isNaN(Number(zoomInput.value))) {
+    if (!isNaN(Number(zoomInput.value)) && zoomInput.value !== "") {
         if (simpleZoom) {
             finalZoom = Number(zoomInput.value);
             zoom = getInverseZoom(finalZoom);
@@ -191,34 +206,50 @@ function updateWithInput(event, simpleZoom = false) {
             zoomTo(getInverseZoom(Number(zoomInput.value)), 0, 0);
         }
     }
-    if (!isNaN(Number(iterationInput.value))) {
-        iterations = Number(iterationInput.value);
+    for (const input of UniformInputs.getInputs()) {
+        console.log(input.input.value);
+        console.log(input.value);
+        if (!isNaN(Number(input.input.value)) && input.input.value !== "") {
+            input.value = Number(input.input.value);
+        }
     }
-    if (!isNaN(Number(escapeInput.value))) {
-        escapeRadius = Number(escapeInput.value);
-    }
+    // if (!isNaN(Number(iterationInput.value))) {
+    // 	iterations = Number(iterationInput.value);
+    // }
+    // if (!isNaN(Number(escapeInput.value))) {
+    // 	escapeRadius = Number(escapeInput.value);
+    // }
     // storeCookies();
     renderFrame();
 }
 function updateDisplays() {
-    if (Number(posXInput.value) !== finalPosX && posXInput.value !== "")
+    if (Number(posXInput.value) !== finalPosX)
         posXInput.value = String(finalPosX);
-    if (Number(posYInput.value) !== finalPosY && posYInput.value !== "")
+    if (Number(posYInput.value) !== finalPosY)
         posYInput.value = String(finalPosY);
-    if (Number(zoomInput.value) !== finalZoom && zoomInput.value !== "")
+    if (Number(zoomInput.value) !== finalZoom)
         zoomInput.value = String(finalZoom);
-    if (Number(iterationInput.value) !== iterations &&
-        iterationInput.value !== "")
-        iterationInput.value = String(iterations);
-    if (Number(escapeInput.value) !== escapeRadius && escapeInput.value !== "")
-        escapeInput.value = String(escapeRadius);
+    for (const input of UniformInputs.getInputs()) {
+        if (Number(input.input.value) !== input.value)
+            input.input.value = String(input.value);
+    }
+    // if (
+    // 	Number(iterationInput.value) !== iterations &&
+    // 	iterationInput.value !== ""
+    // )
+    // 	iterationInput.value = String(iterations);
+    // if (Number(escapeInput.value) !== escapeRadius && escapeInput.value !== "")
+    // 	escapeInput.value = String(escapeRadius);
 }
 function resetTransform() {
     [finalPosX, finalPosY] = [0, 0];
     [posX, posY] = shaderToCanvasSpace(finalPosX, finalPosY);
     zoom = 0;
     finalZoom = getFinalZoom(zoom);
-    iterations = 500;
+    for (const input of UniformInputs.getInputs()) {
+        input.reset();
+    }
+    // iterations = 500;
     renderFrame();
     activateAnimation(resetButton, "popup");
 }
@@ -253,11 +284,15 @@ function renderFrame() {
     gl.uniform2f(offsetLocation, finalPosX, finalPosY);
     let scaleLocation = gl.getUniformLocation(program, "Scale");
     gl.uniform1f(scaleLocation, finalZoom);
-    let iterationsLocation = gl.getUniformLocation(program, "Iterations");
-    gl.uniform1i(iterationsLocation, iterations);
-    let escapeLocation = gl.getUniformLocation(program, "EscapeRadius");
-    gl.uniform1f(escapeLocation, escapeRadius);
-    console.log(escapeRadius);
+    for (const input of UniformInputs.getInputs()) {
+        let location = gl.getUniformLocation(program, input.name[0].toUpperCase() + input.name.slice(1));
+        gl[input.type](location, input.value);
+    }
+    // let iterationsLocation = gl.getUniformLocation(program, "Iterations");
+    // gl.uniform1i(iterationsLocation, iterations);
+    // let escapeLocation = gl.getUniformLocation(program, "EscapeRadius");
+    // gl.uniform1f(escapeLocation, escapeRadius);
+    // console.log(escapeRadius);
     gl.drawArrays(gl.TRIANGLES, 0, 6);
     updateDisplays();
 }

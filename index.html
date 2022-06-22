@@ -21,21 +21,29 @@
 			<canvas width="400" height="400" id="mainCanvas"></canvas>
 			<ul class="display">
 				<li>
-					Pos:
+					<span>Pos:</span>
 					<div class="together">
 						<input type="number" id="posXInput" step="any" />,
 						<input type="number" id="posYInput" step="any" />
 					</div>
 				</li>
 				<li>
-					Zoom:
+					<span>Zoom:</span>
 					<input type="number" id="zoomInput" step="any" />
 				</li>
 				<li>
-					Esc Radius:
-					<input type="number" id="escapeInput" step="25" />
-					Iterations:
-					<input type="number" id="iterationInput" step="100" />
+					<span>Esc Radius 1:</span>
+					<input type="number" id="escapeRadiusInput" step="25" />
+					<span>Iterations:</span>
+					<input type="number" id="iterationsInput" step="100" />
+				</li>
+				<li>
+					<span>Esc Radius 2:</span>
+					<input
+						type="number"
+						id="secondaryEscapeRadiusInput"
+						step="25"
+					/>
 				</li>
 				<li>
 					<button class="popupButton" id="saveButton">
