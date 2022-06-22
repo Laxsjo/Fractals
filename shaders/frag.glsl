@@ -15,7 +15,7 @@ uniform float Scale;
 
 uniform int Iterations;
 
-const float ESCAPE_RADIUS = 2.0;
+const float ESCAPE_RADIUS = 300.0;
 
 const float PI = 3.141592653589793238462643;
 const float TWO_PI = PI * 2.0;
@@ -23,6 +23,7 @@ const float TWO_PI = PI * 2.0;
 const int GRADIENT_COUNT_ITERATIONS = 0;
 const int GRADIENT_ESCAPE_RADIUS = 1;
 const int GRADIENT_ESCAPE_ANGLE = 2;
+const int GRADIENT_CONTINUOUS_ITERATIONS = 3;
 
 vec2 cMult(vec2 c1, vec2 c2) {
 	vec2 outC;
@@ -50,6 +51,10 @@ vec3 colorRamp(vec3 colorA, vec3 colorB, vec3 colorC, float w, float t) {
 vec3 colorPalette(float value) {
 	vec3 color;
 
+	// value = clamp(value, 0.0, 1.0);
+
+	value = sqrt(value);
+
 	// vec3 aColor = vec3(0.81, 0.8, 0.59);
 	// vec3 bColor = vec3(0.81, 1, 0.4) * 1.0;
 	// vec3 cColor = vec3(1.1, 1, 0.0);
@@ -59,19 +64,23 @@ vec3 colorPalette(float value) {
 
 	// color = genColorPalette(aColor, bColor, cColor, dColor, value);
 
-	vec3 colorA = vec3(1, 0.18, 0.47);
-	vec3 colorB = vec3(1, 0.79, 0.2);
-	vec3 colorC = vec3(0);
+	vec3 colorA = vec3(0.18, 0.44, 1);
+	vec3 colorB = vec3(0.56, 0.93, 1);
+	vec3 colorC = vec3(0.06, 0.05, 0.19);
 
-	color = mix(colorRamp(colorA, colorB, colorC, 0.3, pow(1.0 - value, 5.0)), vec3(0), pow(value, 2.0));
+	color = mix(colorRamp(colorA, colorB, colorC, 0.01, pow(1.0 - value, 5.0)), vec3(0), pow(value, 2.0));
 
+	vec3 colorTemp = vec3(0.77, 0.78, 1);
+	color = mix(color, colorTemp, pow(value, 100.0));
+
+	// return vec3(value);
 	return color;
 }
 
 float mandelbrot(vec2 coords, int gradientType) {
 	vec2 c = coords;
 	vec2 z = c;
-	float outValue = 1.0;
+	float outValue = .0;
 
 	for(int i = 0; i < Iterations; i++) {
 		z = cMult(z, z) + c;
@@ -80,8 +89,17 @@ float mandelbrot(vec2 coords, int gradientType) {
 				case GRADIENT_COUNT_ITERATIONS:
 					outValue = float(i) / float(Iterations);
 					break;
+				case GRADIENT_CONTINUOUS_ITERATIONS:
+					z = cMult(z, z) + c;
+					i++;
+					z = cMult(z, z) + c;
+					i++;
+					float modulus = sqrt(z.x * z.x + z.y * z.y);
+					float mu = float(i) - log(log(modulus)) / log(2.0);
+					outValue = mu / float(ESCAPE_RADIUS);
+					break;
 				case GRADIENT_ESCAPE_RADIUS:
-					outValue = (length(z) - ESCAPE_RADIUS) / (ESCAPE_RADIUS);
+					outValue = (length(z) - ESCAPE_RADIUS) / (ESCAPE_RADIUS * ESCAPE_RADIUS);
 					break;
 				case GRADIENT_ESCAPE_ANGLE:
 					outValue = atan(z.y, z.x) / PI;
@@ -99,20 +117,12 @@ void main() {
 
 	vec2 coords = (texCoord - Offset) / Scale;
 
-	float value = mandelbrot(coords, GRADIENT_ESCAPE_RADIUS);
-	value %= mandelbrot(coords, GRADIENT_ESCAPE_ANGLE);
-	value += mandelbrot(coords, GRADIENT_COUNT_ITERATIONS);
+	// float value = mandelbrot(coords, GRADIENT_ESCAPE_RADIUS);
+	// value %= mandelbrot(coords, GRADIENT_ESCAPE_ANGLE);
+	// value += mandelbrot(coords, GRADIENT_COUNT_ITERATIONS);
 
-	// value = atan(coords.y, coords.x) / PI;
-	// value = float(value < 0.001);
-
-	// outColor = vec4(dFdx(value), dFdy(value), 0, 1);
-
-	// color = vec3(1, 1, 1) * value;
-	// vec3 aColor = vec3(0.5, 0.5, 0.5);
-	// vec3 bColor = vec3(0.5, 0.5, 0.5);
-	// vec3 cColor = vec3(1, 1, 1);
-	// vec3 dColor = vec3(0.3, 0.2, 0.1);
+	float value = mandelbrot(coords, GRADIENT_CONTINUOUS_ITERATIONS);
+	// float value = mandelbrot(coords, GRADIENT_ESCAPE_RADIUS);
 
 	if(screenCoord.y < 0.93) {
 		// color = colorPalette(aColor, bColor, cColor, dColor, value);
