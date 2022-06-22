@@ -83,9 +83,7 @@ canvas {
 		display: contents;
 
 		button {
-			justify-self: end;
-
-			grid-column: span 4;
+			justify-self: start;
 		}
 	}
 	.value {
@@ -96,6 +94,11 @@ canvas {
 
 .together {
 	grid-column: span 3;
+}
+
+#resetButton {
+	justify-self: end;
+	grid-column: span 2;
 }
 
 #iterationInput {

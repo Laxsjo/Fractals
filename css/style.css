@@ -65,8 +65,7 @@ canvas {
   display: contents;
 }
 .display li button {
-  justify-self: end;
-  grid-column: span 4;
+  justify-self: start;
 }
 .display .value {
   font-size: 1.3rem;
@@ -75,6 +74,11 @@ canvas {
 
 .together {
   grid-column: span 3;
+}
+
+#resetButton {
+  justify-self: end;
+  grid-column: span 2;
 }
 
 #iterationInput {

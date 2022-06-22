@@ -1,10 +1,13 @@
 import * as webgl from "./webGLUtils.js";
+import * as cookies from "./cookies.js";
 const SAMPL_MULT = 2;
 const canvas = document.querySelector("#mainCanvas");
 const posXInput = document.querySelector("#posXInput");
 const posYInput = document.querySelector("#posYInput");
 const zoomInput = document.querySelector("#zoomInput");
 const iterationInput = document.querySelector("#iterationInput");
+const saveButton = document.querySelector("#saveButton");
+const loadButton = document.querySelector("#loadButton");
 const resetButton = document.querySelector("#resetButton");
 updateCanvasSize();
 let posBuffer;
@@ -32,6 +35,27 @@ function shaderToCanvasSpace(x, y) {
         ((x + 1) / 2) * (canvas.width / SAMPL_MULT),
         ((1 - y * aspectRatio) * (canvas.height / SAMPL_MULT)) / 2,
     ];
+}
+function loadCookies() {
+    let posX = cookies.get("posX");
+    let posY = cookies.get("posY");
+    let zoom = cookies.get("zoom");
+    let iterations = cookies.get("iterations");
+    if (posX)
+        posXInput.value = posX;
+    if (posY)
+        posYInput.value = posY;
+    if (zoom)
+        zoomInput.value = zoom;
+    if (iterations)
+        iterationInput.value = iterations;
+    updateWithInput(null, true);
+}
+function storeCookies() {
+    cookies.set("posX", String(finalPosX));
+    cookies.set("posY", String(finalPosY));
+    cookies.set("zoom", String(finalZoom));
+    cookies.set("iterations", String(iterations));
 }
 function getFinalMousePos(x, y) {
     return canvasToShaderSpace(x, y);
@@ -122,11 +146,14 @@ function initializeWithSources(vertexSource, fragSource) {
 // 	canvas.height *= SAMPL_MULT;
 // }
 function initializeLoop() {
+    // loadCookies();
     updateWithInput(null, true);
     posXInput.addEventListener("change", updateWithInput);
     posYInput.addEventListener("change", updateWithInput);
     zoomInput.addEventListener("change", updateWithInput);
     iterationInput.addEventListener("change", updateWithInput);
+    saveButton.addEventListener("click", storeCookies);
+    loadButton.addEventListener("click", loadCookies);
     resetButton.addEventListener("click", resetTransform);
     canvas.addEventListener("wheel", handleScroll);
     canvas.addEventListener("mousedown", enterDrag);
@@ -152,6 +179,7 @@ function updateWithInput(event, simpleZoom = false) {
     if (!isNaN(Number(iterationInput.value))) {
         iterations = Number(iterationInput.value);
     }
+    // storeCookies();
     renderFrame();
 }
 function updateDisplays() {
@@ -212,9 +240,9 @@ function renderFrame() {
 const gl = canvas.getContext("webgl2");
 gl.clearColor(0.0, 0.0, 0.0, 1.0);
 gl.clear(gl.COLOR_BUFFER_BIT);
-console.log(gl.getShaderPrecisionFormat(gl.FRAGMENT_SHADER, gl.LOW_FLOAT));
-console.log(gl.getShaderPrecisionFormat(gl.FRAGMENT_SHADER, gl.MEDIUM_FLOAT));
-console.log(gl.getShaderPrecisionFormat(gl.FRAGMENT_SHADER, gl.HIGH_FLOAT));
+// console.log(gl.getShaderPrecisionFormat(gl.FRAGMENT_SHADER, gl.LOW_FLOAT));
+// console.log(gl.getShaderPrecisionFormat(gl.FRAGMENT_SHADER, gl.MEDIUM_FLOAT));
+// console.log(gl.getShaderPrecisionFormat(gl.FRAGMENT_SHADER, gl.HIGH_FLOAT));
 let vertexSource = null;
 let fragSource = null;
 fetch("/shaders/frag.glsl").then(async (response) => {

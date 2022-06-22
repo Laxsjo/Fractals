@@ -1,5 +1,6 @@
 import * as webgl from "./webGLUtils.js";
 import { Matrix2x2, matrixMult } from "./matrix.js";
+import * as cookies from "./cookies.js";
 
 const SAMPL_MULT = 2;
 
@@ -10,6 +11,9 @@ const zoomInput = document.querySelector("#zoomInput") as HTMLInputElement;
 const iterationInput = document.querySelector(
 	"#iterationInput"
 ) as HTMLInputElement;
+
+const saveButton = document.querySelector("#saveButton") as HTMLButtonElement;
+const loadButton = document.querySelector("#loadButton") as HTMLButtonElement;
 const resetButton = document.querySelector("#resetButton") as HTMLButtonElement;
 
 updateCanvasSize();
@@ -46,6 +50,27 @@ function shaderToCanvasSpace(x: number, y: number): [number, number] {
 		((x + 1) / 2) * (canvas.width / SAMPL_MULT),
 		((1 - y * aspectRatio) * (canvas.height / SAMPL_MULT)) / 2,
 	];
+}
+
+function loadCookies() {
+	let posX = cookies.get("posX");
+	let posY = cookies.get("posY");
+	let zoom = cookies.get("zoom");
+	let iterations = cookies.get("iterations");
+
+	if (posX) posXInput.value = posX;
+	if (posY) posYInput.value = posY;
+	if (zoom) zoomInput.value = zoom;
+	if (iterations) iterationInput.value = iterations;
+
+	updateWithInput(null, true);
+}
+
+function storeCookies() {
+	cookies.set("posX", String(finalPosX));
+	cookies.set("posY", String(finalPosY));
+	cookies.set("zoom", String(finalZoom));
+	cookies.set("iterations", String(iterations));
 }
 
 function getFinalMousePos(x: number, y: number): [number, number] {
@@ -172,6 +197,7 @@ function initializeWithSources(vertexSource: string, fragSource: string) {
 // }
 
 function initializeLoop() {
+	// loadCookies();
 	updateWithInput(null, true);
 
 	posXInput.addEventListener("change", updateWithInput);
@@ -179,6 +205,8 @@ function initializeLoop() {
 	zoomInput.addEventListener("change", updateWithInput);
 	iterationInput.addEventListener("change", updateWithInput);
 
+	saveButton.addEventListener("click", storeCookies);
+	loadButton.addEventListener("click", loadCookies);
 	resetButton.addEventListener("click", resetTransform);
 
 	canvas.addEventListener("wheel", handleScroll);
@@ -209,6 +237,8 @@ function updateWithInput(event?: Event, simpleZoom: boolean = false) {
 	if (!isNaN(Number(iterationInput.value))) {
 		iterations = Number(iterationInput.value);
 	}
+
+	// storeCookies();
 
 	renderFrame();
 }
@@ -300,9 +330,9 @@ const gl = canvas.getContext("webgl2");
 gl.clearColor(0.0, 0.0, 0.0, 1.0);
 gl.clear(gl.COLOR_BUFFER_BIT);
 
-console.log(gl.getShaderPrecisionFormat(gl.FRAGMENT_SHADER, gl.LOW_FLOAT));
-console.log(gl.getShaderPrecisionFormat(gl.FRAGMENT_SHADER, gl.MEDIUM_FLOAT));
-console.log(gl.getShaderPrecisionFormat(gl.FRAGMENT_SHADER, gl.HIGH_FLOAT));
+// console.log(gl.getShaderPrecisionFormat(gl.FRAGMENT_SHADER, gl.LOW_FLOAT));
+// console.log(gl.getShaderPrecisionFormat(gl.FRAGMENT_SHADER, gl.MEDIUM_FLOAT));
+// console.log(gl.getShaderPrecisionFormat(gl.FRAGMENT_SHADER, gl.HIGH_FLOAT));
 
 let vertexSource: null | string = null;
 let fragSource: null | string = null;
