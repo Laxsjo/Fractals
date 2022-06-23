@@ -11,6 +11,7 @@ out vec4 outColor;
 uniform mat2 Transform;
 
 uniform vec2 Offset;
+uniform float Rotation;
 uniform float Scale;
 
 uniform int Iterations;
@@ -156,7 +157,27 @@ vec3 colorPalette(float value) {
 void main() {
 	vec3 color;
 
-	vec2 coords = (texCoord - Offset) / Scale;
+	vec2 coords = texCoord;
+
+	coords -= Offset;
+
+	vec2 tCoords = coords;
+	float s = sin(Rotation);
+	float c = cos(Rotation);
+	coords.x = c * tCoords.x - s * tCoords.y;
+	coords.y = s * tCoords.x + c * tCoords.y;
+
+	coords /= Scale;
+
+	// color = vec3(pow(coords.x, 4.) + pow(coords.y, 4.) < pow(0.5, 4.));
+
+	// vec2 tempCoords = screenCoord * 2. - 1.;
+
+	// if((tempCoords.x > -0.001 && tempCoords.x < 0.001) || (tempCoords.y > -0.001 && tempCoords.y < 0.001))
+	// 	color = vec3(1, 0, 0);
+
+	// outColor = vec4(color, 1);
+	// return;
 
 	// float value = mandelbrot(coords, GRADIENT_ESCAPE_RADIUS);
 	// value %= mandelbrot(coords, GRADIENT_ESCAPE_ANGLE);

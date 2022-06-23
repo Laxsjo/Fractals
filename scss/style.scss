@@ -138,23 +138,44 @@ canvas {
 	background-color: hsl(0 0% 30% / 0.8);
 
 	* {
+		--span: span 1;
+		--column: ;
+
 		pointer-events: all;
+
+		grid-column: var(--column) var(--span);
+		justify-self: start;
 	}
 
 	li {
 		display: contents;
 
-		button {
-			justify-self: start;
-		}
-
 		& > :first-child {
 			grid-column: 1;
 		}
 	}
+
+	button {
+		justify-self: start;
+	}
+
 	.value {
 		font-size: 1.3rem;
 		font-weight: 400;
+	}
+
+	.newRow {
+		--column: 1 /;
+	}
+
+	.span2 {
+		--span: span 2;
+	}
+	.span3 {
+		--span: span 3;
+	}
+	.span4 {
+		--span: span 4;
 	}
 }
 
@@ -164,7 +185,7 @@ canvas {
 
 #resetButton {
 	justify-self: end;
-	grid-column: span 2;
+	// grid-column: span 2;
 }
 
 .short {

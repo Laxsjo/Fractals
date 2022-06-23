@@ -20,60 +20,57 @@
 		<div class="container">
 			<canvas width="400" height="400" id="mainCanvas"></canvas>
 			<ul class="display">
-				<li>
-					<span>Pos:</span>
-					<div class="together">
-						<input type="number" id="posXInput" step="any" />,
-						<input type="number" id="posYInput" step="any" />
-					</div>
-				</li>
-				<li>
-					<span>Zoom:</span>
-					<input type="number" id="zoomInput" step="any" />
+				<span>Pos:</span>
+				<div class="span3">
+					<input type="number" id="posXInput" step="any" />,
+					<input type="number" id="posYInput" step="any" />
+				</div>
 
-					<span>Res Mult:</span>
-					<input type="number" id="resInput" step="0.25" />
-				</li>
-				<li>
-					<span>Iterations 1:</span>
-					<input
-						class="short"
-						type="number"
-						id="iterationsInput"
-						step="50"
-					/>
-					<span>Iterations 2:</span>
-					<input
-						class="short"
-						type="number"
-						id="secondaryIterationsInput"
-						step="50"
-					/>
-				</li>
-				<li>
-					<span>Esc Radius 1:</span>
-					<input type="number" id="escapeRadiusInput" step="25" />
-					<span>Esc Radius 2:</span>
-					<input
-						type="number"
-						id="secondaryEscapeRadiusInput"
-						step="25"
-					/>
-				</li>
-				<li>
-					<button class="popupButton" id="saveButton">
-						Save
-						<span class="popupLabel">Saved!</span>
-					</button>
-					<button class="popupButton" id="loadButton">
-						Load
-						<span class="popupLabel">Loaded!</span>
-					</button>
-					<button class="popupButton warning" id="resetButton">
-						Reset
-						<span class="popupLabel">Reset!</span>
-					</button>
-				</li>
+				<span>Zoom:</span>
+				<input type="number" id="zoomInput" step="any" />
+
+				<span>Rotation:</span>
+				<input type="number" id="rotationInput" step="any" />
+
+				<span class="newRow">Res Mult:</span>
+				<input class="span3" type="number" id="resInput" step="0.25" />
+
+				<span>Iterations 1:</span>
+				<input
+					class="short"
+					type="number"
+					id="iterationsInput"
+					step="50"
+				/>
+				<span>Iterations 2:</span>
+				<input
+					class="short"
+					type="number"
+					id="secondaryIterationsInput"
+					step="50"
+				/>
+
+				<span>Esc Radius 1:</span>
+				<input type="number" id="escapeRadiusInput" step="25" />
+				<span>Esc Radius 2:</span>
+				<input
+					type="number"
+					id="secondaryEscapeRadiusInput"
+					step="25"
+				/>
+
+				<button class="popupButton" id="saveButton">
+					Save
+					<span class="popupLabel">Saved!</span>
+				</button>
+				<button class="popupButton" id="loadButton">
+					Load
+					<span class="popupLabel">Loaded!</span>
+				</button>
+				<button class="popupButton warning span2" id="resetButton">
+					Reset
+					<span class="popupLabel">Reset!</span>
+				</button>
 			</ul>
 			<div class="failedDisplay">
 				<span class="errorLabel">Error:</span>
