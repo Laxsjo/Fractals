@@ -92,6 +92,7 @@ canvas {
 }
 
 .display {
+  pointer-events: none;
   display: grid;
   /* flex-direction: column; */
   gap: 0.6ch;
@@ -107,6 +108,9 @@ canvas {
   color: white;
   border-radius: 0.6rem;
   background-color: hsla(0deg, 0%, 30%, 0.8);
+}
+.display * {
+  pointer-events: all;
 }
 .display li {
   display: contents;
@@ -126,18 +130,12 @@ canvas {
   grid-column: span 3;
 }
 
-#zoomInput {
-  justify-self: start;
-  grid-column: 1 span 3;
-}
-
 #resetButton {
   justify-self: end;
   grid-column: span 2;
 }
 
-#iterationInput {
-  width: 100%;
+.short {
   justify-self: stretch;
   max-width: 10ch;
 }

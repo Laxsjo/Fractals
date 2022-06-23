@@ -73,8 +73,7 @@ vec3 colorBump(vec3 color, float width, float pos, float intensity, bool wrap, v
 float mandelbrot(vec2 coords, float escapeRadius, int iterations, int gradientType) {
 	vec2 c = coords;
 	vec2 z = c;
-	float outValue = 1.0;
-	bool isOfSet = true;
+	float outValue = 0.0;
 
 	for(int i = 0; i < iterations; i++) {
 		z = cMult(z, z) + c;
@@ -103,16 +102,9 @@ float mandelbrot(vec2 coords, float escapeRadius, int iterations, int gradientTy
 					outValue = atan(z.y, z.x) / PI;
 					break;
 			}
-			isOfSet = false;
 			break;
 		}
 	}
-
-	// if(isOfSet) {
-	// 	outValue = 1.;
-	// } else {
-	// 	outValue = 0.;
-	// }
 
 	return outValue;
 }
@@ -155,6 +147,9 @@ vec3 colorPalette(float value) {
 
 	// color = vec3(value);
 
+	if(value == 0.)
+		color = vec3(0);
+
 	return color;
 }
 
@@ -190,6 +185,8 @@ void main() {
 	} else {
 		color = colorPalette(screenCoord.x);
 	}
+
+	// color = vec3(texCoord.x, texCoord.y, 0);
 
 	outColor = vec4(color, 1);
 }

@@ -6,6 +6,7 @@ const canvas = document.querySelector("#mainCanvas");
 const posXInput = document.querySelector("#posXInput");
 const posYInput = document.querySelector("#posYInput");
 const zoomInput = document.querySelector("#zoomInput");
+const resInput = document.querySelector("#resInput");
 // const escapeInput = document.querySelector("#escapeInput") as HTMLInputElement;
 // const iterationInput = document.querySelector(
 // 	"#iterationInput"
@@ -17,6 +18,7 @@ UniformInputs.registerUniform("secondaryIterations", UniformType.Int, 200);
 const saveButton = document.querySelector("#saveButton");
 const loadButton = document.querySelector("#loadButton");
 const resetButton = document.querySelector("#resetButton");
+let res = 1;
 updateCanvasSize();
 let posBuffer;
 let program;
@@ -32,17 +34,17 @@ let dragOffsetY;
 let dragMouseStartX;
 let dragMouseStartY;
 function canvasToShaderSpace(x, y) {
-    let aspectRatio = canvas.width / canvas.height;
+    let aspectRatio = canvas.clientWidth / canvas.clientHeight;
     return [
-        (x / (canvas.width / SAMPL_MULT)) * 2 - 1,
-        (1 - (y / (canvas.height / SAMPL_MULT)) * 2) / aspectRatio,
+        (x / canvas.clientWidth) * 2 - 1,
+        (1 - (y / canvas.clientHeight) * 2) / aspectRatio,
     ];
 }
 function shaderToCanvasSpace(x, y) {
-    let aspectRatio = canvas.width / canvas.height;
+    let aspectRatio = canvas.clientWidth / canvas.clientHeight;
     return [
-        ((x + 1) / 2) * (canvas.width / SAMPL_MULT),
-        ((1 - y * aspectRatio) * (canvas.height / SAMPL_MULT)) / 2,
+        ((x + 1) / 2) * canvas.clientWidth,
+        ((1 - y * aspectRatio) * canvas.clientHeight) / 2,
     ];
 }
 function activateAnimation(element, className) {
@@ -99,6 +101,7 @@ function zoomTo(newZoom, aroundX, aroundY) {
     finalZoom = getFinalZoom(zoom);
     let deltaZoom = finalZoom / oldZoom;
     let [x, y] = canvasToShaderSpace(posX, posY);
+    console.log(aroundX, aroundY);
     x = (x - aroundX) * deltaZoom + aroundX;
     y = (y - aroundY) * deltaZoom + aroundY;
     [posX, posY] = shaderToCanvasSpace(x, y);
@@ -178,6 +181,7 @@ function initializeLoop() {
     posXInput.addEventListener("change", updateWithInput);
     posYInput.addEventListener("change", updateWithInput);
     zoomInput.addEventListener("change", updateWithInput);
+    resInput.addEventListener("change", updateWithInput);
     for (const input of UniformInputs.getInputs()) {
         input.input.addEventListener("change", updateWithInput);
     }
@@ -207,6 +211,9 @@ function updateWithInput(event, simpleZoom = false) {
             zoomTo(getInverseZoom(Number(zoomInput.value)), 0, 0);
         }
     }
+    if (!isNaN(Number(resInput.value)) && resInput.value !== "") {
+        res = Number(resInput.value);
+    }
     for (const input of UniformInputs.getInputs()) {
         if (!isNaN(Number(input.input.value)) && input.input.value !== "") {
             input.value = Number(input.input.value);
@@ -219,6 +226,7 @@ function updateWithInput(event, simpleZoom = false) {
     // 	escapeRadius = Number(escapeInput.value);
     // }
     // storeCookies();
+    updateCanvasSize();
     renderFrame();
 }
 function updateDisplays() {
@@ -228,6 +236,8 @@ function updateDisplays() {
         posYInput.value = String(finalPosY);
     if (Number(zoomInput.value) !== finalZoom)
         zoomInput.value = String(finalZoom);
+    if (Number(resInput.value) !== res)
+        resInput.value = String(res);
     for (const input of UniformInputs.getInputs()) {
         if (Number(input.input.value) !== input.value)
             input.input.value = String(input.value);
@@ -245,18 +255,21 @@ function resetTransform() {
     [posX, posY] = shaderToCanvasSpace(finalPosX, finalPosY);
     zoom = 0;
     finalZoom = getFinalZoom(zoom);
+    res = 1;
     for (const input of UniformInputs.getInputs()) {
         input.reset();
     }
     // iterations = 500;
+    updateCanvasSize();
     renderFrame();
     activateAnimation(resetButton, "popup");
 }
 function updateCanvasSize() {
-    let width = canvas.clientWidth;
-    let height = canvas.clientHeight;
-    canvas.width = width * SAMPL_MULT;
-    canvas.height = height * SAMPL_MULT;
+    let ratio = window.devicePixelRatio;
+    let width = canvas.clientWidth * ratio;
+    let height = canvas.clientHeight * ratio;
+    canvas.width = width * res;
+    canvas.height = height * res;
 }
 function failCompilation(reason) {
     failed = true;
@@ -269,6 +282,7 @@ function renderFrame() {
     if (failed) {
         return;
     }
+    // console.log(gl.canvas.width, gl.drawingBufferWidth);
     gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
     gl.clearColor(0, 0, 0, 0);
     gl.clear(gl.COLOR_BUFFER_BIT);
