@@ -13,6 +13,7 @@ const zoomInput = document.querySelector("#zoomInput");
 UniformInputs.registerUniform("escapeRadius", UniformType.Float, 300);
 UniformInputs.registerUniform("secondaryEscapeRadius", UniformType.Float, 800);
 UniformInputs.registerUniform("iterations", UniformType.Int, 500);
+UniformInputs.registerUniform("secondaryIterations", UniformType.Int, 200);
 const saveButton = document.querySelector("#saveButton");
 const loadButton = document.querySelector("#loadButton");
 const resetButton = document.querySelector("#resetButton");
@@ -207,8 +208,6 @@ function updateWithInput(event, simpleZoom = false) {
         }
     }
     for (const input of UniformInputs.getInputs()) {
-        console.log(input.input.value);
-        console.log(input.value);
         if (!isNaN(Number(input.input.value)) && input.input.value !== "") {
             input.value = Number(input.input.value);
         }
