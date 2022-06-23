@@ -13,6 +13,7 @@
 				"savePath": "~/../css"
 			}
 		],
-		"liveSassCompile.settings.autoprefix": true
+		"liveSassCompile.settings.autoprefix": true,
+		"liveServer.settings.port": 5501
 	}
 }

@@ -130,13 +130,13 @@ vec3 colorPalette(float value) {
 	vec3 color3 = vec3(0.06, 0.05, 0.19);
 	vec3 color4 = vec3(0.9, 0.9, 1);
 
-	color = color1;
+	color = color3;
 
 	color = colorBump(color2, 1., 0.5, 1., false, color, value);
 
-	color = mix(color, color3, pow(value, 5.));
+	color = mix(color, color1, pow(value, 2.));
 
-	color = colorBump(color4, 0.01, 1., 1., false, color, value);
+	color = colorBump(color4, 0.5, 1., 1., false, color, value);
 
 	// color = colorRamp(colorA, colorB, colorC, 0.01, pow(value, 1. / 1.));
 
@@ -162,13 +162,16 @@ void main() {
 	// value %= mandelbrot(coords, GRADIENT_ESCAPE_ANGLE);
 	// value += mandelbrot(coords, GRADIENT_COUNT_ITERATIONS);
 
-	float value = mandelbrot(coords, SecondaryEscapeRadius, SecondaryIterations, GRADIENT_CONTINUOUS_ITERATIONS);
+	// float value = mandelbrot(coords, SecondaryEscapeRadius, SecondaryIterations, GRADIENT_CONTINUOUS_ITERATIONS);
 
-	float angleValue = mandelbrot(coords, SecondaryEscapeRadius, SecondaryIterations, GRADIENT_ESCAPE_ANGLE);
-	value = value + angleValue * 0.05;
+	float value = mandelbrot(coords, EscapeRadius, Iterations, GRADIENT_CONTINUOUS_ITERATIONS);
+	value = pow(value, 1.);
 
-	float detail = mandelbrot(coords, EscapeRadius, Iterations, GRADIENT_CONTINUOUS_ITERATIONS);
-	value += pow(detail, 10.);
+	float gradientValue = mandelbrot(coords, SecondaryEscapeRadius, SecondaryIterations, GRADIENT_ESCAPE_RADIUS);
+	// gradientValue = pow(gradientValue, 0.2);
+	gradientValue = abs(gradientValue - 0.5) * -2. + 1.;
+
+	value += gradientValue * 0.05;
 
 	// float value = mandelbrot(coords, EscapeRadius, Iterations, GRADIENT_CONTINUOUS_ITERATIONS);
 
