@@ -555,13 +555,13 @@ gl.clear(gl.COLOR_BUFFER_BIT);
 // console.log(gl.getShaderPrecisionFormat(gl.FRAGMENT_SHADER, gl.HIGH_FLOAT));
 let vertexSource = null;
 let fragSource = null;
-fetch('/shaders/frag.glsl').then(async (response) => {
+fetch('shaders/frag.glsl').then(async (response) => {
     fragSource = await response.text();
     if (vertexSource !== null) {
         initializeWithSources(gl, vertexSource, fragSource);
     }
 });
-fetch('/shaders/vertex.glsl').then(async (response) => {
+fetch('shaders/vertex.glsl').then(async (response) => {
     vertexSource = await response.text();
     if (fragSource !== null) {
         initializeWithSources(gl, vertexSource, fragSource);
