@@ -1,37 +1,42 @@
-import * as webgl from "./webGLUtils.js";
-import { UniformInputs, UniformType } from "./uniformInputs.js";
-import { Matrix2x2, matrixMult } from "./matrix.js";
-import * as cookies from "./cookies.js";
+import * as webgl from './webGLUtils.js';
+import { UniformInputs, UniformType } from './uniformInputs.js';
+import { Matrix2x2, matrixMult } from './matrix.js';
+import * as cookies from './cookies.js';
 
 const SAMPL_MULT = 2;
 
-const canvas = document.querySelector("#mainCanvas") as HTMLCanvasElement;
-const posXInput = document.querySelector("#posXInput") as HTMLInputElement;
-const posYInput = document.querySelector("#posYInput") as HTMLInputElement;
-const zoomInput = document.querySelector("#zoomInput") as HTMLInputElement;
+const canvas = document.querySelector('#mainCanvas') as HTMLCanvasElement;
+const posXInput = document.querySelector('#posXInput') as HTMLInputElement;
+const posYInput = document.querySelector('#posYInput') as HTMLInputElement;
+const zoomInput = document.querySelector('#zoomInput') as HTMLInputElement;
 const rotationInput = document.querySelector(
-	"#rotationInput"
+	'#rotationInput'
 ) as HTMLInputElement;
-const resInput = document.querySelector("#resInput") as HTMLInputElement;
+const resInput = document.querySelector('#resInput') as HTMLInputElement;
 // const escapeInput = document.querySelector("#escapeInput") as HTMLInputElement;
 // const iterationInput = document.querySelector(
 // 	"#iterationInput"
 // ) as HTMLInputElement;
 
-UniformInputs.registerUniform("escapeRadius", UniformType.Float, 300);
-UniformInputs.registerUniform("secondaryEscapeRadius", UniformType.Float, 800);
-UniformInputs.registerUniform("iterations", UniformType.Int, 500);
-UniformInputs.registerUniform("secondaryIterations", UniformType.Int, 200);
+UniformInputs.registerUniform('escapeRadius', UniformType.Float, 300);
+UniformInputs.registerUniform('secondaryEscapeRadius', UniformType.Float, 800);
+UniformInputs.registerUniform('iterations', UniformType.Int, 500);
+UniformInputs.registerUniform('secondaryIterations', UniformType.Int, 200);
 
-const saveButton = document.querySelector("#saveButton") as HTMLButtonElement;
-const loadButton = document.querySelector("#loadButton") as HTMLButtonElement;
-const resetButton = document.querySelector("#resetButton") as HTMLButtonElement;
+const saveButton = document.querySelector('#saveButton') as HTMLButtonElement;
+const loadButton = document.querySelector('#loadButton') as HTMLButtonElement;
+const resetButton = document.querySelector('#resetButton') as HTMLButtonElement;
 
-const dimXInput = document.querySelector<HTMLInputElement>("#dimensionXInput");
-const dimYInput = document.querySelector<HTMLInputElement>("#dimensionYInput");
+const dimXInput = document.querySelector<HTMLInputElement>('#dimensionXInput');
+const dimYInput = document.querySelector<HTMLInputElement>('#dimensionYInput');
+const renderResInput =
+	document.querySelector<HTMLInputElement>('#renderResInput');
+const previewInput = document.querySelector<HTMLInputElement>(
+	'#previewRenderInput'
+);
 
 const downloadButton =
-	document.querySelector<HTMLButtonElement>("#downloadButton");
+	document.querySelector<HTMLButtonElement>('#downloadButton');
 
 let res: number = 1;
 
@@ -51,6 +56,8 @@ let [finalPosX, finalPosY] = [0, 0];
 let finalZoom: number = getFinalZoom(zoom);
 
 let [posX, posY] = shaderToCanvasSpace(finalPosX, finalPosY);
+
+let previewRender = false;
 
 let isRender = false;
 
@@ -121,7 +128,7 @@ function activateAnimation(element: HTMLElement, className: string) {
 	element.classList.add(className);
 
 	element.addEventListener(
-		"animationend",
+		'animationend',
 		(e) => {
 			element.classList.remove(className);
 		},
@@ -130,10 +137,10 @@ function activateAnimation(element: HTMLElement, className: string) {
 }
 
 function loadCookies() {
-	let posX = cookies.get("posX");
-	let posY = cookies.get("posY");
-	let zoom = cookies.get("zoom");
-	let rotation = cookies.get("rotation");
+	let posX = cookies.get('posX');
+	let posY = cookies.get('posY');
+	let zoom = cookies.get('zoom');
+	let rotation = cookies.get('rotation');
 	// let escapeRadius = cookies.get("escapeRadius");
 	// let iterations = cookies.get("iterations");
 
@@ -151,14 +158,14 @@ function loadCookies() {
 
 	updateWithInput(null, true);
 
-	activateAnimation(loadButton, "popup");
+	activateAnimation(loadButton, 'popup');
 }
 
 function storeCookies() {
-	cookies.set("posX", String(finalPosX));
-	cookies.set("posY", String(finalPosY));
-	cookies.set("zoom", String(finalZoom));
-	cookies.set("rotation", String(rotation));
+	cookies.set('posX', String(finalPosX));
+	cookies.set('posY', String(finalPosY));
+	cookies.set('zoom', String(finalZoom));
+	cookies.set('rotation', String(rotation));
 
 	for (const input of UniformInputs.getInputs()) {
 		cookies.set(input.name, String(input.value));
@@ -166,7 +173,7 @@ function storeCookies() {
 	// cookies.set("escapeRadius", String(escapeRadius));
 	// cookies.set("iterations", String(iterations));
 
-	activateAnimation(saveButton, "popup");
+	activateAnimation(saveButton, 'popup');
 }
 
 function getFinalMousePos(x: number, y: number): [number, number] {
@@ -255,7 +262,11 @@ function handleMouseMove(event: MouseEvent) {
 }
 
 function handleResize() {
-	updateCanvasSize();
+	if (previewRender) {
+		enterPreview();
+	} else {
+		updateCanvasSize();
+	}
 
 	[posX, posY] = shaderToCanvasSpace(finalPosX, finalPosY);
 
@@ -269,8 +280,8 @@ function enterDrag(event: MouseEvent) {
 
 	rotateActive = event.shiftKey;
 
-	document.addEventListener("mouseup", leaveDrag);
-	document.addEventListener("mousemove", handleMouseMove);
+	document.addEventListener('mouseup', leaveDrag);
+	document.addEventListener('mousemove', handleMouseMove);
 
 	dragOffsetX = event.pageX;
 	dragOffsetY = event.pageY;
@@ -289,8 +300,36 @@ function leaveDrag(event: MouseEvent) {
 
 	rotateActive = false;
 
-	document.removeEventListener("mouseup", this);
-	document.removeEventListener("mousemove", handleMouseMove);
+	document.removeEventListener('mouseup', this);
+	document.removeEventListener('mousemove', handleMouseMove);
+}
+
+function enterPreview() {
+	// console.log('Entered preview');
+
+	let renderX = Number(dimXInput.value);
+	let renderY = Number(dimYInput.value);
+
+	let ratio = renderX / renderY;
+
+	let currentX = canvas.width;
+	let currentY = canvas.height;
+
+	let currentRatio = currentX / currentY;
+
+	console.log(currentRatio, '=>', ratio);
+
+	let x: number, y: number;
+
+	if (currentRatio < ratio) {
+		x = currentX;
+		y = currentX / ratio;
+	} else {
+		y = currentY;
+		x = currentY * ratio;
+	}
+
+	setCanvasSize(x, y);
 }
 
 function initializeWithSources(
@@ -338,40 +377,49 @@ function initializeLoop() {
 	// loadCookies();
 	updateWithInput(null, true);
 
-	posXInput.addEventListener("change", updateWithInput);
-	posYInput.addEventListener("change", updateWithInput);
-	zoomInput.addEventListener("change", updateWithInput);
-	rotationInput.addEventListener("change", updateWithInput);
-	resInput.addEventListener("change", updateWithInput);
+	if (previewRender) {
+		enterPreview();
+	}
+
+	posXInput.addEventListener('change', updateWithInput);
+	posYInput.addEventListener('change', updateWithInput);
+	zoomInput.addEventListener('change', updateWithInput);
+	rotationInput.addEventListener('change', updateWithInput);
+	resInput.addEventListener('change', updateWithInput);
+	previewInput.addEventListener('change', updateWithInput);
 	for (const input of UniformInputs.getInputs()) {
-		input.input.addEventListener("change", updateWithInput);
+		input.input.addEventListener('change', updateWithInput);
 	}
 	// escapeInput.addEventListener("change", updateWithInput);
 	// iterationInput.addEventListener("change", updateWithInput);
 
-	saveButton.addEventListener("click", storeCookies);
-	loadButton.addEventListener("click", loadCookies);
-	resetButton.addEventListener("click", resetTransform);
+	saveButton.addEventListener('click', storeCookies);
+	loadButton.addEventListener('click', loadCookies);
+	resetButton.addEventListener('click', resetTransform);
 
-	downloadButton.addEventListener("click", renderDownload);
+	previewInput.addEventListener('change', updateWithInput);
+	dimXInput.addEventListener('change', updateWithInput);
+	dimYInput.addEventListener('change', updateWithInput);
 
-	canvas.addEventListener("wheel", handleScroll);
+	downloadButton.addEventListener('click', renderDownload);
 
-	canvas.addEventListener("mousedown", enterDrag);
+	canvas.addEventListener('wheel', handleScroll);
 
-	window.addEventListener("resize", handleResize);
+	canvas.addEventListener('mousedown', enterDrag);
+
+	window.addEventListener('resize', handleResize);
 }
 
 function updateWithInput(event?: Event, simpleSet: boolean = true) {
-	if (!isNaN(Number(posXInput.value)) && posXInput.value !== "") {
+	if (!isNaN(Number(posXInput.value)) && posXInput.value !== '') {
 		finalPosX = Number(posXInput.value);
 	}
-	if (!isNaN(Number(posYInput.value)) && posYInput.value !== "") {
+	if (!isNaN(Number(posYInput.value)) && posYInput.value !== '') {
 		finalPosY = Number(posYInput.value);
 	}
 	[posX, posY] = shaderToCanvasSpace(finalPosX, finalPosY);
 
-	if (!isNaN(Number(zoomInput.value)) && zoomInput.value !== "") {
+	if (!isNaN(Number(zoomInput.value)) && zoomInput.value !== '') {
 		if (simpleSet) {
 			finalZoom = Number(zoomInput.value);
 			zoom = getInverseZoom(finalZoom);
@@ -380,7 +428,7 @@ function updateWithInput(event?: Event, simpleSet: boolean = true) {
 		}
 	}
 
-	if (!isNaN(Number(rotationInput.value)) && rotationInput.value !== "") {
+	if (!isNaN(Number(rotationInput.value)) && rotationInput.value !== '') {
 		if (simpleSet) {
 			rotation = Number(rotationInput.value);
 		} else {
@@ -388,12 +436,14 @@ function updateWithInput(event?: Event, simpleSet: boolean = true) {
 		}
 	}
 
-	if (!isNaN(Number(resInput.value)) && resInput.value !== "") {
+	if (!isNaN(Number(resInput.value)) && resInput.value !== '') {
 		res = Number(resInput.value);
 	}
 
+	previewRender = previewInput.checked;
+
 	for (const input of UniformInputs.getInputs()) {
-		if (!isNaN(Number(input.input.value)) && input.input.value !== "") {
+		if (!isNaN(Number(input.input.value)) && input.input.value !== '') {
 			input.value = Number(input.input.value);
 		}
 	}
@@ -408,6 +458,10 @@ function updateWithInput(event?: Event, simpleSet: boolean = true) {
 	// storeCookies();
 
 	updateCanvasSize();
+	if (previewRender) {
+		enterPreview();
+	}
+
 	renderFrame(gl, program);
 }
 
@@ -422,6 +476,8 @@ function updateDisplays() {
 	if (Number(rotationInput.value) !== rotation)
 		rotationInput.value = String(rotation);
 	if (Number(resInput.value) !== res) resInput.value = String(res);
+
+	previewInput.checked = previewRender;
 
 	for (const input of UniformInputs.getInputs()) {
 		if (Number(input.input.value) !== input.value)
@@ -455,7 +511,7 @@ function resetTransform() {
 	updateCanvasSize();
 	renderFrame(gl, program);
 
-	activateAnimation(resetButton, "popup");
+	activateAnimation(resetButton, 'popup');
 }
 
 function updateCanvasSize() {
@@ -463,6 +519,10 @@ function updateCanvasSize() {
 	let width = canvas.clientWidth * ratio;
 	let height = canvas.clientHeight * ratio;
 
+	setCanvasSize(width, height);
+}
+
+function setCanvasSize(width: number, height: number) {
 	canvas.width = width * res;
 	canvas.height = height * res;
 }
@@ -470,11 +530,11 @@ function updateCanvasSize() {
 function failCompilation(reason: string) {
 	failed = true;
 
-	const containerElement = document.querySelector<HTMLElement>(".container");
-	containerElement.classList.add("failed");
+	const containerElement = document.querySelector<HTMLElement>('.container');
+	containerElement.classList.add('failed');
 
 	const reasonElement =
-		containerElement.querySelector<HTMLElement>(".errorReason");
+		containerElement.querySelector<HTMLElement>('.errorReason');
 	reasonElement.innerText = reason;
 }
 
@@ -491,26 +551,26 @@ function renderFrame(gl: WebGL2RenderingContext, program: WebGLProgram) {
 
 	gl.useProgram(program);
 
-	let posAttrLocation = gl.getAttribLocation(program, "a_position");
+	let posAttrLocation = gl.getAttribLocation(program, 'a_position');
 	gl.enableVertexAttribArray(posAttrLocation);
 
 	// gl.bindBuffer(gl.ARRAY_BUFFER, posBuffer);
 	gl.vertexAttribPointer(posAttrLocation, 2, gl.FLOAT, false, 0, 0);
 
-	let aspectRatioLocation = gl.getUniformLocation(program, "AspectRatio");
+	let aspectRatioLocation = gl.getUniformLocation(program, 'AspectRatio');
 	gl.uniform1f(aspectRatioLocation, gl.canvas.width / gl.canvas.height);
 
-	let offsetLocation = gl.getUniformLocation(program, "Offset");
+	let offsetLocation = gl.getUniformLocation(program, 'Offset');
 	gl.uniform2f(offsetLocation, finalPosX, finalPosY);
 
-	let rotationLocation = gl.getUniformLocation(program, "Rotation");
+	let rotationLocation = gl.getUniformLocation(program, 'Rotation');
 	gl.uniform1f(rotationLocation, (rotation / 360) * Math.PI);
 
-	let scaleLocation = gl.getUniformLocation(program, "Scale");
+	let scaleLocation = gl.getUniformLocation(program, 'Scale');
 	gl.uniform1f(scaleLocation, finalZoom);
 
-	let isRenderLoc = gl.getUniformLocation(program, "IsRender");
-	gl.uniform1i(isRenderLoc, Number(isRender));
+	let isRenderLoc = gl.getUniformLocation(program, 'IsRender');
+	gl.uniform1i(isRenderLoc, Number(isRender || previewRender));
 
 	for (const input of UniformInputs.getInputs()) {
 		let location = gl.getUniformLocation(
@@ -534,22 +594,26 @@ function renderFrame(gl: WebGL2RenderingContext, program: WebGLProgram) {
 
 function renderDownload() {
 	if (isNaN(Number(dimXInput.value)) || isNaN(Number(dimYInput.value))) {
-		console.log("Render failed: invalid dimensions");
+		console.log('Render failed: invalid dimensions');
 
 		return;
 	}
-	console.log("Started render");
+
+	let link = document.querySelector<HTMLAnchorElement>('#renderImageLink');
+	let image = link.querySelector('img');
+
+	activateAnimation(downloadButton, 'popup');
+	link.classList.remove('active');
 
 	let width = Number(dimXInput.value);
 	let height = Number(dimYInput.value);
+	let resMult = Number(renderResInput.value);
+	resMult = Math.pow(2, Math.round(Math.log2(resMult))); // convert multiplier to nearest power of 2
 
-	activateAnimation(downloadButton, "popup");
+	console.log('Started render', width, 'x', height, `mult x${resMult}`);
 
-	let link = document.querySelector<HTMLAnchorElement>("#renderImageLink");
-	let image = link.querySelector("img");
-
-	let offsCanvas = document.createElement("canvas");
-	const gl = offsCanvas.getContext("webgl2", { preserveDrawingBuffer: true });
+	let offsCanvas = document.createElement('canvas');
+	const gl = offsCanvas.getContext('webgl2', { preserveDrawingBuffer: true });
 
 	let renderPosBuffer = gl.createBuffer();
 	gl.bindBuffer(gl.ARRAY_BUFFER, renderPosBuffer);
@@ -569,8 +633,8 @@ function renderDownload() {
 		gl.STATIC_DRAW
 	);
 
-	offsCanvas.width = width;
-	offsCanvas.height = height;
+	offsCanvas.width = width * resMult;
+	offsCanvas.height = height * resMult;
 
 	const program = webgl.createProgramFromSources(
 		gl,
@@ -594,18 +658,40 @@ function renderDownload() {
 	// link.classList.add("active");
 
 	webgl.callbackOnSync(gl, () => {
-		let url = offsCanvas.toDataURL();
+		let resizeCanvas = document.createElement('canvas');
+		resizeCanvas.width = width;
+		resizeCanvas.height = height;
 
-		link.style.aspectRatio = width + " / " + height;
+		let context = resizeCanvas.getContext('2d');
+		context.drawImage(
+			offsCanvas,
+			0,
+			0,
+			width * resMult,
+			height * resMult,
+			0,
+			0,
+			width,
+			height
+		);
 
-		link.href = url;
-		image.src = url;
+		resizeCanvas.toBlob((blob) => {
+			// link.style.aspectRatio = width + ' / ' + height;
 
-		link.classList.add("active");
+			let url = window.URL.createObjectURL(blob);
+
+			link.href = url;
+			// window.URL.revokeObjectURL(url);
+			// image.src = url;
+
+			link.classList.add('active');
+
+			link.click();
+		});
 	});
 }
 
-const gl = canvas.getContext("webgl2");
+const gl = canvas.getContext('webgl2');
 
 gl.clearColor(0.0, 0.0, 0.0, 1.0);
 gl.clear(gl.COLOR_BUFFER_BIT);
@@ -617,13 +703,13 @@ gl.clear(gl.COLOR_BUFFER_BIT);
 let vertexSource: null | string = null;
 let fragSource: null | string = null;
 
-fetch("/shaders/frag.glsl").then(async (response) => {
+fetch('/shaders/frag.glsl').then(async (response) => {
 	fragSource = await response.text();
 	if (vertexSource !== null) {
 		initializeWithSources(gl, vertexSource, fragSource);
 	}
 });
-fetch("/shaders/vertex.glsl").then(async (response) => {
+fetch('/shaders/vertex.glsl').then(async (response) => {
 	vertexSource = await response.text();
 	if (fragSource !== null) {
 		initializeWithSources(gl, vertexSource, fragSource);

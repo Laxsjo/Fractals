@@ -66,7 +66,13 @@ canvas {
 	height: 100%;
 	box-sizing: border-box;
 
+	object-fit: contain;
+
 	border: 1px solid black;
+
+	// &.renderPreview {
+	// 	height;
+	// }
 }
 
 @keyframes fadeOut {
@@ -357,10 +363,10 @@ canvas {
 	// justify-self: stretch;
 
 	box-sizing: border-box;
-	height: 5rem;
+	// height: 5rem;
 
-	border-radius: 0.6rem;
-	border: 2px solid hsl(0 0% 45%);
+	// border-radius: 0.6rem;
+	// border: 2px solid hsl(0 0% 45%);
 
 	&:not(.active) {
 		display: none;

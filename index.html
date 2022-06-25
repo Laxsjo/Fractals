@@ -65,10 +65,11 @@
 
 					<label class="newRow" for="resInput">Res Mult:</label>
 					<input
-						class="span3"
+						class="span3 short"
 						type="number"
 						id="resInput"
-						step="0.25"
+						value="2"
+						step="1"
 					/>
 					<label for="iterationsInput">Iterations 1:</label>
 					<input
@@ -139,8 +140,18 @@
 							/>
 						</div>
 
+						<label class="newRow" for="renderResInput"
+							>Render Res Mult:</label
+						>
+						<input
+							class="short"
+							type="number"
+							id="renderResInput"
+							step="0.25"
+						/>
+
 						<button
-							class="fancyButton popupButton"
+							class="fancyButton popupButton newRow"
 							id="downloadButton"
 						>
 							Render
@@ -150,16 +161,22 @@
 						<label class="together" for="previewRenderInput"
 							>Preview Render:</label
 						>
-						<input type="checkbox" id="previewRenderInput" />
+						<input
+							type="checkbox"
+							id="previewRenderInput"
+							value="true"
+						/>
 
 						<a
-							class="imagePreview newRow span4"
+							class="imagePreview fancyButton newRow span4"
 							href=""
 							target="_blank"
 							id="renderImageLink"
 							title="Click to open in new tab"
+							download="render.png"
 						>
-							<img src="" alt="Your rendered image" />
+							Download again
+							<!-- <img src="" alt="Your rendered image" /> -->
 						</a>
 					</div>
 				</div>
