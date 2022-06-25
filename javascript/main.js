@@ -146,7 +146,7 @@ function addCookieSlot() {
     let existingSlots = cookies.getJSON('slots');
     if (!existingSlots)
         existingSlots = [];
-    console.log(existingSlots);
+    // console.log(existingSlots);
     let newSlot = ((_a = _.max(existingSlots)) !== null && _a !== void 0 ? _a : 0) + 1;
     existingSlots.push(newSlot);
     cookies.setJSON('slots', existingSlots);
@@ -213,7 +213,7 @@ function handleMouseMove(event) {
         rot *= 360;
         let [startX, startY] = canvasToShaderSpace(dragStartX, dragStartY);
         rotation = dragStartRot + rot;
-        console.log(rot);
+        // console.log(rot);
         [posX, posY] = shaderToCanvasSpace(...rotatePoint(startX, startY, deg2Rad(-rot / 2)));
     }
     [finalPosX, finalPosY] = getFinalMousePos(posX, posY);
@@ -260,7 +260,7 @@ function enterPreview() {
     let currentX = canvas.width;
     let currentY = canvas.height;
     let currentRatio = currentX / currentY;
-    console.log(currentRatio, '=>', ratio);
+    // console.log(currentRatio, '=>', ratio);
     let x, y;
     if (currentRatio < ratio) {
         x = currentX;
@@ -492,7 +492,7 @@ function renderFrame(gl, program) {
 }
 function renderDownload() {
     if (isNaN(Number(dimXInput.value)) || isNaN(Number(dimYInput.value))) {
-        console.log('Render failed: invalid dimensions');
+        console.error('Render failed: invalid dimensions');
         return;
     }
     let link = document.querySelector('#renderImageLink');

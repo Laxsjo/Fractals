@@ -61,7 +61,7 @@ export class InputColor extends Input {
         let numValues = _.take(_.map(hexValues, (hexNumbers) => {
             return parseInt(hexNumbers.join(''), 16) / 255;
         }), 3);
-        console.log(this.value, '=', numValues);
+        // console.log(this.value, '=', numValues);
         return numValues;
     }
 }

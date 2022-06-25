@@ -104,7 +104,7 @@ export class InputColor extends Input {
 			3
 		) as [number, number, number];
 
-		console.log(this.value, '=', numValues);
+		// console.log(this.value, '=', numValues);
 
 		return numValues;
 	}
