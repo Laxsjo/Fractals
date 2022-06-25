@@ -656,9 +656,8 @@ button {
 
 .disclosureButton,
 button[is='disclosure-button'] {
-	&::before {
-		content: 'expand_more';
-
+	&::before,
+	&::after {
 		margin-block: var(--md-negativeMargin);
 		margin-left: var(--md-negativeMargin);
 
@@ -670,6 +669,9 @@ button[is='disclosure-button'] {
 		transform: rotate(-90deg);
 		transition: none 0.1s ease-out;
 		transition-property: transform;
+	}
+	&::before {
+		content: 'expand_more';
 	}
 
 	// .icon {

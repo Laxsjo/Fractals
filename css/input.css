@@ -587,9 +587,9 @@ button > .material-icons {
   border-radius: 50%;
 }
 
-.disclosureButton::before,
-button[is=disclosure-button]::before {
-  content: "expand_more";
+.disclosureButton::before, .disclosureButton::after,
+button[is=disclosure-button]::before,
+button[is=disclosure-button]::after {
   margin-block: var(--md-negativeMargin);
   margin-left: var(--md-negativeMargin);
   font-family: "Material Symbols Rounded";
@@ -599,6 +599,10 @@ button[is=disclosure-button]::before {
   transform: rotate(-90deg);
   transition: none 0.1s ease-out;
   transition-property: transform;
+}
+.disclosureButton::before,
+button[is=disclosure-button]::before {
+  content: "expand_more";
 }
 .disclosureButton[aria-expanded=true]::before,
 button[is=disclosure-button][aria-expanded=true]::before {

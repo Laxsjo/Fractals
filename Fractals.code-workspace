@@ -6,6 +6,11 @@
 	],
 	"settings": {
 		"cSpell.words": ["SAMPL"],
+		"cssvar.files": [
+			"css/theme.dark.css",
+			"css/icons.css",
+			"css/definitions.css"
+		],
 		"liveSassCompile.settings.formats": [
 			{
 				"format": "expanded",

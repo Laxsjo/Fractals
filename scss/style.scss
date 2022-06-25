@@ -4,7 +4,7 @@
 @use 'sass:math';
 
 :root {
-	font-family: monospace;
+	font-family: 'Noto Sans Mono', monospace;
 }
 
 body {
@@ -14,7 +14,7 @@ body {
 	padding: 1rem;
 	box-sizing: border-box;
 
-	font-size: calc(0.68rem + 0.75vh);
+	font-size: calc(0.5rem + 0.75vmin);
 }
 
 // button {
@@ -167,7 +167,11 @@ canvas {
 
 		&::before,
 		&::after {
-			content: '⯆';
+			content: 'expand_more';
+
+			overflow: visible;
+
+			transform: rotate(0deg);
 
 			transition: transform 0.3s;
 		}
@@ -204,7 +208,7 @@ canvas {
 
 	display: grid;
 	/* flex-direction: column; */
-	gap: 0.6ch;
+	gap: var(--gapWithinPair);
 	grid:
 		auto
 		auto
@@ -256,7 +260,26 @@ canvas {
 }
 
 .together {
-	width: max-content;
+	display: grid;
+	grid-template-columns: repeat(var(--columnCount), auto);
+	align-items: center;
+	gap: var(--gapWithinPair);
+
+	&.count1 {
+		--columnCount: 1;
+	}
+	&.count2 {
+		--columnCount: 2;
+	}
+	&.count3 {
+		--columnCount: 3;
+	}
+	&.count4 {
+		--columnCount: 4;
+	}
+	&.count5 {
+		--columnCount: 5;
+	}
 }
 
 #resetButton {
@@ -267,6 +290,14 @@ canvas {
 .short {
 	justify-self: stretch;
 	max-width: 10ch;
+}
+
+.veryShort {
+	max-width: 7ch;
+}
+
+.stretch {
+	width: max-content;
 }
 
 .container:not(.failed) .failedDisplay {
@@ -342,19 +373,19 @@ canvas {
 		// }
 	}
 
-	&.stretchContent {
-		height: var(--height);
-		max-width: 100%;
-		min-width: 100%;
+	// &.stretchContent {
+	// 	height: var(--height);
+	// 	max-width: 100%;
+	// 	min-width: 100%;
 
-		& > .animationContainer {
-			height: 100%;
+	// 	& > .animationContainer {
+	// 		height: 100%;
 
-			& > .measuringWrapper {
-				height: 100%;
-			}
-		}
-	}
+	// 		& > .measuringWrapper {
+	// 			height: 100%;
+	// 		}
+	// 	}
+	// }
 }
 
 .imagePreview {
