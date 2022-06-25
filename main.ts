@@ -23,6 +23,8 @@ UniformInputs.registerUniform('secondaryEscapeRadius', UniformType.Float, 800);
 UniformInputs.registerUniform('iterations', UniformType.Int, 500);
 UniformInputs.registerUniform('secondaryIterations', UniformType.Int, 200);
 
+const slotSelect = document.querySelector<HTMLSelectElement>('#slotSelect');
+
 const saveButton = document.querySelector('#saveButton') as HTMLButtonElement;
 const loadButton = document.querySelector('#loadButton') as HTMLButtonElement;
 const resetButton = document.querySelector('#resetButton') as HTMLButtonElement;
@@ -46,6 +48,8 @@ let posBuffer: WebGLBuffer;
 let program: WebGLProgram;
 
 let failed = false;
+
+let activeSlot = 1;
 
 let zoom: number = 0;
 let rotation = 0;
@@ -137,10 +141,10 @@ function activateAnimation(element: HTMLElement, className: string) {
 }
 
 function loadCookies() {
-	let posX = cookies.get('posX');
-	let posY = cookies.get('posY');
-	let zoom = cookies.get('zoom');
-	let rotation = cookies.get('rotation');
+	let posX = cookies.get(`${activeSlot}_posX`);
+	let posY = cookies.get(`${activeSlot}_posY`);
+	let zoom = cookies.get(`${activeSlot}_zoom`);
+	let rotation = cookies.get(`${activeSlot}_rotation`);
 	// let escapeRadius = cookies.get("escapeRadius");
 	// let iterations = cookies.get("iterations");
 
@@ -152,7 +156,7 @@ function loadCookies() {
 	// if (iterations) iterationInput.value = iterations;
 
 	for (const input of UniformInputs.getInputs()) {
-		let value = cookies.get(input.name);
+		let value = cookies.get(`${activeSlot}_${input.name}`);
 		if (value) input.input.value = value;
 	}
 
@@ -162,18 +166,24 @@ function loadCookies() {
 }
 
 function storeCookies() {
-	cookies.set('posX', String(finalPosX));
-	cookies.set('posY', String(finalPosY));
-	cookies.set('zoom', String(finalZoom));
-	cookies.set('rotation', String(rotation));
+	cookies.set(`${activeSlot}_posX`, String(finalPosX));
+	cookies.set(`${activeSlot}_posY`, String(finalPosY));
+	cookies.set(`${activeSlot}_zoom`, String(finalZoom));
+	cookies.set(`${activeSlot}_rotation`, String(rotation));
 
 	for (const input of UniformInputs.getInputs()) {
-		cookies.set(input.name, String(input.value));
+		cookies.set(`${activeSlot}_${input.name}`, String(input.value));
 	}
 	// cookies.set("escapeRadius", String(escapeRadius));
 	// cookies.set("iterations", String(iterations));
 
 	activateAnimation(saveButton, 'popup');
+}
+
+function addCookieSlot(): number {
+	let existingSlots = cookies.getJSON("slots") as number[];
+	
+	let newIndex = _.
 }
 
 function getFinalMousePos(x: number, y: number): [number, number] {

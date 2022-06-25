@@ -13,6 +13,7 @@
 		<link rel="stylesheet" href="/css/input.css" />
 		<link rel="stylesheet" href="/css/style.css" />
 
+		<script src="/lodash.js"></script>
 		<script src="/node_modules/wicg-inert/dist/inert.min.js"></script>
 		<!-- <script
 			src="/node_modules/mathjs/lib/browser/math.js"
@@ -99,7 +100,9 @@
 					<div class="together count4 span3">
 						<label for="slotSelect">Active Slot:</label>
 						<div class="fancySelect veryShort">
-							<select id="slotSelect"></select>
+							<select id="slotSelect">
+								<option value="new">Add slot</option>
+							</select>
 						</div>
 
 						<button class="fancyButton popupButton" id="saveButton">

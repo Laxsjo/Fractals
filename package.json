@@ -17,6 +17,8 @@
   },
   "homepage": "https://github.com/Laxsjo/Fractals#readme",
   "dependencies": {
+    "@types/lodash": "^4.14.182",
+    "lodash": "^4.17.21",
     "wicg-inert": "^3.1.2"
   }
 }
