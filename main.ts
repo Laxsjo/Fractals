@@ -183,7 +183,7 @@ function storeCookies() {
 function addCookieSlot(): number {
 	let existingSlots = cookies.getJSON("slots") as number[];
 	
-	let newIndex = _.
+	let newIndex = 
 }
 
 function getFinalMousePos(x: number, y: number): [number, number] {
