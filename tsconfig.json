@@ -6,7 +6,9 @@
 		"sourceMap": true,
 		"outDir": "javascript",
 		"typeRoots": ["./node_modules/@types", "./types"],
-		"strictNullChecks": false
+		"strictNullChecks": false,
+		"allowUmdGlobalAccess": true,
+		"baseUrl": "./"
 	},
 	// "include": [
 	//     "**/*.ts",

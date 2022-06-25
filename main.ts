@@ -2,6 +2,7 @@ import * as webgl from './webGLUtils.js';
 import { UniformInputs, UniformType } from './uniformInputs.js';
 import { Matrix2x2, matrixMult } from './matrix.js';
 import * as cookies from './cookies.js';
+// import * as _ from '';
 
 const SAMPL_MULT = 2;
 
@@ -180,10 +181,44 @@ function storeCookies() {
 	activateAnimation(saveButton, 'popup');
 }
 
+function appendCookieSlots(): number[] {
+	let slots = cookies.getJSON('slots') as number[];
+	if (!slots) slots = [1];
+
+	if (slotSelect.value === 'new') {
+		slotSelect.value = '1';
+	}
+
+	slotSelectAddOption(...slots);
+
+	return slots;
+}
+
 function addCookieSlot(): number {
-	let existingSlots = cookies.getJSON("slots") as number[];
-	
-	let newIndex = 
+	let existingSlots = cookies.getJSON('slots') as number[];
+	if (!existingSlots) existingSlots = [];
+
+	console.log(existingSlots);
+
+	let newSlot = (_.max(existingSlots) ?? 0) + 1;
+	existingSlots.push(newSlot);
+	cookies.setJSON('slots', existingSlots);
+
+	slotSelectAddOption(newSlot);
+
+	return newSlot;
+}
+
+function slotSelectAddOption(...slots: number[]) {
+	let newSlotOpt = slotSelect.querySelector<HTMLOptionElement>('.newSlot');
+
+	for (const slot of slots) {
+		let option = document.createElement('option');
+		option.value = String(slot);
+		option.innerText = String(slot);
+
+		newSlotOpt.insertAdjacentElement('beforebegin', option);
+	}
 }
 
 function getFinalMousePos(x: number, y: number): [number, number] {
@@ -342,6 +377,21 @@ function enterPreview() {
 	setCanvasSize(x, y);
 }
 
+function handleSlotChange(loadSlot = true) {
+	let value = slotSelect.value;
+
+	let slot: number;
+	if (value === 'new') {
+		slot = addCookieSlot();
+	} else {
+		slot = Number(value);
+	}
+
+	activeSlot = slot;
+
+	if (loadSlot) loadCookies();
+}
+
 function initializeWithSources(
 	gl: WebGL2RenderingContext,
 	vertexSource: string,
@@ -385,6 +435,10 @@ function initializeWithSources(
 
 function initializeLoop() {
 	// loadCookies();
+	appendCookieSlots();
+
+	handleSlotChange(false);
+
 	updateWithInput(null, true);
 
 	if (previewRender) {
@@ -402,6 +456,10 @@ function initializeLoop() {
 	}
 	// escapeInput.addEventListener("change", updateWithInput);
 	// iterationInput.addEventListener("change", updateWithInput);
+
+	slotSelect.addEventListener('change', () => {
+		handleSlotChange();
+	});
 
 	saveButton.addEventListener('click', storeCookies);
 	loadButton.addEventListener('click', loadCookies);
@@ -493,6 +551,8 @@ function updateDisplays() {
 		if (Number(input.input.value) !== input.value)
 			input.input.value = String(input.value);
 	}
+
+	slotSelect.value = String(activeSlot);
 
 	// if (
 	// 	Number(iterationInput.value) !== iterations &&

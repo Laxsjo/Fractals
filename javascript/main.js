@@ -1,6 +1,7 @@
 import * as webgl from './webGLUtils.js';
 import { UniformInputs, UniformType } from './uniformInputs.js';
 import * as cookies from './cookies.js';
+// import * as _ from '';
 const SAMPL_MULT = 2;
 const canvas = document.querySelector('#mainCanvas');
 const posXInput = document.querySelector('#posXInput');
@@ -16,6 +17,7 @@ UniformInputs.registerUniform('escapeRadius', UniformType.Float, 300);
 UniformInputs.registerUniform('secondaryEscapeRadius', UniformType.Float, 800);
 UniformInputs.registerUniform('iterations', UniformType.Int, 500);
 UniformInputs.registerUniform('secondaryIterations', UniformType.Int, 200);
+const slotSelect = document.querySelector('#slotSelect');
 const saveButton = document.querySelector('#saveButton');
 const loadButton = document.querySelector('#loadButton');
 const resetButton = document.querySelector('#resetButton');
@@ -29,6 +31,7 @@ updateCanvasSize();
 let posBuffer;
 let program;
 let failed = false;
+let activeSlot = 1;
 let zoom = 0;
 let rotation = 0;
 // let escapeRadius: number = 100;
@@ -88,10 +91,10 @@ function activateAnimation(element, className) {
     }, { once: true });
 }
 function loadCookies() {
-    let posX = cookies.get('posX');
-    let posY = cookies.get('posY');
-    let zoom = cookies.get('zoom');
-    let rotation = cookies.get('rotation');
+    let posX = cookies.get(`${activeSlot}_posX`);
+    let posY = cookies.get(`${activeSlot}_posY`);
+    let zoom = cookies.get(`${activeSlot}_zoom`);
+    let rotation = cookies.get(`${activeSlot}_rotation`);
     // let escapeRadius = cookies.get("escapeRadius");
     // let iterations = cookies.get("iterations");
     if (posX)
@@ -105,7 +108,7 @@ function loadCookies() {
     // if (escapeRadius) escapeInput.value = escapeRadius;
     // if (iterations) iterationInput.value = iterations;
     for (const input of UniformInputs.getInputs()) {
-        let value = cookies.get(input.name);
+        let value = cookies.get(`${activeSlot}_${input.name}`);
         if (value)
             input.input.value = value;
     }
@@ -113,16 +116,47 @@ function loadCookies() {
     activateAnimation(loadButton, 'popup');
 }
 function storeCookies() {
-    cookies.set('posX', String(finalPosX));
-    cookies.set('posY', String(finalPosY));
-    cookies.set('zoom', String(finalZoom));
-    cookies.set('rotation', String(rotation));
+    cookies.set(`${activeSlot}_posX`, String(finalPosX));
+    cookies.set(`${activeSlot}_posY`, String(finalPosY));
+    cookies.set(`${activeSlot}_zoom`, String(finalZoom));
+    cookies.set(`${activeSlot}_rotation`, String(rotation));
     for (const input of UniformInputs.getInputs()) {
-        cookies.set(input.name, String(input.value));
+        cookies.set(`${activeSlot}_${input.name}`, String(input.value));
     }
     // cookies.set("escapeRadius", String(escapeRadius));
     // cookies.set("iterations", String(iterations));
     activateAnimation(saveButton, 'popup');
+}
+function appendCookieSlots() {
+    let slots = cookies.getJSON('slots');
+    if (!slots)
+        slots = [1];
+    if (slotSelect.value === 'new') {
+        slotSelect.value = '1';
+    }
+    slotSelectAddOption(...slots);
+    return slots;
+}
+function addCookieSlot() {
+    var _a;
+    let existingSlots = cookies.getJSON('slots');
+    if (!existingSlots)
+        existingSlots = [];
+    console.log(existingSlots);
+    let newSlot = ((_a = _.max(existingSlots)) !== null && _a !== void 0 ? _a : 0) + 1;
+    existingSlots.push(newSlot);
+    cookies.setJSON('slots', existingSlots);
+    slotSelectAddOption(newSlot);
+    return newSlot;
+}
+function slotSelectAddOption(...slots) {
+    let newSlotOpt = slotSelect.querySelector('.newSlot');
+    for (const slot of slots) {
+        let option = document.createElement('option');
+        option.value = String(slot);
+        option.innerText = String(slot);
+        newSlotOpt.insertAdjacentElement('beforebegin', option);
+    }
 }
 function getFinalMousePos(x, y) {
     return canvasToShaderSpace(x, y);
@@ -234,6 +268,19 @@ function enterPreview() {
     }
     setCanvasSize(x, y);
 }
+function handleSlotChange(loadSlot = true) {
+    let value = slotSelect.value;
+    let slot;
+    if (value === 'new') {
+        slot = addCookieSlot();
+    }
+    else {
+        slot = Number(value);
+    }
+    activeSlot = slot;
+    if (loadSlot)
+        loadCookies();
+}
 function initializeWithSources(gl, vertexSource, fragSource) {
     try {
         program = webgl.createProgramFromSources(gl, vertexSource, fragSource);
@@ -264,6 +311,8 @@ function initializeWithSources(gl, vertexSource, fragSource) {
 // }
 function initializeLoop() {
     // loadCookies();
+    appendCookieSlots();
+    handleSlotChange(false);
     updateWithInput(null, true);
     if (previewRender) {
         enterPreview();
@@ -279,6 +328,9 @@ function initializeLoop() {
     }
     // escapeInput.addEventListener("change", updateWithInput);
     // iterationInput.addEventListener("change", updateWithInput);
+    slotSelect.addEventListener('change', () => {
+        handleSlotChange();
+    });
     saveButton.addEventListener('click', storeCookies);
     loadButton.addEventListener('click', loadCookies);
     resetButton.addEventListener('click', resetTransform);
@@ -353,6 +405,7 @@ function updateDisplays() {
         if (Number(input.input.value) !== input.value)
             input.input.value = String(input.value);
     }
+    slotSelect.value = String(activeSlot);
     // if (
     // 	Number(iterationInput.value) !== iterations &&
     // 	iterationInput.value !== ""

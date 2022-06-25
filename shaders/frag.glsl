@@ -128,16 +128,16 @@ vec3 colorPalette(float value) {
 
 	// color = genColorPalette(aColor, bColor, cColor, dColor, value);
 
-	vec3 color1 = vec3(0.56, 0.93, 1);
+	vec3 color1 = vec3(0.06, 0.05, 0.19);
 	vec3 color2 = vec3(0.18, 0.44, 1);
-	vec3 color3 = vec3(0.06, 0.05, 0.19);
+	vec3 color3 = vec3(0.56, 0.93, 1);
 	vec3 color4 = vec3(0.9, 0.9, 1);
 
-	color = color3;
+	color = color1;
 
 	color = colorBump(color2, 1., 0.5, 1., false, color, value);
 
-	color = mix(color, color1, pow(value, 2.));
+	color = mix(color, color3, pow(value, 2.));
 
 	color = colorBump(color4, 0.5, 1., 1., false, color, value);
 

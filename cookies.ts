@@ -1,11 +1,19 @@
 export function set(
 	name: string,
 	value: string,
-	exdays: number = 365,
+	exdays: number | null = null,
 	sameSiteOnly = true
 ) {
 	const d = new Date();
-	d.setTime(d.getTime() + exdays * 24 * 60 * 60 * 1000);
+	if (exdays === null) {
+		/*Point when unix exceeds 32-bit int limit, which may break some
+		browsers (Actually its a few months later but I've added some
+		margin just to be sure). From here: https://stackoverflow.com/a/532660/15507414*/
+		d.setUTCFullYear(2038, 0, 1);
+		d.setHours(1, 0, 0, 0);
+	} else {
+		d.setTime(d.getTime() + exdays * 24 * 60 * 60 * 1000);
+	}
 	let expires = 'expires=' + d.toUTCString();
 	let sameSite = sameSiteOnly ? 'strict' : 'lax';
 	document.cookie =
@@ -37,8 +45,8 @@ export function setJSON(
 	set(name, encodeURIComponent(JSON.stringify(value)), exdays, sameSiteOnly);
 }
 
-export function getJSON(name: string): object {
+export function getJSON(name: string): object | undefined {
 	let value = get(name);
-	if (!value) return null;
+	if (!value) return undefined;
 	return JSON.parse(decodeURIComponent(get(name)));
 }
