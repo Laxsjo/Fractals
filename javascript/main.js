@@ -19,6 +19,9 @@ UniformInputs.registerUniform("secondaryIterations", UniformType.Int, 200);
 const saveButton = document.querySelector("#saveButton");
 const loadButton = document.querySelector("#loadButton");
 const resetButton = document.querySelector("#resetButton");
+const dimXInput = document.querySelector("#dimensionXInput");
+const dimYInput = document.querySelector("#dimensionYInput");
+const downloadButton = document.querySelector("#downloadButton");
 let res = 1;
 updateCanvasSize();
 let posBuffer;
@@ -31,6 +34,7 @@ let rotation = 0;
 let [finalPosX, finalPosY] = [0, 0];
 let finalZoom = getFinalZoom(zoom);
 let [posX, posY] = shaderToCanvasSpace(finalPosX, finalPosY);
+let isRender = false;
 let dragOffsetX;
 let dragOffsetY;
 let dragStartX;
@@ -94,7 +98,7 @@ function loadCookies() {
     if (zoom)
         zoomInput.value = zoom;
     if (rotation)
-        rotationInput.value = zoom;
+        rotationInput.value = rotation;
     // if (escapeRadius) escapeInput.value = escapeRadius;
     // if (iterations) iterationInput.value = iterations;
     for (const input of UniformInputs.getInputs()) {
@@ -151,7 +155,7 @@ function handleScroll(event) {
         return;
     let [x, y] = canvasToShaderSpace(event.x, event.y);
     zoomTo(zoom - event.deltaY, x, y);
-    renderFrame();
+    renderFrame(gl, program);
 }
 function handleMouseMove(event) {
     let x = event.pageX - dragOffsetX;
@@ -172,12 +176,12 @@ function handleMouseMove(event) {
         [posX, posY] = shaderToCanvasSpace(...rotatePoint(startX, startY, deg2Rad(-rot / 2)));
     }
     [finalPosX, finalPosY] = getFinalMousePos(posX, posY);
-    renderFrame();
+    renderFrame(gl, program);
 }
 function handleResize() {
     updateCanvasSize();
-    [finalPosX, finalPosY] = getFinalMousePos(posX, posY);
-    renderFrame();
+    [posX, posY] = shaderToCanvasSpace(finalPosX, finalPosY);
+    renderFrame(gl, program);
 }
 function enterDrag(event) {
     if (event.button !== 0) {
@@ -202,7 +206,7 @@ function leaveDrag(event) {
     document.removeEventListener("mouseup", this);
     document.removeEventListener("mousemove", handleMouseMove);
 }
-function initializeWithSources(vertexSource, fragSource) {
+function initializeWithSources(gl, vertexSource, fragSource) {
     try {
         program = webgl.createProgramFromSources(gl, vertexSource, fragSource);
     }
@@ -222,7 +226,7 @@ function initializeWithSources(vertexSource, fragSource) {
     ];
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertexPositions), gl.STATIC_DRAW);
     initializeLoop();
-    renderFrame();
+    renderFrame(gl, program);
 }
 // function initializeCanvas() {
 // 	canvas.style.width = canvas.width + "px";
@@ -246,6 +250,7 @@ function initializeLoop() {
     saveButton.addEventListener("click", storeCookies);
     loadButton.addEventListener("click", loadCookies);
     resetButton.addEventListener("click", resetTransform);
+    downloadButton.addEventListener("click", renderDownload);
     canvas.addEventListener("wheel", handleScroll);
     canvas.addEventListener("mousedown", enterDrag);
     window.addEventListener("resize", handleResize);
@@ -291,7 +296,7 @@ function updateWithInput(event, simpleSet = true) {
     // }
     // storeCookies();
     updateCanvasSize();
-    renderFrame();
+    renderFrame(gl, program);
 }
 function updateDisplays() {
     if (Number(posXInput.value) !== finalPosX)
@@ -328,7 +333,7 @@ function resetTransform() {
     }
     // iterations = 500;
     updateCanvasSize();
-    renderFrame();
+    renderFrame(gl, program);
     activateAnimation(resetButton, "popup");
 }
 function updateCanvasSize() {
@@ -345,7 +350,7 @@ function failCompilation(reason) {
     const reasonElement = containerElement.querySelector(".errorReason");
     reasonElement.innerText = reason;
 }
-function renderFrame() {
+function renderFrame(gl, program) {
     if (failed) {
         return;
     }
@@ -356,16 +361,18 @@ function renderFrame() {
     gl.useProgram(program);
     let posAttrLocation = gl.getAttribLocation(program, "a_position");
     gl.enableVertexAttribArray(posAttrLocation);
-    gl.bindBuffer(gl.ARRAY_BUFFER, posBuffer);
+    // gl.bindBuffer(gl.ARRAY_BUFFER, posBuffer);
     gl.vertexAttribPointer(posAttrLocation, 2, gl.FLOAT, false, 0, 0);
     let aspectRatioLocation = gl.getUniformLocation(program, "AspectRatio");
-    gl.uniform1f(aspectRatioLocation, canvas.width / canvas.height);
+    gl.uniform1f(aspectRatioLocation, gl.canvas.width / gl.canvas.height);
     let offsetLocation = gl.getUniformLocation(program, "Offset");
     gl.uniform2f(offsetLocation, finalPosX, finalPosY);
     let rotationLocation = gl.getUniformLocation(program, "Rotation");
     gl.uniform1f(rotationLocation, (rotation / 360) * Math.PI);
     let scaleLocation = gl.getUniformLocation(program, "Scale");
     gl.uniform1f(scaleLocation, finalZoom);
+    let isRenderLoc = gl.getUniformLocation(program, "IsRender");
+    gl.uniform1i(isRenderLoc, Number(isRender));
     for (const input of UniformInputs.getInputs()) {
         let location = gl.getUniformLocation(program, input.name[0].toUpperCase() + input.name.slice(1));
         gl[input.type](location, input.value);
@@ -378,6 +385,51 @@ function renderFrame() {
     gl.drawArrays(gl.TRIANGLES, 0, 6);
     updateDisplays();
 }
+function renderDownload() {
+    if (isNaN(Number(dimXInput.value)) || isNaN(Number(dimYInput.value))) {
+        console.log("Render failed: invalid dimensions");
+        return;
+    }
+    console.log("Started render");
+    let width = Number(dimXInput.value);
+    let height = Number(dimYInput.value);
+    activateAnimation(downloadButton, "popup");
+    let link = document.querySelector("#renderImageLink");
+    let image = link.querySelector("img");
+    let offsCanvas = document.createElement("canvas");
+    const gl = offsCanvas.getContext("webgl2", { preserveDrawingBuffer: true });
+    let renderPosBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, renderPosBuffer);
+    // prettier-ignore
+    let vertexPositions = [
+        -1, -1,
+        -1, 1,
+        1, 1,
+        -1, -1,
+        1, 1,
+        1, -1,
+    ];
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertexPositions), gl.STATIC_DRAW);
+    offsCanvas.width = width;
+    offsCanvas.height = height;
+    const program = webgl.createProgramFromSources(gl, vertexSource, fragSource);
+    isRender = true;
+    renderFrame(gl, program);
+    isRender = false;
+    // gl.finish();
+    // let url = offsCanvas.toDataURL();
+    // image.style.aspectRatio = width + " / " + height;
+    // link.href = url;
+    // image.src = url;
+    // link.classList.add("active");
+    webgl.callbackOnSync(gl, () => {
+        let url = offsCanvas.toDataURL();
+        link.style.aspectRatio = width + " / " + height;
+        link.href = url;
+        image.src = url;
+        link.classList.add("active");
+    });
+}
 const gl = canvas.getContext("webgl2");
 gl.clearColor(0.0, 0.0, 0.0, 1.0);
 gl.clear(gl.COLOR_BUFFER_BIT);
@@ -389,13 +441,13 @@ let fragSource = null;
 fetch("/shaders/frag.glsl").then(async (response) => {
     fragSource = await response.text();
     if (vertexSource !== null) {
-        initializeWithSources(vertexSource, fragSource);
+        initializeWithSources(gl, vertexSource, fragSource);
     }
 });
 fetch("/shaders/vertex.glsl").then(async (response) => {
     vertexSource = await response.text();
     if (fragSource !== null) {
-        initializeWithSources(vertexSource, fragSource);
+        initializeWithSources(gl, vertexSource, fragSource);
     }
 });
 //# sourceMappingURL=main.js.map

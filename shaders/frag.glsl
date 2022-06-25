@@ -14,6 +14,8 @@ uniform vec2 Offset;
 uniform float Rotation;
 uniform float Scale;
 
+uniform bool IsRender;
+
 uniform int Iterations;
 uniform int SecondaryIterations;
 
@@ -200,7 +202,7 @@ void main() {
 
 	value = clamp(value, 0., 1.);
 
-	if(screenCoord.y < 0.93) {
+	if(screenCoord.y < 0.93 || IsRender) {
 		// color = colorPalette(aColor, bColor, cColor, dColor, value);
 		color = colorPalette(value);
 		// color = vec3(value);

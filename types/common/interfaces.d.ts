@@ -1,0 +1,3 @@
+interface HTMLElement {
+	inert: boolean;
+}

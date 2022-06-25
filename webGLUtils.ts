@@ -48,3 +48,34 @@ export function createProgramFromSources(
 
 	return createProgram(gl, vertexShader, fragShader);
 }
+
+/**
+ * From here: https://stackoverflow.com/a/54499741/15507414
+ */
+export function callbackOnSync(
+	gl: WebGL2RenderingContext,
+	callback: () => any
+) {
+	const sync = gl.fenceSync(gl.SYNC_GPU_COMMANDS_COMPLETE, 0);
+	gl.flush(); // make sure the sync command is read
+
+	setTimeout(checkSync);
+
+	function checkSync() {
+		const timeout = 0; // 0 = just check the status
+		const bitflags = 0;
+		const status = gl.clientWaitSync(sync, bitflags, timeout);
+		switch (status) {
+			case gl.TIMEOUT_EXPIRED:
+				// it's not done, check again next time
+				return setTimeout(checkSync);
+			case gl.WAIT_FAILED:
+				throw new Error("should never get here");
+			default:
+				// it's done!
+				gl.deleteSync(sync);
+
+				callback();
+		}
+	}
+}

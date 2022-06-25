@@ -27,6 +27,12 @@ const saveButton = document.querySelector("#saveButton") as HTMLButtonElement;
 const loadButton = document.querySelector("#loadButton") as HTMLButtonElement;
 const resetButton = document.querySelector("#resetButton") as HTMLButtonElement;
 
+const dimXInput = document.querySelector<HTMLInputElement>("#dimensionXInput");
+const dimYInput = document.querySelector<HTMLInputElement>("#dimensionYInput");
+
+const downloadButton =
+	document.querySelector<HTMLButtonElement>("#downloadButton");
+
 let res: number = 1;
 
 updateCanvasSize();
@@ -45,6 +51,8 @@ let [finalPosX, finalPosY] = [0, 0];
 let finalZoom: number = getFinalZoom(zoom);
 
 let [posX, posY] = shaderToCanvasSpace(finalPosX, finalPosY);
+
+let isRender = false;
 
 let dragOffsetX: number;
 let dragOffsetY: number;
@@ -132,7 +140,7 @@ function loadCookies() {
 	if (posX) posXInput.value = posX;
 	if (posY) posYInput.value = posY;
 	if (zoom) zoomInput.value = zoom;
-	if (rotation) rotationInput.value = zoom;
+	if (rotation) rotationInput.value = rotation;
 	// if (escapeRadius) escapeInput.value = escapeRadius;
 	// if (iterations) iterationInput.value = iterations;
 
@@ -214,7 +222,7 @@ function handleScroll(event: WheelEvent) {
 	let [x, y] = canvasToShaderSpace(event.x, event.y);
 
 	zoomTo(zoom - event.deltaY, x, y);
-	renderFrame();
+	renderFrame(gl, program);
 }
 
 function handleMouseMove(event: MouseEvent) {
@@ -243,15 +251,15 @@ function handleMouseMove(event: MouseEvent) {
 
 	[finalPosX, finalPosY] = getFinalMousePos(posX, posY);
 
-	renderFrame();
+	renderFrame(gl, program);
 }
 
 function handleResize() {
 	updateCanvasSize();
 
-	[finalPosX, finalPosY] = getFinalMousePos(posX, posY);
+	[posX, posY] = shaderToCanvasSpace(finalPosX, finalPosY);
 
-	renderFrame();
+	renderFrame(gl, program);
 }
 
 function enterDrag(event: MouseEvent) {
@@ -285,7 +293,11 @@ function leaveDrag(event: MouseEvent) {
 	document.removeEventListener("mousemove", handleMouseMove);
 }
 
-function initializeWithSources(vertexSource: string, fragSource: string) {
+function initializeWithSources(
+	gl: WebGL2RenderingContext,
+	vertexSource: string,
+	fragSource: string
+) {
 	try {
 		program = webgl.createProgramFromSources(gl, vertexSource, fragSource);
 	} catch (e) {
@@ -312,7 +324,7 @@ function initializeWithSources(vertexSource: string, fragSource: string) {
 
 	initializeLoop();
 
-	renderFrame();
+	renderFrame(gl, program);
 }
 
 // function initializeCanvas() {
@@ -340,6 +352,8 @@ function initializeLoop() {
 	saveButton.addEventListener("click", storeCookies);
 	loadButton.addEventListener("click", loadCookies);
 	resetButton.addEventListener("click", resetTransform);
+
+	downloadButton.addEventListener("click", renderDownload);
 
 	canvas.addEventListener("wheel", handleScroll);
 
@@ -394,7 +408,7 @@ function updateWithInput(event?: Event, simpleSet: boolean = true) {
 	// storeCookies();
 
 	updateCanvasSize();
-	renderFrame();
+	renderFrame(gl, program);
 }
 
 function updateDisplays() {
@@ -439,7 +453,7 @@ function resetTransform() {
 	// iterations = 500;
 
 	updateCanvasSize();
-	renderFrame();
+	renderFrame(gl, program);
 
 	activateAnimation(resetButton, "popup");
 }
@@ -464,7 +478,7 @@ function failCompilation(reason: string) {
 	reasonElement.innerText = reason;
 }
 
-function renderFrame() {
+function renderFrame(gl: WebGL2RenderingContext, program: WebGLProgram) {
 	if (failed) {
 		return;
 	}
@@ -480,11 +494,11 @@ function renderFrame() {
 	let posAttrLocation = gl.getAttribLocation(program, "a_position");
 	gl.enableVertexAttribArray(posAttrLocation);
 
-	gl.bindBuffer(gl.ARRAY_BUFFER, posBuffer);
+	// gl.bindBuffer(gl.ARRAY_BUFFER, posBuffer);
 	gl.vertexAttribPointer(posAttrLocation, 2, gl.FLOAT, false, 0, 0);
 
 	let aspectRatioLocation = gl.getUniformLocation(program, "AspectRatio");
-	gl.uniform1f(aspectRatioLocation, canvas.width / canvas.height);
+	gl.uniform1f(aspectRatioLocation, gl.canvas.width / gl.canvas.height);
 
 	let offsetLocation = gl.getUniformLocation(program, "Offset");
 	gl.uniform2f(offsetLocation, finalPosX, finalPosY);
@@ -494,6 +508,9 @@ function renderFrame() {
 
 	let scaleLocation = gl.getUniformLocation(program, "Scale");
 	gl.uniform1f(scaleLocation, finalZoom);
+
+	let isRenderLoc = gl.getUniformLocation(program, "IsRender");
+	gl.uniform1i(isRenderLoc, Number(isRender));
 
 	for (const input of UniformInputs.getInputs()) {
 		let location = gl.getUniformLocation(
@@ -515,6 +532,79 @@ function renderFrame() {
 	updateDisplays();
 }
 
+function renderDownload() {
+	if (isNaN(Number(dimXInput.value)) || isNaN(Number(dimYInput.value))) {
+		console.log("Render failed: invalid dimensions");
+
+		return;
+	}
+	console.log("Started render");
+
+	let width = Number(dimXInput.value);
+	let height = Number(dimYInput.value);
+
+	activateAnimation(downloadButton, "popup");
+
+	let link = document.querySelector<HTMLAnchorElement>("#renderImageLink");
+	let image = link.querySelector("img");
+
+	let offsCanvas = document.createElement("canvas");
+	const gl = offsCanvas.getContext("webgl2", { preserveDrawingBuffer: true });
+
+	let renderPosBuffer = gl.createBuffer();
+	gl.bindBuffer(gl.ARRAY_BUFFER, renderPosBuffer);
+
+	// prettier-ignore
+	let vertexPositions = [
+        -1, -1,
+        -1, 1,
+        1, 1,
+        -1, -1,
+        1, 1,
+        1, -1,
+    ];
+	gl.bufferData(
+		gl.ARRAY_BUFFER,
+		new Float32Array(vertexPositions),
+		gl.STATIC_DRAW
+	);
+
+	offsCanvas.width = width;
+	offsCanvas.height = height;
+
+	const program = webgl.createProgramFromSources(
+		gl,
+		vertexSource,
+		fragSource
+	);
+
+	isRender = true;
+	renderFrame(gl, program);
+	isRender = false;
+
+	// gl.finish();
+
+	// let url = offsCanvas.toDataURL();
+
+	// image.style.aspectRatio = width + " / " + height;
+
+	// link.href = url;
+	// image.src = url;
+
+	// link.classList.add("active");
+
+	webgl.callbackOnSync(gl, () => {
+		let url = offsCanvas.toDataURL();
+
+		link.style.aspectRatio = width + " / " + height;
+
+		link.href = url;
+		image.src = url;
+
+		link.classList.add("active");
+	});
+}
+
 const gl = canvas.getContext("webgl2");
 
 gl.clearColor(0.0, 0.0, 0.0, 1.0);
@@ -530,12 +620,12 @@ let fragSource: null | string = null;
 fetch("/shaders/frag.glsl").then(async (response) => {
 	fragSource = await response.text();
 	if (vertexSource !== null) {
-		initializeWithSources(vertexSource, fragSource);
+		initializeWithSources(gl, vertexSource, fragSource);
 	}
 });
 fetch("/shaders/vertex.glsl").then(async (response) => {
 	vertexSource = await response.text();
 	if (fragSource !== null) {
-		initializeWithSources(vertexSource, fragSource);
+		initializeWithSources(gl, vertexSource, fragSource);
 	}
 });
