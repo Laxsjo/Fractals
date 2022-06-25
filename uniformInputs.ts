@@ -1,7 +1,8 @@
 export enum UniformType {
-	Float = "uniform1f",
-	Int = "uniform1i",
-	UInt = "uniform1ui",
+	Float = 'uniform1f',
+	Vec3 = 'uniform3f',
+	Int = 'uniform1i',
+	UInt = 'uniform1ui',
 }
 
 export class UniformInputs {
@@ -10,9 +11,22 @@ export class UniformInputs {
 	public static registerUniform(
 		name: string,
 		type: UniformType,
-		defaultValue: number
+		defaultValue: string | number
 	) {
-		this.inputs.push(new Input(name, type, defaultValue));
+		let constructor: () => Input;
+		switch (type) {
+			case UniformType.Float:
+			case UniformType.Int:
+			case UniformType.UInt:
+				this.inputs.push(
+					new InputNumber(name, type, String(defaultValue))
+				);
+				break;
+			case UniformType.Vec3:
+				this.inputs.push(
+					new InputColor(name, type, String(defaultValue))
+				);
+		}
 	}
 
 	public static getInputs() {
@@ -20,20 +34,20 @@ export class UniformInputs {
 	}
 }
 
-class Input {
+abstract class Input {
 	public name: string;
-	public value: number;
+	public value: string;
 	public type: UniformType;
 
 	public input: HTMLInputElement;
 
-	protected defaultValue: number;
+	protected defaultValue: string;
 
 	constructor(
 		name: string,
 		type: UniformType,
-		defaultValue: number,
-		value?: number
+		defaultValue: string,
+		value?: string
 	) {
 		this.name = name;
 		this.input = document.querySelector<HTMLInputElement>(
@@ -56,15 +70,42 @@ class Input {
 			return;
 		}
 
-		if (this.input.value === "") {
+		if (this.input.value === '') {
 			this.value = defaultValue;
 			return;
 		}
 
-		this.value = Number(this.input.value);
+		this.value = this.input.value;
+	}
+
+	public getValue(): any {
+		return this.value;
 	}
 
 	public reset() {
 		this.value = this.defaultValue;
+	}
+}
+
+export class InputNumber extends Input {
+	public getValue(): number {
+		return Number(this.value);
+	}
+}
+
+export class InputColor extends Input {
+	public getValue(): [number, number, number] {
+		let hexValues = _.chunk(_.trim(this.value, '#'), 2);
+
+		let numValues = _.take(
+			_.map(hexValues, (hexNumbers) => {
+				return parseInt(hexNumbers.join(''), 16) / 255;
+			}),
+			3
+		) as [number, number, number];
+
+		console.log(this.value, '=', numValues);
+
+		return numValues;
 	}
 }

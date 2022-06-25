@@ -1,5 +1,10 @@
 import * as webgl from './webGLUtils.js';
-import { UniformInputs, UniformType } from './uniformInputs.js';
+import {
+	UniformInputs,
+	InputNumber,
+	InputColor,
+	UniformType,
+} from './uniformInputs.js';
 import { Matrix2x2, matrixMult } from './matrix.js';
 import * as cookies from './cookies.js';
 // import * as _ from '';
@@ -23,6 +28,11 @@ UniformInputs.registerUniform('escapeRadius', UniformType.Float, 300);
 UniformInputs.registerUniform('secondaryEscapeRadius', UniformType.Float, 800);
 UniformInputs.registerUniform('iterations', UniformType.Int, 500);
 UniformInputs.registerUniform('secondaryIterations', UniformType.Int, 200);
+
+UniformInputs.registerUniform('color1', UniformType.Vec3, '#0f0d30');
+UniformInputs.registerUniform('color2', UniformType.Vec3, '#2e70ff');
+UniformInputs.registerUniform('color3', UniformType.Vec3, '#8fedff');
+UniformInputs.registerUniform('color4', UniformType.Vec3, '#e6e6ff');
 
 const slotSelect = document.querySelector<HTMLSelectElement>('#slotSelect');
 
@@ -511,8 +521,8 @@ function updateWithInput(event?: Event, simpleSet: boolean = true) {
 	previewRender = previewInput.checked;
 
 	for (const input of UniformInputs.getInputs()) {
-		if (!isNaN(Number(input.input.value)) && input.input.value !== '') {
-			input.value = Number(input.input.value);
+		if (!isNaN(input.getValue()) && input.input.value !== '') {
+			input.value = input.input.value;
 		}
 	}
 
@@ -548,8 +558,7 @@ function updateDisplays() {
 	previewInput.checked = previewRender;
 
 	for (const input of UniformInputs.getInputs()) {
-		if (Number(input.input.value) !== input.value)
-			input.input.value = String(input.value);
+		if (input.input.value !== input.value) input.input.value = input.value;
 	}
 
 	slotSelect.value = String(activeSlot);
@@ -647,7 +656,11 @@ function renderFrame(gl: WebGL2RenderingContext, program: WebGLProgram) {
 			program,
 			input.name[0].toUpperCase() + input.name.slice(1)
 		);
-		gl[input.type](location, input.value);
+		if (input instanceof InputColor) {
+			gl[input.type](location, ...input.getValue());
+		} else if (input instanceof InputNumber) {
+			gl[input.type](location, input.getValue(), 0, 0);
+		}
 	}
 
 	// let iterationsLocation = gl.getUniformLocation(program, "Iterations");

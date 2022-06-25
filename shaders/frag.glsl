@@ -14,6 +14,11 @@ uniform vec2 Offset;
 uniform float Rotation;
 uniform float Scale;
 
+uniform vec3 Color1;
+uniform vec3 Color2;
+uniform vec3 Color3;
+uniform vec3 Color4;
+
 uniform bool IsRender;
 
 uniform int Iterations;
@@ -128,10 +133,10 @@ vec3 colorPalette(float value) {
 
 	// color = genColorPalette(aColor, bColor, cColor, dColor, value);
 
-	vec3 color1 = vec3(0.06, 0.05, 0.19);
-	vec3 color2 = vec3(0.18, 0.44, 1);
-	vec3 color3 = vec3(0.56, 0.93, 1);
-	vec3 color4 = vec3(0.9, 0.9, 1);
+	vec3 color1 = Color1; //vec3(0.06, 0.05, 0.19);
+	vec3 color2 = Color2; //vec3(0.18, 0.44, 1);
+	vec3 color3 = Color3; //vec3(0.56, 0.93, 1);
+	vec3 color4 = Color4; //vec3(0.9, 0.9, 1);
 
 	color = color1;
 
