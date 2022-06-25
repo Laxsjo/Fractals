@@ -1,0 +1,170 @@
+@use "sass:color";
+@use "sass:math";
+
+@function gradient1-66Power($color) {
+	@return linear-gradient(
+		to bottom,
+		rgba($color, 0.58431372549),
+		rgba($color, 0.666957964023),
+		rgba($color, 0.742149853755),
+		rgba($color, 0.809486167517),
+		rgba($color, 0.868460589254),
+		rgba($color, 0.918406119284),
+		rgba($color, 0.95837578087),
+		rgba($color, 0.986828467542),
+		rgba($color, 1),
+		rgba($color, 0.986828467542),
+		rgba($color, 0.95837578087),
+		rgba($color, 0.918406119284),
+		rgba($color, 0.868460589254),
+		rgba($color, 0.809486167517),
+		rgba($color, 0.742149853755),
+		rgba($color, 0.666957964023),
+		rgba($color, 0.58431372549)
+	);
+	/*  CSS is very dumb and doesn't support non-linear gradients
+        So I have to aproximate a non-linear curve...
+        If you're curious the curve I'm approximating is 1-(1-x)^1.66*/
+}
+
+@function noUnit($number) {
+	@if type-of($number) == "number" and not unitless($number) {
+		@return math.div($number, ($number * 0 + 1));
+	}
+
+	@return $number;
+}
+
+@function exponent-gradient(
+	$direction,
+	$color0,
+	$color1,
+	$exponent,
+	$iterations: 20
+) {
+	$colors: "";
+	@for $i from 0 to $iterations {
+		$colors: $colors +
+			color.mix(
+				$color1,
+				$color0,
+				math.pow($i / $iterations, $exponent) * 100%
+			) +
+			// " " +
+			// ($i / 20 * 100%) +
+			", ";
+	}
+	$colors: str-slice($colors, 1, -3);
+	@debug "hello";
+
+	@return linear-gradient($direction, #{$colors});
+	// @return black;
+}
+
+@mixin colorFilter($color: #000 /*, $opacity: 1*/, $additionalFilters: "") {
+	$r: math.div(red($color), 255);
+	$g: math.div(green($color), 255);
+	$b: math.div(blue($color), 255);
+	$a: alpha($color);
+	// $a: $opacity;
+
+	// grayscale fallback if SVG from data url is not supported
+	$lightness: lightness($color);
+	-webkit-filter: saturate(0%) brightness(0%) invert($lightness) opacity($a) #{$additionalFilters};
+	filter: saturate(0%) brightness(0%) invert($lightness) opacity($a) #{$additionalFilters};
+
+	// color filter
+	$svg-filter-id: "colorFilter";
+
+	-webkit-filter: url('data:image/svg+xml;utf8,\
+    <svg xmlns="http://www.w3.org/2000/svg">\
+      <filter id="#{$svg-filter-id}" color-interpolation-filters="sRGB">\
+        <feColorMatrix type="matrix" values="\
+          0 0 0 0 #{$r}\
+          0 0 0 0 #{$g}\
+          0 0 0 0 #{$b}\
+          0 0 0 #{$a} 0\
+        "/>\
+      </filter>\
+    </svg>\
+    ##{$svg-filter-id}')
+		#{$additionalFilters};
+
+	filter: url('data:image/svg+xml;utf8,\
+    <svg xmlns="http://www.w3.org/2000/svg">\
+      <filter id="#{$svg-filter-id}" color-interpolation-filters="sRGB">\
+        <feColorMatrix type="matrix" values="\
+          0 0 0 0 #{$r}\
+          0 0 0 0 #{$g}\
+          0 0 0 0 #{$b}\
+          0 0 0 #{$a} 0\
+        "/>\
+      </filter>\
+    </svg>\
+    ##{$svg-filter-id}')
+		#{$additionalFilters};
+}
+
+@mixin paragraphThin {
+	width: calc(var(--paragraphWidth-thin));
+	min-width: 30ch;
+}
+@mixin paragraphMedium {
+	width: calc(var(--paragraphWidth-medium));
+	min-width: 40ch;
+}
+@mixin paragraphWide {
+	width: calc(var(--paragraphWidth-wide));
+	min-width: 50ch;
+}
+
+@mixin focusRing($color: currentColor, $style: solid, $width: 2px) {
+	outline: $width $style transparent;
+	transition: none var(--duration-medium) ease;
+	transition-property: outline-color, border-color;
+
+	&:focus-visible {
+		outline-color: $color;
+	}
+}
+
+@mixin fancyLink {
+	display: inline;
+	position: relative;
+
+	text-decoration: none;
+
+	outline: 2px dotted transparent;
+
+	background: linear-gradient(
+			90deg,
+			var(--underlineColor1, currentColor),
+			var(--underlineColor2, currentColor)
+		)
+		100% 100%/0% 2px no-repeat;
+	transition: background-size 0.2s, outline-color var(--duration-short) ease;
+
+	&:hover,
+	&:focus-visible {
+		background-size: 100% 2px;
+		background-position: 0% 100%;
+		background-image: linear-gradient(
+			90deg,
+			var(--underlineHoverColor1, var(--underlineColor1, currentColor)),
+			var(--underlineHoverColor2, var(--underlineColor2, currentColor))
+		);
+	}
+
+	&:focus-visible {
+		outline: 2px dotted currentColor;
+	}
+
+	@media (any-hover: none) {
+		// background-size: 100% 1px !important;
+		// background-position: 0% 100% !important;
+
+		text-decoration: underline;
+
+		background: none !important;
+	}
+}

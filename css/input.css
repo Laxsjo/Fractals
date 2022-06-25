@@ -1,0 +1,2204 @@
+@charset "UTF-8";
+.material-icons {
+  display: inline-block;
+  overflow: hidden;
+  overflow: clip;
+  width: 1em;
+  height: 1em;
+  font-family: "Material Symbols Outlined";
+  font-weight: inherit;
+  font-style: normal;
+  font-size: 1em;
+  line-height: 1em;
+  vertical-align: middle;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  font-feature-settings: "liga";
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  font-optical-sizing: auto;
+  font-variation-settings: "FILL" 0, "wght" 700, "GRAD" 0, "opsz" 20;
+  -webkit-user-select: none;
+  /* Safari */
+  -moz-user-select: none;
+  /* Firefox */
+  -ms-user-select: none;
+  /* IE10+/Edge */
+  user-select: none;
+  /* Standard */
+  color: var(--mdColor1);
+}
+
+.material-icons.outlined {
+  font-family: "Material Symbols Outlined" !important;
+}
+
+.material-icons.round {
+  font-family: "Material Symbols Rounded" !important;
+}
+
+.md-small {
+  font-size: 1.125rem !important;
+  line-height: 1.125rem !important;
+}
+
+.md-medium {
+  font-size: 1.5rem !important;
+  line-height: 1.5rem !important;
+}
+
+.md-large {
+  font-size: 2.25rem !important;
+  line-height: 2.25rem !important;
+}
+
+.md-veryLarge {
+  font-size: 3rem !important;
+  line-height: 3rem !important;
+}
+
+.mdRelative-small {
+  font-size: 1.125em !important;
+  line-height: 1.125em !important;
+}
+
+.mdRelative-medium {
+  font-size: 1.5em !important;
+  line-height: 1.5em !important;
+}
+
+.mdRelative-large {
+  font-size: 2.25em !important;
+  line-height: 2.25em !important;
+}
+
+.mdRelative-veryLarge {
+  font-size: 3em !important;
+  line-height: 3em !important;
+}
+
+:root {
+  --md-small: 1.125rem;
+  --md-medium: 1.5rem;
+  --md-large: 2.25rem;
+  --md-veryLarge: 3rem;
+  --md-negativeMargin: -0.1em;
+}
+
+.modified {
+  --focusColor1: var(--modifiedFocusColor1);
+  --focusColor2: var(--modifiedFocusColor2);
+}
+
+.new {
+  --focusColor1: var(--newFocusColor1);
+  --focusColor2: var(--newFocusColor2);
+}
+
+label:required {
+  color: red !important;
+}
+
+label,
+.inputLabel {
+  cursor: default;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  color: var(--textBoldColor);
+}
+label.modified,
+.inputLabel.modified {
+  color: var(--textBoldColor);
+}
+label.required::after,
+.inputLabel.required::after {
+  content: "*";
+  color: var(--requiredColor1);
+}
+
+@-webkit-keyframes backgroundHighlight {
+  0% {
+    background-color: var(--highlightBackground);
+  }
+  100% {
+    background-color: var(--normalBackground);
+  }
+}
+
+@keyframes backgroundHighlight {
+  0% {
+    background-color: var(--highlightBackground);
+  }
+  100% {
+    background-color: var(--normalBackground);
+  }
+}
+input,
+select,
+textarea,
+.fancySelect {
+  --normalBackground: var(--background);
+}
+input:user-invalid,
+select:user-invalid,
+textarea:user-invalid,
+.fancySelect:user-invalid {
+  -webkit-text-decoration: wavy underline var(--invalidColor1);
+          text-decoration: wavy underline var(--invalidColor1);
+}
+@supports not selector(:user-invalid) {
+  input:invalid,
+select:invalid,
+textarea:invalid,
+.fancySelect:invalid {
+    --highlightBackground: var(--invalidBackground1);
+    -webkit-text-decoration: wavy underline var(--invalidColor1);
+            text-decoration: wavy underline var(--invalidColor1);
+  }
+}
+
+input {
+  --background: var(--inputBackground1);
+  box-sizing: content-box;
+  height: 1.4em;
+  width: var(--inputWidth);
+  font-family: "Atkinson Hyperlegible", "Noto Sans Mono", monospace;
+  line-height: 1.4em;
+  background: var(--background);
+  border: 2px solid var(--inputBorder);
+  border-radius: var(--borderRadius-small);
+  color: var(--textBoldColor);
+  outline: 3px solid transparent;
+  transition: none var(--duration-medium) ease;
+  transition-property: outline-color, border-color;
+}
+input.modified {
+  border: 2px solid var(--modifiedBorder);
+}
+input.new {
+  border: 2px solid var(--newBorder);
+}
+input:focus-visible {
+  outline-color: var(--focusColor2);
+}
+input:focus-visible {
+  border-color: var(--focusColor1);
+}
+input::-moz-placeholder {
+  color: var(--textGrayColor);
+}
+input:-ms-input-placeholder {
+  color: var(--textGrayColor);
+}
+input::placeholder {
+  color: var(--textGrayColor);
+}
+input[type=checkbox] {
+  display: inline-block;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  position: relative;
+  vertical-align: baseline;
+  cursor: default;
+  box-sizing: content-box;
+  aspect-ratio: 1;
+  width: 0.7rem;
+  height: 0.7rem;
+  border-radius: var(--borderRadius-small);
+  background: var(--inputBackground1);
+}
+input[type=checkbox]:hover, input[type=checkbox]:focus-visible {
+  background: var(--inputHoverBackground1);
+  border-color: var(--inputHoverBorder1);
+}
+input[type=checkbox]:focus-visible {
+  border-color: var(--focusColor1);
+}
+input[type=checkbox]:checked {
+  background: var(--inputCheckedBackground1);
+  border-color: var(--inputCheckedBackground1);
+}
+input[type=checkbox]:checked:hover {
+  background: var(--inputCheckedHoverBackground1);
+  border-color: var(--inputCheckedHoverBackground1);
+}
+input[type=checkbox]:checked:focus-visible {
+  border-color: var(--focusColor1);
+  background-color: var(--focusColor1);
+}
+input[type=checkbox]:checked::after {
+  color: var(--inputCheckedColor1);
+}
+input[type=checkbox]::after {
+  display: block;
+  content: "done";
+  position: absolute;
+  width: 0.7rem;
+  height: 0.7rem;
+  margin-left: -0.1292rem;
+  font-family: "Material Symbols Rounded" !important;
+  font-size: 0.91rem;
+  line-height: 0.7rem;
+  text-align: center;
+  font-weight: 1000;
+  color: transparent;
+}
+input[type=radio] {
+  display: inline-block;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  position: relative;
+  vertical-align: baseline;
+  width: 0.7rem;
+  height: 0.7rem;
+  margin: 0;
+  margin-inline: 0.2rem;
+  box-sizing: content-box;
+  border-radius: 50%;
+  border-color: var(--inputBorder);
+  background: var(--inputBackground1);
+}
+input[type=radio]:hover, input[type=radio]:focus-visible {
+  border-color: var(--inputHoverBorder1);
+  background: var(--inputHoverBackground1);
+}
+input[type=radio]:focus-visible {
+  border-color: var(--focusColor1);
+}
+input[type=radio]:checked {
+  border-color: var(--inputCheckedBackground1);
+  background: var(--inputCheckedColor1);
+}
+input[type=radio]:checked:hover, input[type=radio]:checked:focus-visible {
+  border-color: var(--inputCheckedHoverBackground1);
+}
+input[type=radio]:checked:hover::after, input[type=radio]:checked:focus-visible::after {
+  background: var(--inputCheckedHoverBackground1);
+}
+input[type=radio]:checked:focus-visible {
+  border-color: var(--focusColor1);
+}
+input[type=radio]:checked:focus-visible::after {
+  background-color: var(--focusColor1);
+}
+input[type=radio]:checked::after {
+  content: "";
+  display: block;
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: calc(0.7rem - 4px);
+  height: calc(0.7rem - 4px);
+  border-radius: 50%;
+  background: var(--inputCheckedBackground1);
+}
+input[type=submit] {
+  background: var(--inputBackground2);
+}
+input[type=submit]:hover, input[type=submit]:focus-visible {
+  background: var(--inputHoverBackground2);
+}
+input[type=submit]:active {
+  background: var(--inputActiveBackground2);
+}
+
+select {
+  --background: var(--inputBackground2);
+  content: "";
+  width: var(--inputWidth);
+  border: 2px solid var(--inputBorder);
+  border-radius: var(--borderRadius-small);
+  font-family: "Noto Sans Display", Arial, sans-serif;
+  font-size: 0.8rem;
+  color: var(--textColor);
+  background-color: var(--background);
+  outline: 3px solid transparent;
+  transition: none var(--duration-medium) ease;
+  transition-property: outline-color, border-color;
+}
+select:focus-visible, select:hover {
+  --background: var(--inputHoverBackground2);
+}
+select:focus-visible {
+  outline-color: var(--focusColor2);
+}
+select:focus-visible {
+  border-color: var(--focusColor1);
+}
+select:active {
+  --background: var(--inputActiveBackground2);
+}
+select:before {
+  content: "hello";
+}
+select.modified {
+  border-color: var(--modifiedBorder);
+}
+select.new {
+  border-color: var(--newBorder);
+}
+select option {
+  color: var(--textGrayColor);
+  background: var(--inputBackground2);
+}
+select optgroup {
+  color: var(--textBoldColor);
+  background: var(--inputBackground1);
+}
+
+.fancySelect {
+  --background: var(--inputBackground2);
+  display: inline-flex;
+  flex-flow: row nowrap;
+  position: relative;
+  width: var(--inputWidth);
+  font-family: "Noto Sans Display", Arial, sans-serif;
+  font-size: 0.8rem;
+  border: 2px solid var(--inputBorder);
+  border-radius: var(--borderRadius-small);
+  background: var(--background);
+  outline: 3px solid transparent;
+  transition: none var(--duration-medium) ease;
+  transition-property: outline-color, border-color;
+}
+.fancySelect:focus-within, .fancySelect:hover {
+  --background: var(--inputHoverBackground2);
+}
+.fancySelect:focus-within::after {
+  transform: rotate(180deg);
+}
+.fancySelect.modified {
+  border-color: var(--modifiedBorder);
+}
+.fancySelect.new {
+  border-color: var(--newBorder);
+}
+.fancySelect:focus-visible {
+  outline-color: var(--focusColor2);
+}
+.fancySelect:focus-within {
+  border-color: var(--focusColor1);
+}
+.fancySelect:active {
+  --background: var(--inputActiveBackground2);
+}
+.fancySelect::after {
+  content: "expand_more";
+  pointer-events: none;
+  position: absolute;
+  right: 0.1rem;
+  font-size: 1.4em;
+  vertical-align: middle;
+  font-family: "Material Symbols Rounded" !important;
+  transform: rotate(0);
+  transition: transform 0.2s ease-out;
+}
+.fancySelect select {
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  flex-grow: 1;
+  padding-right: 1rem;
+  border-width: 0;
+  border-radius: 0;
+  color: inherit;
+  background: none;
+}
+.fancySelect select:focus-visible, .fancySelect select:hover {
+  background: none;
+  outline-color: transparent;
+}
+.fancySelect select:active {
+  background: none;
+}
+
+textarea {
+  color: var(--textColor);
+  border: 2px solid var(--inputBorder);
+  border-radius: var(--borderRadius-small);
+  background: var(--inputBackground1);
+  outline: 3px solid transparent;
+  transition: none var(--duration-medium) ease;
+  transition-property: outline-color, border-color;
+}
+textarea:focus-visible {
+  outline-color: var(--focusColor2);
+}
+textarea:focus-visible {
+  border-color: var(--focusColor1);
+}
+textarea.modified {
+  border-color: var(--modifiedBorder);
+}
+textarea.new {
+  border-color: var(--newBorder);
+}
+
+button {
+  font-family: "Noto Sans Display", Arial, sans-serif;
+  color: inherit;
+  outline: 3px solid transparent;
+  transition: none var(--duration-medium) ease;
+  transition-property: outline-color, border-color;
+}
+button:focus-visible {
+  outline-color: var(--focusColor2);
+}
+button:focus-visible {
+  border-color: var(--focusColor1);
+}
+button.iconLeft > .material-icons {
+  margin-left: var(--md-negativeMargin);
+}
+button.iconRight > .material-icons {
+  margin-right: var(--md-negativeMargin);
+}
+button > .material-icons {
+  margin-block: -3px;
+}
+:root.jsDisabled button:not(.needNoJs) {
+  pointer-events: none;
+}
+
+.textButton,
+.fancyButton,
+.circleButton {
+  text-decoration: none;
+}
+.textButton:disabled .material-icons, .jsDisabled .textButton:not(.needNoJs) .material-icons,
+.fancyButton:disabled .material-icons,
+.jsDisabled .fancyButton:not(.needNoJs) .material-icons,
+.circleButton:disabled .material-icons,
+.jsDisabled .circleButton:not(.needNoJs) .material-icons {
+  color: var(--mdInactiveColor1);
+}
+
+.textButton {
+  cursor: pointer;
+  display: inline-flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  padding-block: 3px;
+  padding-inline: 4px;
+  font-weight: 600;
+  border-width: 0;
+  border-radius: 5px;
+  background: none;
+}
+.textButton:not(:disabled) {
+  outline: 3px solid transparent;
+  transition: none var(--duration-medium) ease;
+  transition-property: outline-color, border-color;
+}
+.textButton:not(:disabled):hover, .textButton:not(:disabled):focus-visible {
+  color: var(--textBoldColor);
+  background: var(--textButtonHoverBackground1);
+}
+.textButton:not(:disabled):active {
+  background: var(--textButtonActiveBackground1);
+}
+.textButton:not(:disabled):focus-visible {
+  outline-color: var(--focusColor2);
+}
+.textButton:not(:disabled):focus-visible {
+  padding-inline: 2px;
+  padding-block: 1px;
+  border: 2px solid var(--focusColor1);
+}
+.textButton:disabled, .jsDisabled .textButton:not(.needNoJs) {
+  cursor: default;
+  font-style: italic;
+  color: var(--buttonDisabledColor1);
+}
+.textButton:disabled:hover, .textButton:disabled:focus-visible, .jsDisabled .textButton:not(.needNoJs):hover, .jsDisabled .textButton:not(.needNoJs):focus-visible {
+  color: var(--buttonDisabledColor1);
+  background: none;
+}
+.textButton span {
+  vertical-align: middle;
+}
+
+.fancyButton {
+  padding: 0.2rem 0.4rem;
+  font-weight: 600;
+  color: var(--buttonColor1);
+  border: 2px solid var(--buttonBorder1);
+  border-radius: 5px;
+  background: var(--buttonBackground1);
+}
+.fancyButton:not(:disabled) {
+  cursor: pointer;
+}
+.fancyButton:not(:disabled):hover, .fancyButton:not(:disabled):focus-visible {
+  color: var(--buttonHoverColor1);
+  background: var(--buttonHoverBackground1);
+}
+.fancyButton:not(:disabled):active {
+  color: var(--buttonHoverColor1);
+  background: var(--buttonActiveBackground1);
+}
+.fancyButton:disabled, .jsDisabled .fancyButton:not(.needNoJs) {
+  font-style: italic;
+  font-weight: 400;
+  color: var(--buttonDisabledColor1);
+  border-color: var(--buttonDisabledBorder1);
+  background: var(--buttonDisabledBackground1);
+}
+.fancyButton:disabled:hover, .fancyButton:disabled:focus-visible, .fancyButton:disabled:active, .jsDisabled .fancyButton:not(.needNoJs):hover, .jsDisabled .fancyButton:not(.needNoJs):focus-visible, .jsDisabled .fancyButton:not(.needNoJs):active {
+  color: var(--buttonDisabledColor1);
+  background: var(--buttonDisabledBackground1);
+}
+.fancyButton.highlight {
+  border-color: var(--highlightButtonBorder1);
+  background: var(--highlightButtonBackground1);
+}
+.fancyButton.highlight:not(:disabled):hover, .fancyButton.highlight:not(:disabled):focus-visible {
+  background: var(--highlightButtonHoverBackground1);
+}
+.fancyButton.highlight:not(:disabled):focus-visible {
+  border-color: var(--focusColor1);
+}
+.fancyButton.highlight:not(:disabled):active {
+  background: var(--highlightButtonActiveBackground1);
+}
+.fancyButton.highlight:disabled {
+  border-color: var(--highlightButtonDisabledBorder1);
+  background: var(--highlightButtonDisabledBackground1);
+}
+.fancyButton.delete {
+  color: var(--deleteButtonColor1);
+  border-color: var(--deleteButtonBorder1);
+  background-color: var(--deleteButtonBackground1);
+}
+.fancyButton.delete .material-icons {
+  color: var(--deleteButtonColor2);
+}
+
+.circleButton {
+  aspect-ratio: 1;
+  border-radius: 50%;
+}
+
+.disclosureButton::before,
+button[is=disclosure-button]::before {
+  content: "expand_more";
+  margin-block: var(--md-negativeMargin);
+  margin-left: var(--md-negativeMargin);
+  font-family: "Material Symbols Rounded";
+  font-size: var(--md-medium);
+  line-height: 1em;
+  vertical-align: middle;
+  transform: rotate(-90deg);
+  transition: none 0.1s ease-out;
+  transition-property: transform;
+}
+.disclosureButton[aria-expanded=true]::before,
+button[is=disclosure-button][aria-expanded=true]::before {
+  transform: rotate(0);
+}
+
+@-webkit-keyframes disclosureHide {
+  0% {
+    height: var(--height);
+  }
+  100% {
+    height: 0;
+  }
+}
+
+@keyframes disclosureHide {
+  0% {
+    height: var(--height);
+  }
+  100% {
+    height: 0;
+  }
+}
+.disclosureContent {
+  position: relative;
+  height: var(--height);
+}
+.disclosureContent > .animationContainer {
+  overflow-block: clip;
+  position: absolute;
+  transition: height var(--duration) ease-in-out;
+}
+.disclosureContent > .animationContainer > .measuringWrapper {
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+  padding: 0.01px;
+}
+.disclosureContent > .animationContainer > .measuringWrapper > :first-child {
+  margin-top: 0;
+}
+.disclosureContent.hidden {
+  height: 0;
+  -webkit-animation: disclosureHide var(--duration) step-end;
+          animation: disclosureHide var(--duration) step-end;
+}
+.disclosureContent.hidden > .animationContainer {
+  height: 0 !important;
+}
+.disclosureContent.stretchContent {
+  width: var(--width);
+  max-width: 100%;
+  min-width: 100%;
+}
+.disclosureContent.stretchContent > .animationContainer {
+  width: 100%;
+}
+.disclosureContent.stretchContent > .animationContainer > .measuringWrapper {
+  width: 100%;
+}
+
+toggle-button-section.hidden {
+  display: none;
+}
+
+toggle-password button {
+  position: relative;
+  width: 1em;
+  height: 1em;
+  font-size: var(--md-medium);
+  vertical-align: middle;
+  color: var(--textColor);
+  border: none;
+  border-radius: 0.4rem;
+  background: none;
+}
+toggle-password button::before, toggle-password button::after {
+  display: inline-block;
+  overflow: hidden;
+  overflow: clip;
+  width: 1em;
+  height: 1em;
+  font-family: "Material Symbols Outlined";
+  font-weight: inherit;
+  font-style: normal;
+  font-size: 1em;
+  line-height: 1em;
+  vertical-align: middle;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  font-feature-settings: "liga";
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  font-optical-sizing: auto;
+  font-variation-settings: "FILL" 0, "wght" 700, "GRAD" 0, "opsz" 20;
+  -webkit-user-select: none;
+  /* Safari */
+  -moz-user-select: none;
+  /* Firefox */
+  -ms-user-select: none;
+  /* IE10+/Edge */
+  user-select: none;
+  /* Standard */
+  font-family: "Material Symbols Outlined";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: inherit;
+  color: inherit;
+}
+toggle-password button::before {
+  content: "visibility";
+}
+toggle-password button::after {
+  content: "visibility_off";
+}
+toggle-password button:hover, toggle-password button:focus-visible {
+  background: var(--textButtonHoverBackground1);
+}
+toggle-password button:active {
+  background: var(--textButtonActiveBackground1);
+}
+toggle-password button:not(:active) {
+  transition: color ease 0.5s;
+}
+toggle-password button:active {
+  color: var(--mdColor1);
+}
+toggle-password button[aria-checked=true]::before {
+  -webkit-animation: diagonalUncover 0.3s ease;
+          animation: diagonalUncover 0.3s ease;
+}
+toggle-password button[aria-checked=true]::after {
+  -webkit-animation: diagonalCover 0.3s ease;
+          animation: diagonalCover 0.3s ease;
+  -webkit-clip-path: polygon(0% 0%, 0% 0%, 0% 0%, 0% 0%);
+          clip-path: polygon(0% 0%, 0% 0%, 0% 0%, 0% 0%);
+}
+toggle-password button[aria-checked=false]::before {
+  -webkit-animation: diagonalCover 0.3s ease;
+          animation: diagonalCover 0.3s ease;
+  -webkit-clip-path: polygon(0% 0%, 0% 0%, 0% 0%, 0% 0%);
+          clip-path: polygon(0% 0%, 0% 0%, 0% 0%, 0% 0%);
+}
+toggle-password button[aria-checked=false]::after {
+  -webkit-animation: diagonalUncover 0.3s ease;
+          animation: diagonalUncover 0.3s ease;
+}
+
+@-webkit-keyframes hideFlexLeft {
+  0% {
+    display: flex;
+    transform: translateX(100%);
+  }
+  100% {
+    display: flex;
+    transform: translateX(0);
+  }
+}
+
+@keyframes hideFlexLeft {
+  0% {
+    display: flex;
+    transform: translateX(100%);
+  }
+  100% {
+    display: flex;
+    transform: translateX(0);
+  }
+}
+@-webkit-keyframes revealFlexLeft {
+  0% {
+    display: flex;
+    transform: translateX(-100%);
+  }
+  100% {
+    display: flex;
+    transform: translateX(0%);
+  }
+}
+@keyframes revealFlexLeft {
+  0% {
+    display: flex;
+    transform: translateX(-100%);
+  }
+  100% {
+    display: flex;
+    transform: translateX(0%);
+  }
+}
+@-webkit-keyframes hideFlexUp {
+  0% {
+    display: flex;
+    transform: translateY(0%);
+  }
+  100% {
+    display: flex;
+    transform: translateY(-100%);
+  }
+}
+@keyframes hideFlexUp {
+  0% {
+    display: flex;
+    transform: translateY(0%);
+  }
+  100% {
+    display: flex;
+    transform: translateY(-100%);
+  }
+}
+@-webkit-keyframes revealFlexUp {
+  0% {
+    display: flex;
+    transform: translateY(-100%);
+  }
+  100% {
+    display: flex;
+    transform: translateY(0%);
+  }
+}
+@keyframes revealFlexUp {
+  0% {
+    display: flex;
+    transform: translateY(-100%);
+  }
+  100% {
+    display: flex;
+    transform: translateY(0%);
+  }
+}
+.filename {
+  display: inline-block;
+  white-space: nowrap;
+}
+.filename > .fancyLink > span {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: bottom;
+  width: auto;
+  max-width: max(20ch, 10ch + 20vw);
+  text-overflow: ellipsis;
+}
+
+.fileDisplay {
+  padding-inline: 0.3rem;
+  color: var(--textBoldColor);
+  border: 2px solid var(--inputInactiveBorder1);
+  border-radius: 5px;
+  background-color: var(--inputInactiveBackground1);
+}
+.fileDisplay .filename {
+  display: block;
+}
+.fileDisplay .version {
+  display: inline;
+  font-size: 1em;
+  font-style: italic;
+  color: var(--textGrayColor);
+}
+.fileDisplay .uploader {
+  display: inline;
+  font-size: 0.9em;
+  color: var(--textColor);
+}
+.fileDisplay .uploader::before {
+  content: "(";
+}
+.fileDisplay .uploader::after {
+  content: ")";
+}
+.fileDisplay.ourUploader .filename {
+  font-weight: 700;
+}
+.fileDisplay.ourUploader .uploader {
+  font-weight: 500;
+  color: var(--textBoldColor);
+}
+
+.fileInput,
+file-input {
+  display: inline-block;
+  position: relative;
+  font-size: 0.8rem;
+  color: var(--textColor);
+}
+.fileInput.modified .label,
+file-input.modified .label {
+  border-color: var(--modifiedBorder);
+}
+.fileInput.new .label,
+file-input.new .label {
+  border-color: var(--newBorder);
+}
+.fileInput input[type=file],
+file-input input[type=file] {
+  cursor: pointer;
+  display: block;
+  box-sizing: content-box;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  font-size: 0;
+  border-width: 0;
+  opacity: 0;
+}
+.fileInput .label,
+file-input .label {
+  display: inline-block;
+  width: 100%;
+  border: 2px solid var(--inputBorder);
+  border-radius: var(--borderRadius-small);
+  background: var(--inputBackground1);
+}
+.fileInput .label > .button,
+file-input .label > .button {
+  display: inline-flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  gap: 0.2rem;
+  height: 100%;
+  padding-inline: 0.3rem;
+  font-weight: 600;
+  vertical-align: middle;
+  color: var(--textBoldColor);
+  border-radius: calc(var(--borderRadius-small) - 2px);
+}
+.fileInput .label > .button::before,
+file-input .label > .button::before {
+  content: "folder_open";
+  display: inline;
+  font-family: "Material Symbols Outlined";
+  font-size: 1.125rem;
+  color: var(--mdColor1);
+}
+.fileInput .label > .filename,
+file-input .label > .filename {
+  color: var(--textBoldColor);
+}
+.fileInput:focus-within .label > .button, .fileInput:hover .label > .button,
+file-input:focus-within .label > .button,
+file-input:hover .label > .button {
+  background: var(--textButtonHoverBackground1);
+}
+.fileInput:focus-within .label,
+file-input:focus-within .label {
+  outline: 3px solid var(--focusColor2);
+}
+.fileInput:focus-within .label > .button,
+file-input:focus-within .label > .button {
+  outline-color: var(--focusColor1);
+}
+.fileInput:active .label,
+file-input:active .label {
+  background: var(--inputActiveBackground2);
+}
+.fileInput:active .label > .button,
+file-input:active .label > .button {
+  background: var(--textButtonActiveBackground1);
+}
+.fileInput .filename,
+file-input .filename {
+  margin-inline: 0.3rem;
+  font-style: italic;
+  color: var(--textBoldColor);
+}
+:root.jsDisabled .fileInput input[type=file],
+:root.jsDisabled file-input input[type=file] {
+  cursor: pointer;
+  display: unset;
+  position: static;
+  width: unset;
+  height: unset;
+  font-size: unset;
+  border-width: 2px;
+  opacity: 1;
+}
+:root.jsDisabled .fileInput .label,
+:root.jsDisabled file-input .label {
+  display: none;
+}
+
+.replaceFileInput {
+  display: grid;
+  grid: "file revert" auto "input ." -webkit-min-content "replace ." min-content/auto -webkit-max-content;
+  grid: "file revert" auto "input ." min-content "replace ." min-content/auto max-content;
+  justify-items: start;
+  align-items: center;
+  gap: 0 var(--gapWithinPair);
+  position: relative;
+}
+.replaceFileInput .fileDisplay,
+.replaceFileInput .newFile {
+  grid-area: file;
+  position: relative;
+}
+.replaceFileInput .fileDisplay > .label,
+.replaceFileInput .newFile > .label {
+  display: none;
+  margin-right: 0.4rem;
+  font-size: 0.85rem;
+}
+.replaceFileInput .fileDisplay > .label::after,
+.replaceFileInput .newFile > .label::after {
+  content: ":";
+}
+.replaceFileInput .fileDisplay {
+  z-index: 2;
+}
+.replaceFileInput .newFile {
+  grid-area: input;
+  z-index: 1;
+  margin-top: var(--gapWithinSubPair);
+}
+.replaceFileInput .newFile,
+.replaceFileInput .replaceButton,
+.replaceFileInput .revertButton {
+  transition: transform 0.2s ease;
+}
+.replaceFileInput .replaceButton {
+  grid-area: replace;
+  margin-top: var(--gapWithinSubPair);
+}
+.replaceFileInput .revertButton {
+  display: flex;
+  grid-area: revert;
+  margin-left: 0;
+}
+.replaceFileInput .revertButton .material-icons {
+  font-size: 1.35rem;
+}
+.replaceFileInput:not(.inputActive) .newFile {
+  visibility: hidden;
+  width: 0;
+  height: 0;
+  transform: translateY(-100%);
+}
+.replaceFileInput:not(.inputActive) .revertButton {
+  visibility: hidden;
+  width: 0;
+  height: 0;
+  transform: translateX(-100%);
+}
+.replaceFileInput.inputActive .fileDisplay .filename {
+  color: var(--textDisabledColor);
+}
+.replaceFileInput.inputActive .fileDisplay .filename a {
+  background-image: none;
+  color: inherit;
+}
+.replaceFileInput.inputActive .fileDisplay .filename a span {
+  -webkit-text-decoration: line-through solid;
+          text-decoration: line-through solid;
+  text-decoration-thickness: 1px;
+}
+.replaceFileInput.inputActive .fileDisplay .version {
+  color: var(--textGrayColor);
+}
+.replaceFileInput.inputActive .fileDisplay .uploader {
+  color: var(--textGrayColor);
+}
+.replaceFileInput.inputActive .replaceButton {
+  visibility: hidden;
+  width: 0;
+  height: 0;
+  transform: translateY(-100%);
+}
+.replaceFileInput.singleRow {
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+}
+.replaceFileInput.singleRow .replaceButton {
+  margin-left: 0;
+}
+.replaceFileInput.singleRow:not(.inputActive) .replaceButton {
+  -webkit-animation-name: revealFlexLeft;
+          animation-name: revealFlexLeft;
+}
+.replaceFileInput.singleRow.inputActive .replaceButton {
+  -webkit-animation-name: hideFlexLeft;
+          animation-name: hideFlexLeft;
+}
+.replaceFileInput.emptyBefore {
+  grid: "input revert" auto/auto -webkit-max-content;
+  grid: "input revert" auto/auto max-content;
+}
+.replaceFileInput.emptyBefore .fileDisplay {
+  display: none;
+}
+.replaceFileInput.emptyBefore .newFile {
+  margin-top: 0;
+}
+.replaceFileInput.emptyBefore .replaceButton {
+  grid-area: input;
+  margin-top: 0;
+}
+
+@-webkit-keyframes revealDown {
+  0% {
+    transform: translateY(-100%);
+  }
+}
+
+@keyframes revealDown {
+  0% {
+    transform: translateY(-100%);
+  }
+}
+.inputList,
+.replaceFileInputList {
+  counter-reset: listItem 0;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: 1fr auto;
+  grid-auto-flow: row;
+  justify-items: start;
+  align-items: stretch;
+  -moz-column-gap: clamp(0.3rem, 5vw, 5rem);
+       column-gap: clamp(0.3rem, 5vw, 5rem);
+  padding-bottom: 0.4rem;
+  border: 0 solid var(--listBorder1);
+  border-width: 2px 0;
+  background: var(--listBackground2);
+}
+.inputList .inputLabel,
+.replaceFileInputList .inputLabel {
+  align-self: start;
+  margin: 0;
+}
+.inputList ol,
+.inputList ul,
+.replaceFileInputList ol,
+.replaceFileInputList ul {
+  display: flex;
+  flex-flow: column nowrap;
+  gap: var(--gapWithinPair);
+  padding: 0;
+  margin: 0;
+}
+.inputList ol > li,
+.inputList ul > li,
+.replaceFileInputList ol > li,
+.replaceFileInputList ul > li {
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  gap: var(--gapWithinPair);
+  position: relative;
+  margin-block: 0;
+  -webkit-animation: revealDown 0.2s ease;
+          animation: revealDown 0.2s ease;
+}
+.inputList ol > li::before,
+.inputList ul > li::before,
+.replaceFileInputList ol > li::before,
+.replaceFileInputList ul > li::before {
+  counter-increment: listItem 1;
+  position: absolute;
+  left: -0.5ch;
+  transform: translateX(-100%);
+}
+.inputList ol > li > :not(.removeButton),
+.inputList ul > li > :not(.removeButton),
+.replaceFileInputList ol > li > :not(.removeButton),
+.replaceFileInputList ul > li > :not(.removeButton) {
+  position: relative;
+  z-index: 1;
+}
+.inputList ol > li > .removeButton,
+.inputList ul > li > .removeButton,
+.replaceFileInputList ol > li > .removeButton,
+.replaceFileInputList ul > li > .removeButton {
+  position: relative;
+  z-index: 0;
+  margin-left: 0;
+  vertical-align: middle;
+  -webkit-animation: revealFlexLeft 0.2s;
+          animation: revealFlexLeft 0.2s;
+}
+.inputList ol > li::before,
+.replaceFileInputList ol > li::before {
+  content: counter(listItem) ".";
+}
+.inputList ul > li::before,
+.replaceFileInputList ul > li::before {
+  content: "●";
+}
+.inputList .addButton,
+.replaceFileInputList .addButton {
+  grid-column: 2;
+  margin-left: calc(-2ch - 4px);
+  margin-top: var(--gapWithinPair);
+  transition: all 0.2s ease-out;
+  transition-property: margin-left;
+}
+.inputList.noEntries,
+.replaceFileInputList.noEntries {
+  grid-template-rows: auto;
+}
+.inputList.noEntries ol,
+.inputList.noEntries ul,
+.replaceFileInputList.noEntries ol,
+.replaceFileInputList.noEntries ul {
+  display: none;
+}
+.inputList.noEntries .addButton,
+.replaceFileInputList.noEntries .addButton {
+  grid-column: initial;
+  margin-top: 0;
+  margin-left: 0;
+}
+.inputList.singleEntry ol > li::before,
+.inputList.singleEntry ul > li::before,
+.replaceFileInputList.singleEntry ol > li::before,
+.replaceFileInputList.singleEntry ul > li::before {
+  content: initial;
+}
+.inputList.singleEntry .addButton,
+.replaceFileInputList.singleEntry .addButton {
+  margin-left: 0;
+}
+
+.replaceFileInputList ol,
+.replaceFileInputList ul {
+  display: grid;
+  grid-template-columns: auto auto auto;
+  grid-auto-flow: row;
+  gap: var(--gapWithinPair);
+  align-items: center;
+  justify-items: start;
+  position: relative;
+}
+.replaceFileInputList ol > li,
+.replaceFileInputList ul > li {
+  display: contents;
+}
+.replaceFileInputList ol > li::before,
+.replaceFileInputList ul > li::before {
+  content: initial;
+}
+.replaceFileInputList ol > li > .replaceFileInput,
+.replaceFileInputList ul > li > .replaceFileInput {
+  display: contents;
+}
+.replaceFileInputList ol > li > .replaceFileInput .fileDisplay,
+.replaceFileInputList ol > li > .replaceFileInput .newFile,
+.replaceFileInputList ol > li > .replaceFileInput .replaceButton,
+.replaceFileInputList ol > li > .replaceFileInput .revertButton,
+.replaceFileInputList ul > li > .replaceFileInput .fileDisplay,
+.replaceFileInputList ul > li > .replaceFileInput .newFile,
+.replaceFileInputList ul > li > .replaceFileInput .replaceButton,
+.replaceFileInputList ul > li > .replaceFileInput .revertButton {
+  grid-area: unset;
+  margin-top: 0;
+}
+.replaceFileInputList ol > li > .replaceFileInput .newFile,
+.replaceFileInputList ul > li > .replaceFileInput .newFile {
+  margin-top: calc(-1 * var(--gapWithinPair) + var(--gapWithinSubPair));
+}
+.replaceFileInputList ol > li > .replaceFileInput .fileDisplay,
+.replaceFileInputList ol > li > .replaceFileInput .newFile,
+.replaceFileInputList ul > li > .replaceFileInput .fileDisplay,
+.replaceFileInputList ul > li > .replaceFileInput .newFile {
+  grid-column: 1;
+  justify-self: start;
+}
+.replaceFileInputList ol > li > .replaceFileInput .buttonWrapper,
+.replaceFileInputList ul > li > .replaceFileInput .buttonWrapper {
+  grid-column: 2;
+  overflow: hidden;
+  overflow: clip;
+}
+.replaceFileInputList ol > li > .replaceFileInput:not(.inputActive) .newFile,
+.replaceFileInputList ul > li > .replaceFileInput:not(.inputActive) .newFile {
+  position: absolute;
+}
+.replaceFileInputList ol > li > .replaceFileInput:not(.inputActive) .revertButton,
+.replaceFileInputList ul > li > .replaceFileInput:not(.inputActive) .revertButton {
+  position: absolute;
+  transform: translateX(-100%);
+}
+.replaceFileInputList ol > li > .replaceFileInput.inputActive .replaceButton,
+.replaceFileInputList ul > li > .replaceFileInput.inputActive .replaceButton {
+  position: absolute;
+  transform: translateX(-100%);
+}
+.replaceFileInputList ol > li > .fileDisplay,
+.replaceFileInputList ul > li > .fileDisplay {
+  justify-self: start;
+  grid-column: 1;
+}
+.replaceFileInputList ol > li > .fileInput,
+.replaceFileInputList ul > li > .fileInput {
+  grid-column: 1;
+}
+.replaceFileInputList ol > li .removeButton,
+.replaceFileInputList ul > li .removeButton {
+  grid-column: 3;
+}
+.replaceFileInputList ol > li > .replaceFileInput > .fileDisplay, .replaceFileInputList ol > li > :not(.replaceFileInput):first-child,
+.replaceFileInputList ul > li > .replaceFileInput > .fileDisplay,
+.replaceFileInputList ul > li > :not(.replaceFileInput):first-child {
+  position: relative;
+}
+.replaceFileInputList ol > li > .replaceFileInput > .fileDisplay::before, .replaceFileInputList ol > li > :not(.replaceFileInput):first-child::before,
+.replaceFileInputList ul > li > .replaceFileInput > .fileDisplay::before,
+.replaceFileInputList ul > li > :not(.replaceFileInput):first-child::before {
+  counter-increment: listItem 1;
+  display: block;
+  position: absolute;
+  top: 50%;
+  left: -0.5ch;
+  margin-block: auto;
+  transform: translate(-100%, -50%);
+}
+.replaceFileInputList ol > li > .replaceFileInput > .fileDisplay::before, .replaceFileInputList ol > li > :not(.replaceFileInput):first-child::before {
+  content: counter(listItem) ".";
+}
+.replaceFileInputList ul > li > .replaceFileInput > .fileDisplay::before, .replaceFileInputList ul > li > :not(.replaceFileInput):first-child::before {
+  content: "•";
+  font-size: 2em;
+}
+.replaceFileInputList.singleEntry ul > li > .replaceFileInput > .fileDisplay::before, .replaceFileInputList.singleEntry ul > li > :not(.replaceFileInput):first-child::before {
+  content: initial;
+}
+
+@-webkit-keyframes insertedHighlight {
+  0% {
+    background: var(--newHighlightBackground);
+  }
+}
+
+@keyframes insertedHighlight {
+  0% {
+    background: var(--newHighlightBackground);
+  }
+}
+.insertedItem {
+  -webkit-animation: insertedHighlight 0.5s ease-out;
+          animation: insertedHighlight 0.5s ease-out;
+}
+.insertedItem * {
+  -webkit-animation: insertedHighlight 0.5s ease-out;
+          animation: insertedHighlight 0.5s ease-out;
+}
+
+@-webkit-keyframes clickHighlight0 {
+  0% {
+    background: var(--inputCheckedActiveBackground1);
+  }
+  100% {
+    background: var(--inputCheckedBackground1);
+  }
+}
+
+@keyframes clickHighlight0 {
+  0% {
+    background: var(--inputCheckedActiveBackground1);
+  }
+  100% {
+    background: var(--inputCheckedBackground1);
+  }
+}
+@-webkit-keyframes clickHighlight1 {
+  0% {
+    background: var(--inputCheckedActiveBackground1);
+  }
+  100% {
+    background: var(--inputCheckedBackground1);
+  }
+}
+@keyframes clickHighlight1 {
+  0% {
+    background: var(--inputCheckedActiveBackground1);
+  }
+  100% {
+    background: var(--inputCheckedBackground1);
+  }
+}
+.optionToggle {
+  --clickAnimDuration: 0.1s;
+  cursor: pointer;
+  display: inline-flex;
+  flex-flow: row nowrap;
+  gap: 0.4rem;
+  position: relative;
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+  height: 1.4em;
+  padding: 0 0.4rem;
+  margin: 0;
+  border: 2px solid var(--inputBorder);
+  border-radius: 10rem;
+  background: var(--inputBackground2);
+  outline: 3px solid transparent;
+  transition: none var(--duration-medium) ease;
+  transition-property: outline-color, border-color;
+}
+.optionToggle::before {
+  content: "";
+  z-index: 0;
+  background: var(--inputCheckedBackground1);
+  transition: none 0.3s cubic-bezier(0.53, 1.51, 0.5, 1);
+  transition-duration: 0.3s, 0.3s;
+  transition-property: width, left;
+  -webkit-animation-duration: 0.5s;
+          animation-duration: 0.5s;
+  -webkit-animation-timing-function: ease-out;
+          animation-timing-function: ease-out;
+}
+.optionToggle[data-selected-index="0"]::before {
+  width: calc(var(--optionWidth0) + 0.8rem);
+  left: 0;
+  -webkit-animation-name: clickHighlight0;
+          animation-name: clickHighlight0;
+}
+.optionToggle[data-selected-index="1"]::before {
+  width: calc(var(--optionWidth1) + 0.8rem);
+  left: calc(var(--optionWidth0) + 0.4rem);
+  -webkit-animation-name: clickHighlight1;
+          animation-name: clickHighlight1;
+}
+.optionToggle::before {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  border-radius: 10rem;
+}
+.optionToggle:focus-visible {
+  outline-color: var(--focusColor2);
+}
+.optionToggle:focus-within[data-user-focus] {
+  border-color: var(--focusColor2);
+}
+.optionToggle:focus-within[data-user-focus]::before {
+  outline: 2px solid var(--focusColor1);
+}
+.optionToggle:focus-visible {
+  outline: none;
+}
+.optionToggle:hover, .optionToggle:focus-within[data-user-focus] {
+  background: var(--inputHoverBackground2);
+}
+.optionToggle:active {
+  background: var(--inputActiveBackground2);
+}
+.optionToggle:active::before {
+  background: var(--inputCheckedActiveBackground1);
+  transition-property: width, left;
+}
+.optionToggle > label {
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  pointer-events: none;
+  padding: 0;
+  margin: 0;
+  z-index: 1;
+  font-weight: 600;
+  font-size: 0.8rem;
+  line-height: 1.4em;
+  vertical-align: middle;
+  color: var(--textGrayColor);
+  transition: none 0.3s ease-out;
+  transition-property: color;
+}
+.optionToggle > label:focus-visible {
+  outline: none;
+}
+.optionToggle > label[data-checked=true] {
+  color: var(--inputCheckedColor1);
+}
+.optionToggle > label > input[type=radio] {
+  position: fixed;
+  top: -10000px;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  clip: rect(1px, 1px, 1px, 1px);
+}
+.jsDisabled .optionToggle {
+  display: block;
+  height: -webkit-max-content;
+  height: -moz-max-content;
+  height: max-content;
+  border: none;
+  background: none;
+}
+.jsDisabled .optionToggle > label {
+  display: block;
+  pointer-events: unset;
+}
+.jsDisabled .optionToggle > label > input[type=radio] {
+  clip: initial;
+  position: relative;
+  top: unset;
+  left: unset;
+  width: 0.7rem;
+  height: 0.7rem;
+}
+
+fieldset {
+  min-inline-size: 0;
+}
+fieldset legend,
+fieldset .fieldsetLegend {
+  font-family: "Atkinson Hyperlegible", Arial, sans-serif;
+  font-size: var(--fieldsetHeaderSize);
+  font-weight: 700;
+  color: var(--titleTextColor);
+  margin: 0.5rem 0;
+}
+fieldset.nestedFieldset legend,
+fieldset.nestedFieldset .fieldsetLegend {
+  font-size: var(--fieldsetHeaderSize-nested);
+}
+
+.fancyFieldset,
+.nestedFieldset {
+  --background: var(--contentBackground1);
+  --border: var(--contentBorder1);
+  overflow-x: auto;
+  overflow-y: visible;
+  -ms-scroll-chaining: none;
+      overscroll-behavior: contain;
+  clear: both;
+  max-width: 100%;
+  margin-inline: 0;
+  margin-block: var(--gapSection1);
+  padding-inline: var(--containerPadding-fieldset);
+  padding-block: var(--containerPadding-fieldset);
+  border: 2px solid var(--border);
+  border-radius: 5px;
+  background: var(--background);
+}
+.fancyFieldset legend,
+.fancyFieldset .fieldsetLegend,
+.nestedFieldset legend,
+.nestedFieldset .fieldsetLegend {
+  margin-block: 0;
+  margin-inline: -2px;
+  padding-inline: 2px;
+  color: var(--textBoldColor);
+}
+.fancyFieldset legend button,
+.fancyFieldset .fieldsetLegend button,
+.nestedFieldset legend button,
+.nestedFieldset .fieldsetLegend button {
+  margin-block: 0;
+}
+.fancyFieldset > .formGrid,
+.nestedFieldset > .formGrid {
+  outline: none;
+}
+.fancyFieldset > .formGrid > .inputCell:nth-child(1), .fancyFieldset > .formGrid > .inputCell:nth-child(2),
+.nestedFieldset > .formGrid > .inputCell:nth-child(1),
+.nestedFieldset > .formGrid > .inputCell:nth-child(2) {
+  border-top-width: 2px;
+}
+.fancyFieldset > .formGrid > .inputCell:nth-last-child(1), .fancyFieldset > .formGrid > .inputCell:nth-last-child(2),
+.nestedFieldset > .formGrid > .inputCell:nth-last-child(1),
+.nestedFieldset > .formGrid > .inputCell:nth-last-child(2) {
+  border-bottom-width: 2px;
+}
+.fancyFieldset > .formGrid:nth-child(2), .fancyFieldset > .formDescriptionGrid:nth-child(2),
+.nestedFieldset > .formGrid:nth-child(2),
+.nestedFieldset > .formDescriptionGrid:nth-child(2) {
+  margin-top: 0;
+}
+.fancyFieldset > :nth-child(2),
+.nestedFieldset > :nth-child(2) {
+  margin-top: 0;
+}
+.fancyFieldset > :last-child,
+.nestedFieldset > :last-child {
+  margin-bottom: 0;
+}
+.fancyFieldset.modified,
+.nestedFieldset.modified {
+  border-color: var(--modifiedBorder);
+}
+.fancyFieldset.new,
+.nestedFieldset.new {
+  border-color: var(--newBorder);
+}
+
+.nestedFieldset {
+  --background: var(--contentBackground3);
+  --border: var(--contentBorder3);
+  box-sizing: content-box;
+  margin: var(--gapPair) calc(var(--containerPadding-fieldset) * -1);
+  padding-block: var(--containerPadding-medium);
+  border-inline-width: 0;
+  border-radius: 0;
+}
+.nestedFieldset.parentFieldset {
+  --background: var(--contentColoredBackground3);
+  --border: var(--contentColoredBorder3);
+}
+
+.fieldsetNegativeMargin {
+  margin-left: calc(-1 * var(--containerPadding-fieldset));
+  margin-right: calc(-1 * var(--containerPadding-fieldset));
+}
+
+.fieldsetNegativeMarginLeft {
+  margin-left: calc(-1 * var(--containerPadding-fieldset));
+}
+
+.fieldsetNegativeMarginRight {
+  margin-right: calc(-1 * var(--containerPadding-fieldset));
+}
+
+.formDescriptionTable {
+  width: calc(100% + 2 * var(--containerPadding-fieldset));
+  border: 0 solid var(--listBorder1);
+  border-width: 2px 0;
+  border-collapse: collapse;
+  background-color: var(--listBackground1);
+}
+.formDescriptionTable > tbody > tr > td {
+  padding: 0.2rem 0.1rem;
+  border: 0 solid var(--listBorder1);
+}
+.formDescriptionTable > tbody > tr > td > label {
+  margin-left: 0.3rem;
+}
+.formDescriptionTable > tbody > tr > td > input {
+  margin-right: 0.3rem;
+}
+.formDescriptionTable > tbody > tr:nth-child(4n+1) > td, .formDescriptionTable > tbody > tr:nth-child(4n+2) > td {
+  background-color: var(--listBackground1);
+}
+.formDescriptionTable > tbody > tr:nth-child(4n+3) > td, .formDescriptionTable > tbody > tr:nth-child(4n+4) > td {
+  background-color: var(--listBackground2);
+}
+.formDescriptionTable .inputRow label {
+  color: var(--textBoldColor);
+  font-weight: 500;
+}
+.formDescriptionTable .inputRow > td {
+  border-top-width: 2px;
+}
+.formDescriptionTable .inputRow input,
+.formDescriptionTable .inputRow select {
+  margin-left: 2rem;
+}
+.formDescriptionTable .descriptionRow {
+  color: var(--textColor);
+}
+.formDescriptionTable .descriptionRow > td {
+  border-bottom-width: 2px;
+}
+.formDescriptionTable .descriptionRow p {
+  margin: 0.8rem;
+  margin-top: 0;
+  margin-bottom: 0.4rem;
+}
+
+.addressEntry[data-is-sweden*=true] tr:not(.swedenUsefull) {
+  display: none;
+}
+.addressEntry[data-is-sweden*=true] .formDescriptionTable > tbody > .swedenUsefull:nth-of-type() > td, .addressEntry[data-is-sweden*=true] .formDescriptionTable > tbody > .swedenUsefull:nth-of-type(4n + 2) > td {
+  background-color: var(--listBackground1);
+}
+.addressEntry[data-is-sweden*=true] .formDescriptionTable > tbody > .swedenUsefull:nth-of-type(4n + 3) > td, .addressEntry[data-is-sweden*=true] .formDescriptionTable > tbody > .swedenUsefull:nth-of-type(4n + 4) > td {
+  background-color: var(--listBackground2);
+}
+
+.revealItems.hidden {
+  display: none !important;
+}
+
+.formGrid,
+.formDescriptionGrid {
+  --n1: var(--listBackground2);
+  --n2: var(--listBackground1);
+  --border: var(--listBorder1);
+  display: grid;
+  grid-template-columns: minmax(-webkit-min-content, -webkit-max-content) 1fr;
+  grid-template-columns: minmax(min-content, max-content) 1fr;
+  grid-auto-flow: row;
+  justify-items: stretch;
+  align-items: stretch;
+  margin-block: var(--gapPair);
+}
+.formGrid.outlined,
+.formDescriptionGrid.outlined {
+  outline: var(--border) solid 2px;
+}
+.formGrid.insideFieldset,
+.formDescriptionGrid.insideFieldset {
+  margin-inline: calc(-1 * var(--containerPadding-fieldset));
+}
+.formGrid.outsideFieldset,
+.formDescriptionGrid.outsideFieldset {
+  margin-inline: calc(-1 * var(--containerPadding-page));
+}
+.formGrid.outsideFieldset .labelCell,
+.formGrid.outsideFieldset .inputCell,
+.formDescriptionGrid.outsideFieldset .labelCell,
+.formDescriptionGrid.outsideFieldset .inputCell {
+  padding-inline: var(--containerPadding-fieldset);
+}
+.formGrid.outsideFieldset .labelCell,
+.formDescriptionGrid.outsideFieldset .labelCell {
+  padding-left: calc(var(--containerPadding-page));
+}
+.formGrid.outsideFieldset .inputCell,
+.formDescriptionGrid.outsideFieldset .inputCell {
+  padding-right: calc(var(--containerPadding-page));
+}
+.formGrid .inputCell,
+.formGrid .labelCell,
+.formDescriptionGrid .inputCell,
+.formDescriptionGrid .labelCell {
+  display: flex;
+  flex-flow: row;
+  align-items: center;
+  padding: calc(var(--gapPair) / 2) var(--containerPadding-fieldset);
+  border: 0 solid var(--border);
+}
+.formGrid .inputCell.revealItem,
+.formGrid .labelCell.revealItem,
+.formDescriptionGrid .inputCell.revealItem,
+.formDescriptionGrid .labelCell.revealItem {
+  padding-block: calc(var(--gapWithinPair) / 2);
+}
+.formGrid .labelCell,
+.formDescriptionGrid .labelCell {
+  justify-content: flex-start;
+}
+.formGrid .labelCell.alignTop,
+.formDescriptionGrid .labelCell.alignTop {
+  align-items: flex-start;
+}
+.formGrid .inputCell,
+.formDescriptionGrid .inputCell {
+  padding-left: var(--gapWithinPair);
+}
+.formGrid .revealItems,
+.formDescriptionGrid .revealItems {
+  display: grid;
+  grid-template-columns: minmax(-webkit-min-content, -webkit-max-content) auto;
+  grid-template-columns: minmax(min-content, max-content) auto;
+  grid-auto-flow: row;
+  justify-items: stretch;
+  align-items: stretch;
+  grid-column: span 2;
+  padding-left: var(--containerPadding-fieldset);
+  border: 0 solid var(--border);
+}
+.formGrid .revealItems .labelCell,
+.formGrid .revealItems .inputCell,
+.formDescriptionGrid .revealItems .labelCell,
+.formDescriptionGrid .revealItems .inputCell {
+  padding-block: calc(var(--gapWithinPair) / 2);
+}
+.formGrid .revealItems .descriptionCell,
+.formDescriptionGrid .revealItems .descriptionCell {
+  padding-block: calc(var(--gapWithinPair) / 2);
+}
+.formGrid .revealItems .labelCell,
+.formGrid .revealItems .descriptionCell,
+.formDescriptionGrid .revealItems .labelCell,
+.formDescriptionGrid .revealItems .descriptionCell {
+  border-left-width: 2px;
+}
+.formGrid .revealItems > .labelCell:nth-last-child(2), .formGrid .revealItems > .inputCell:nth-last-child(1), .formGrid .revealItems > .descriptionCell:last-child,
+.formDescriptionGrid .revealItems > .labelCell:nth-last-child(2),
+.formDescriptionGrid .revealItems > .inputCell:nth-last-child(1),
+.formDescriptionGrid .revealItems > .descriptionCell:last-child {
+  border-bottom-width: 0;
+  padding-bottom: calc(var(--gapPair) / 2);
+}
+.formGrid .revealItems .inputList:last-child > .labelCell, .formGrid .revealItems .inputList:last-child > .inputCell, .formGrid .revealItems .inputList:last-child > .descriptionCell,
+.formDescriptionGrid .revealItems .inputList:last-child > .labelCell,
+.formDescriptionGrid .revealItems .inputList:last-child > .inputCell,
+.formDescriptionGrid .revealItems .inputList:last-child > .descriptionCell {
+  border-bottom-width: 0;
+  padding-bottom: calc(var(--gapPair) / 2);
+}
+.formGrid .n1,
+.formDescriptionGrid .n1 {
+  background: var(--n1);
+}
+.formGrid .n2,
+.formDescriptionGrid .n2 {
+  background: var(--n2);
+}
+.formGrid:not(.outlined) > .labelCell:nth-of-type(1), .formGrid:not(.outlined) > .inputCell:nth-of-type(2),
+.formDescriptionGrid:not(.outlined) > .labelCell:nth-of-type(1),
+.formDescriptionGrid:not(.outlined) > .inputCell:nth-of-type(2) {
+  border-top-width: 2px;
+}
+.formGrid:not(.outlined) > .inputList:first-child .labelCell,
+.formGrid:not(.outlined) > .inputList:first-child .inputCell, .formGrid:not(.outlined) > .replaceFileInputList:first-child .labelCell,
+.formGrid:not(.outlined) > .replaceFileInputList:first-child .inputCell,
+.formDescriptionGrid:not(.outlined) > .inputList:first-child .labelCell,
+.formDescriptionGrid:not(.outlined) > .inputList:first-child .inputCell,
+.formDescriptionGrid:not(.outlined) > .replaceFileInputList:first-child .labelCell,
+.formDescriptionGrid:not(.outlined) > .replaceFileInputList:first-child .inputCell {
+  border-top-width: 2px;
+}
+.formGrid:not(.outlined) .revealItems,
+.formDescriptionGrid:not(.outlined) .revealItems {
+  border-bottom-width: 2px;
+}
+.formGrid.outlined > .labelCell:nth-last-of-type(2), .formGrid.outlined > .inputCell:nth-last-of-type(1), .formGrid.outlined > .descriptionCell:nth-last-of-type(1),
+.formDescriptionGrid.outlined > .labelCell:nth-last-of-type(2),
+.formDescriptionGrid.outlined > .inputCell:nth-last-of-type(1),
+.formDescriptionGrid.outlined > .descriptionCell:nth-last-of-type(1) {
+  border-bottom-width: 0px;
+}
+.formGrid .inputList,
+.formGrid .replaceFileInputList,
+.formDescriptionGrid .inputList,
+.formDescriptionGrid .replaceFileInputList {
+  display: contents;
+}
+.formGrid .inputList > .inputCell,
+.formGrid .replaceFileInputList > .inputCell,
+.formDescriptionGrid .inputList > .inputCell,
+.formDescriptionGrid .replaceFileInputList > .inputCell {
+  counter-reset: listItem 0;
+  display: grid;
+  grid-template-columns: auto;
+  grid-template-rows: 1fr auto;
+  grid-auto-flow: row;
+  justify-items: start;
+  align-items: stretch;
+  justify-content: start;
+  padding-left: var(--gapWithinPair);
+}
+.formGrid .inputList > .inputCell .addButton,
+.formGrid .replaceFileInputList > .inputCell .addButton,
+.formDescriptionGrid .inputList > .inputCell .addButton,
+.formDescriptionGrid .replaceFileInputList > .inputCell .addButton {
+  grid-column: initial;
+}
+.formGrid .inputList.noEntries > .inputCell:nth-child(2),
+.formGrid .replaceFileInputList.noEntries > .inputCell:nth-child(2),
+.formDescriptionGrid .inputList.noEntries > .inputCell:nth-child(2),
+.formDescriptionGrid .replaceFileInputList.noEntries > .inputCell:nth-child(2) {
+  grid-template-rows: auto;
+}
+.formGrid .inputList.noEntries > .inputCell:nth-child(2) .list,
+.formGrid .replaceFileInputList.noEntries > .inputCell:nth-child(2) .list,
+.formDescriptionGrid .inputList.noEntries > .inputCell:nth-child(2) .list,
+.formDescriptionGrid .replaceFileInputList.noEntries > .inputCell:nth-child(2) .list {
+  display: none;
+}
+.formGrid .inputList.noEntries > .inputCell:nth-child(2) .addButton,
+.formGrid .replaceFileInputList.noEntries > .inputCell:nth-child(2) .addButton,
+.formDescriptionGrid .inputList.noEntries > .inputCell:nth-child(2) .addButton,
+.formDescriptionGrid .replaceFileInputList.noEntries > .inputCell:nth-child(2) .addButton {
+  grid-column: initial;
+}
+.formGrid .inputList.singleEntry > .inputCell:nth-child(2) .list,
+.formGrid .replaceFileInputList.singleEntry > .inputCell:nth-child(2) .list,
+.formDescriptionGrid .inputList.singleEntry > .inputCell:nth-child(2) .list,
+.formDescriptionGrid .replaceFileInputList.singleEntry > .inputCell:nth-child(2) .list {
+  list-style-type: none;
+}
+.formGrid .inputList.singleEntry > .inputCell:nth-child(2) .addButton,
+.formGrid .replaceFileInputList.singleEntry > .inputCell:nth-child(2) .addButton,
+.formDescriptionGrid .inputList.singleEntry > .inputCell:nth-child(2) .addButton,
+.formDescriptionGrid .replaceFileInputList.singleEntry > .inputCell:nth-child(2) .addButton {
+  margin-left: 0;
+}
+.formGrid:first-child,
+.formDescriptionGrid:first-child {
+  margin-top: 0;
+}
+.formGrid:last-child,
+.formDescriptionGrid:last-child {
+  margin-bottom: 0;
+}
+.parentFieldset .formGrid,
+.parentFieldset .formDescriptionGrid {
+  --n1: var(--listColoredBackground2);
+  --n2: var(--listColoredBackground1);
+  --border: var(--listColoredBorder1);
+}
+
+.formGrid .inputCell,
+.formGrid .labelCell {
+  border-bottom-width: 2px;
+}
+.jsDisabled .formGrid:not(.outlined) > .noJsHidden + .labelCell:nth-of-type(3), .jsDisabled .formGrid:not(.outlined) > .noJsHidden + .labelCell:nth-of-type(3) + .inputCell:nth-of-type(4) {
+  border-top-width: 2px;
+}
+
+.formDescriptionGrid .inputCell,
+.formDescriptionGrid .labelCell {
+  padding-bottom: 0 !important;
+}
+.formDescriptionGrid .descriptionCell {
+  grid-column: span 2;
+  padding-inline: var(--containerPadding-fieldset);
+  padding-block: var(--gapWithinPair) calc(var(--gapPair) / 2);
+  color: var(--textColor);
+  border: 0 solid var(--border);
+  border-bottom-width: 2px;
+}
+.formDescriptionGrid .descriptionCell.revealItem {
+  padding-bottom: calc(var(--gapWithinPair) / 2);
+}
+.formDescriptionGrid .descriptionCell.empty {
+  padding-top: 0;
+  height: 0;
+}
+.formDescriptionGrid .descriptionCell > :first-child {
+  margin-top: 0;
+}
+.formDescriptionGrid .descriptionCell > :last-child {
+  margin-bottom: 0;
+}
+.formDescriptionGrid .revealItems.descriptionCell {
+  padding-bottom: calc(var(--gapWithinPair) / 2);
+}
+.jsDisabled .formDescriptionGrid:not(.outlined) > .noJsHidden + .labelCell:nth-of-type(4), .jsDisabled .formDescriptionGrid:not(.outlined) > .noJsHidden + .labelCell:nth-of-type(4) + .inputCell:nth-of-type(5) {
+  border-top-width: 2px;
+}
+
+@media (max-width: 500px) {
+  .formGrid,
+.formDescriptionGrid {
+    grid-template-columns: auto;
+  }
+  .formGrid:not(.outlined) > .labelCell:nth-of-type(1) + .inputCell:nth-of-type(2),
+.formDescriptionGrid:not(.outlined) > .labelCell:nth-of-type(1) + .inputCell:nth-of-type(2) {
+    border-top-width: 0;
+  }
+  .formGrid .labelCell,
+.formDescriptionGrid .labelCell {
+    padding-bottom: 0;
+    border-bottom-width: 0;
+  }
+  .formGrid .inputCell,
+.formDescriptionGrid .inputCell {
+    padding-top: var(--gapWithinSubPair);
+  }
+  .formGrid .labelCell,
+.formGrid .inputCell,
+.formGrid .descriptionCell,
+.formDescriptionGrid .labelCell,
+.formDescriptionGrid .inputCell,
+.formDescriptionGrid .descriptionCell {
+    padding-inline: var(--containerPadding-main);
+  }
+  .formGrid > .inputList > .inputCell, .formGrid > .replaceFileInputList > .inputCell,
+.formDescriptionGrid > .inputList > .inputCell,
+.formDescriptionGrid > .replaceFileInputList > .inputCell {
+    padding-inline: var(--containerPadding-main);
+  }
+  .formGrid.outsideFieldset .labelCell,
+.formGrid.outsideFieldset .inputCell,
+.formGrid.outsideFieldset .descriptionCell,
+.formDescriptionGrid.outsideFieldset .labelCell,
+.formDescriptionGrid.outsideFieldset .inputCell,
+.formDescriptionGrid.outsideFieldset .descriptionCell {
+    padding-inline: var(--containerPadding-main);
+  }
+
+  .formDescriptionGrid .descriptionCell {
+    grid-column: span 1;
+  }
+}
+.singleInput {
+  margin-inline: 0.4rem;
+  margin-block: 0.6rem;
+}
+.singleInput label {
+  margin-inline: clamp(0.4rem, 0.8vw, 1.5rem);
+}
+.singleInput .input {
+  margin-left: clamp(0.3rem, 5vw, 5rem);
+}
+
+.addressEntry[data-is-sweden*=true] .formDescriptionGrid > :not(.swedenUsefull) {
+  display: none;
+}
+
+.saveMenu {
+  display: flex;
+  flex-flow: row wrap;
+  align-items: baseline;
+  gap: var(--gapWithinPair);
+  margin-block: var(--gapSection1);
+}
+.saveMenu .changes {
+  font-weight: 500;
+  color: var(--textBoldColor);
+}
+.saveMenu .noChanges {
+  color: var(--textGrayColor);
+}
+.saveMenu.saveActive .noChanges {
+  display: none;
+}
+.saveMenu:not(.saveActive) .changesLabel {
+  display: none;
+}
+.saveMenu:not(.saveActive) .changes {
+  display: none;
+}
+
+.formResult {
+  overflow: hidden;
+  overflow: clip;
+  display: block;
+  padding: var(--containerPadding-page);
+  margin-inline: calc(-1 * var(--containerPadding-page));
+  border-block: 2px solid var(--contentBorder1);
+  background: var(--contentBackground1);
+}
+.formResult > h2, .formResult > h3 {
+  margin: calc(var(--containerPadding-page) * -1);
+  margin-bottom: 0;
+  padding-inline: var(--containerPadding-medium);
+  padding-block: var(--containerPadding-small) 0;
+  font-size: 1.1rem;
+  color: var(--textColor);
+  border: 0 solid var(--contentBorder1);
+  border-bottom-width: 2px;
+  background: var(--contentHeaderBackground1);
+}
+.formResult > h2 .success,
+.formResult > h2 .failure, .formResult > h3 .success,
+.formResult > h3 .failure {
+  display: inline-flex;
+  align-items: center;
+  font-size: 1.3rem;
+  font-weight: 500;
+  color: var(--titleTextColor);
+}
+.formResult > h2 .success::after,
+.formResult > h2 .failure::after, .formResult > h3 .success::after,
+.formResult > h3 .failure::after {
+  display: inline-block;
+  overflow: hidden;
+  overflow: clip;
+  width: 1em;
+  height: 1em;
+  font-family: "Material Symbols Outlined";
+  font-weight: inherit;
+  font-style: normal;
+  font-size: 1em;
+  line-height: 1em;
+  vertical-align: middle;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  font-feature-settings: "liga";
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  font-optical-sizing: auto;
+  font-variation-settings: "FILL" 0, "wght" 700, "GRAD" 0, "opsz" 20;
+  -webkit-user-select: none;
+  /* Safari */
+  -moz-user-select: none;
+  /* Firefox */
+  -ms-user-select: none;
+  /* IE10+/Edge */
+  user-select: none;
+  /* Standard */
+  font-family: "Material Symbols Rounded";
+}
+.formResult > h2 .success::after, .formResult > h3 .success::after {
+  content: "done";
+  color: var(--menuColorColor2);
+  font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 48;
+}
+.formResult > h2 .failure::after, .formResult > h3 .failure::after {
+  content: "close";
+  color: var(--errorTextColor1);
+}
+.formResult .path {
+  display: flex;
+  flex-flow: row wrap;
+  gap: var(--gapWithinPair);
+  font-size: 0.9em;
+  color: var(--textGrayColor);
+}
+.formResult .path ol {
+  display: flex;
+  flex-flow: row wrap;
+  margin: 0;
+  padding: 0;
+}
+.formResult .path ol li {
+  display: flex;
+  align-items: center;
+  margin: 0;
+  font-weight: 600;
+  color: var(--textBoldColor);
+}
+.formResult .path ol li:not(:first-child)::before {
+  display: inline-block;
+  overflow: hidden;
+  overflow: clip;
+  width: 1em;
+  height: 1em;
+  font-family: "Material Symbols Outlined";
+  font-weight: inherit;
+  font-style: normal;
+  font-size: 1em;
+  line-height: 1em;
+  vertical-align: middle;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  font-feature-settings: "liga";
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  font-optical-sizing: auto;
+  font-variation-settings: "FILL" 0, "wght" 700, "GRAD" 0, "opsz" 20;
+  -webkit-user-select: none;
+  /* Safari */
+  -moz-user-select: none;
+  /* Firefox */
+  -ms-user-select: none;
+  /* IE10+/Edge */
+  user-select: none;
+  /* Standard */
+  font-family: "Material Symbols Rounded";
+  content: "navigate_next";
+  color: var(--textGrayColor);
+}
+.formResult .message,
+.formResult .reason {
+  white-space: pre-wrap;
+  max-width: var(--paragraphWidth-wide);
+  font-size: 1.1rem;
+}
+.formResult > .failure p:nth-child(2) {
+  margin-bottom: var(--gapWithinSubPair);
+  font-style: italic;
+  font-size: 0.9rem;
+  color: var(--textGrayColor);
+}
+.formResult > .failure .email {
+  margin-block: var(--gapWithinSubPair) 0;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+.formResult > .failure .email a {
+  font-weight: 400;
+  font-size: 1rem;
+}
+.formResult.hasSubpath .subpath {
+  display: none;
+}
+.formResult.successfull > h2, .formResult.successfull > h3 {
+  display: none;
+}
+.formResult.successfull .failure {
+  display: none;
+}
+.formResult.failed .success {
+  display: none;
+}
+.formResult:not(.active) {
+  display: none;
+}
+.formResult.island {
+  margin: 0;
+  border: none;
+  border-radius: var(--borderRadius-medium);
+  background: var(--contentBackground2);
+}
+
+list-prop.empty {
+  font-style: italic;
+  color: var(--textGrayColor);
+}
+
+@media (prefers-reduced-motion) {
+  .inputList ol > li > .removeButton,
+.inputList ul > li > .removeButton {
+    -webkit-animation: none;
+            animation: none;
+  }
+  .inputList > button {
+    transition: none;
+  }
+}/*# sourceMappingURL=input.css.map */

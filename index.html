@@ -8,6 +8,9 @@
 
 		<link rel="icon" type="image/svg+xml" href="/icon.svg" />
 
+		<link rel="stylesheet" href="/css/theme.dark.css" />
+		<link rel="stylesheet" href="/css/definitions.css" />
+		<link rel="stylesheet" href="/css/input.css" />
 		<link rel="stylesheet" href="/css/style.css" />
 
 		<script src="/node_modules/wicg-inert/dist/inert.min.js"></script>
@@ -17,6 +20,27 @@
 		></script> -->
 		<script src="/javascript/widgets.js" type="module"></script>
 		<script src="/javascript/main.js" type="module"></script>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400;1,700&family=EB+Garamond:ital,wght@1,400&family=Noto+Sans+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600;1,700;1,800&family=Poppins:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600;1,700;1,800&display=swap"
+			rel="stylesheet"
+		/>
+		<link
+			href="https://fonts.googleapis.com/css2?family=Noto+Sans+Mono:wght@100;300;400;500;600;700;900&display=swap"
+			rel="stylesheet"
+		/>
+
+		<!-- Fancy variable material symbols 👀 -->
+		<link
+			rel="stylesheet"
+			href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
+		/>
+		<link
+			rel="stylesheet"
+			href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded"
+		/>
 	</head>
 	<body>
 		<div class="container">
@@ -28,59 +52,66 @@
 
 			<div class="inputs">
 				<div class="panel">
-					<span>Pos:</span>
+					<span class="inputLabel">Pos:</span>
 					<div class="span3">
 						<input type="number" id="posXInput" step="any" />,
 						<input type="number" id="posYInput" step="any" />
 					</div>
-					<span>Zoom:</span>
+					<label for="zoomInput">Zoom:</label>
 					<input type="number" id="zoomInput" step="any" />
-					<span>Rotation:</span>
+
+					<label for="rotationInput">Rotation:</label>
 					<input type="number" id="rotationInput" step="any" />
-					<span class="newRow">Res Mult:</span>
+
+					<label class="newRow" for="resInput">Res Mult:</label>
 					<input
 						class="span3"
 						type="number"
 						id="resInput"
 						step="0.25"
 					/>
-					<span>Iterations 1:</span>
+					<label for="iterationsInput">Iterations 1:</label>
 					<input
 						class="short"
 						type="number"
 						id="iterationsInput"
 						step="50"
 					/>
-					<span>Iterations 2:</span>
+					<label for="secondaryIterationsInput">Iterations 2:</label>
 					<input
 						class="short"
 						type="number"
 						id="secondaryIterationsInput"
 						step="50"
 					/>
-					<span>Esc Radius 1:</span>
+					<label for="escapeRadiusInput">Esc Radius 1:</label>
 					<input type="number" id="escapeRadiusInput" step="25" />
-					<span>Esc Radius 2:</span>
+					<label for="secondaryEscapeRadiusInput"
+						>Esc Radius 2:</label
+					>
 					<input
 						type="number"
 						id="secondaryEscapeRadiusInput"
 						step="25"
 					/>
-					<button class="popupButton" id="saveButton">
+					<button class="fancyButton popupButton" id="saveButton">
 						Save
 						<span class="popupLabel">Saved!</span>
 					</button>
-					<button class="popupButton" id="loadButton">
+					<button class="fancyButton popupButton" id="loadButton">
 						Load
 						<span class="popupLabel">Loaded!</span>
 					</button>
-					<button class="popupButton warning span2" id="resetButton">
+					<button
+						class="fancyButton popupButton warning span2"
+						id="resetButton"
+					>
 						Reset
 						<span class="popupLabel">Reset!</span>
 					</button>
 				</div>
 				<button
-					class="vertical"
+					class="fancyButton vertical"
 					is="disclosure-button"
 					aria-expanded="false"
 					aria-controls="saveInputs"
@@ -89,7 +120,7 @@
 				</button>
 				<div class="disclosureContent" id="saveInputs">
 					<div class="panel">
-						<span>Dimensions:</span>
+						<span class="inputLabel">Dimensions:</span>
 						<div class="span3 together">
 							<input
 								class="short"
@@ -108,10 +139,18 @@
 							/>
 						</div>
 
-						<button class="popupButton" id="downloadButton">
+						<button
+							class="fancyButton popupButton"
+							id="downloadButton"
+						>
 							Render
 							<span class="popupLabel">Began render!</span>
 						</button>
+
+						<label class="together" for="previewRenderInput"
+							>Preview Render:</label
+						>
+						<input type="checkbox" id="previewRenderInput" />
 
 						<a
 							class="imagePreview newRow span4"
