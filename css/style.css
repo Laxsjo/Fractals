@@ -174,8 +174,9 @@ canvas {
   position: absolute;
   margin: 0.4rem;
   padding: 0.6rem;
-  max-width: 100%;
+  max-width: calc(100% - 0.8rem);
   max-height: 100%;
+  box-sizing: border-box;
   font-weight: 600;
   color: white;
   border-radius: 0.6rem;

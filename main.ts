@@ -5,6 +5,7 @@ import {
 	InputColor,
 	UniformType,
 } from './uniformInputs.js';
+import { Gestures, Gesture } from './pointerGestures.js';
 import { Matrix2x2, matrixMult } from './matrix.js';
 import * as cookies from './cookies.js';
 // import * as _ from '';
@@ -287,9 +288,31 @@ function handleScroll(event: WheelEvent) {
 	renderFrame(gl, program);
 }
 
-function handleMouseMove(event: MouseEvent) {
-	let x = event.pageX - dragOffsetX;
-	let y = event.pageY - dragOffsetY;
+function handlePointerDown(event: PointerEvent) {
+	Gestures.addGesture(event);
+}
+
+function handlePointerUp(event: PointerEvent) {
+	Gestures.removeGesture(event);
+}
+
+function handlePointerMove(event: PointerEvent) {
+	Gestures.updateGestures(event);
+}
+
+function handleGestureBegin(pointerId: number | null) {
+	enterDrag(pointerId ?? -1);
+}
+
+function handleGestureEnd(pointerId: number) {
+	leaveDrag(pointerId);
+}
+
+function handleGestureMove(pointerId: number) {
+	let gesture = Gestures.getGesture(pointerId);
+
+	let x = gesture.lastEvent.pageX - gesture.startEvent.pageX;
+	let y = gesture.lastEvent.pageY - gesture.startEvent.pageY;
 
 	if (!rotateActive) {
 		// x /= finalZoom;
@@ -328,18 +351,22 @@ function handleResize() {
 	renderFrame(gl, program);
 }
 
-function enterDrag(event: MouseEvent) {
-	if (event.button !== 0) {
+function enterDrag(pointerId: number) {
+	let gesture = Gestures.getGesture(pointerId) ?? Gestures.activeGestures[0];
+
+	if (gesture.startEvent.button !== 0) {
 		return;
 	}
 
-	rotateActive = event.shiftKey;
+	console.log(gesture.startEvent.pointerId);
 
-	document.addEventListener('mouseup', leaveDrag);
-	document.addEventListener('mousemove', handleMouseMove);
+	rotateActive = gesture.startEvent.shiftKey;
 
-	dragOffsetX = event.pageX;
-	dragOffsetY = event.pageY;
+	// document.addEventListener('pointerup', leaveDrag);
+	// document.addEventListener('pointermove', handlePointerMove);
+
+	dragOffsetX = gesture.lastEvent.pageX;
+	dragOffsetY = gesture.lastEvent.pageY;
 
 	if (rotateActive) {
 		dragStartRot = rotation;
@@ -348,15 +375,19 @@ function enterDrag(event: MouseEvent) {
 	dragStartY = posY;
 }
 
-function leaveDrag(event: MouseEvent) {
-	if (event.button !== 0) {
+function leaveDrag(pointerId: number) {
+	const gesture = Gestures.getGesture(pointerId);
+
+	if (gesture.lastEvent.button !== 0) {
 		return;
 	}
 
+	console.log(pointerId);
+
 	rotateActive = false;
 
-	document.removeEventListener('mouseup', this);
-	document.removeEventListener('mousemove', handleMouseMove);
+	// document.removeEventListener('pointerup', this);
+	// document.removeEventListener('pointermove', handlePointerMove);
 }
 
 function enterPreview() {
@@ -483,7 +514,14 @@ function initializeLoop() {
 
 	canvas.addEventListener('wheel', handleScroll);
 
-	canvas.addEventListener('mousedown', enterDrag);
+	// canvas.addEventListener('pointerdown', enterDrag);
+	canvas.addEventListener('pointerdown', handlePointerDown);
+	window.addEventListener('pointermove', handlePointerMove);
+	window.addEventListener('pointerup', handlePointerUp);
+
+	Gestures.addEventListener('gestureBegin', handleGestureBegin);
+	Gestures.addEventListener('gestureMove', handleGestureMove);
+	Gestures.addEventListener('gestureEnd', handleGestureEnd);
 
 	window.addEventListener('resize', handleResize);
 }

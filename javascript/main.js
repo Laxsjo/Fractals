@@ -1,5 +1,6 @@
 import * as webgl from './webGLUtils.js';
 import { UniformInputs, InputNumber, InputColor, UniformType, } from './uniformInputs.js';
+import { Gestures } from './pointerGestures.js';
 import * as cookies from './cookies.js';
 // import * as _ from '';
 const SAMPL_MULT = 2;
@@ -198,9 +199,25 @@ function handleScroll(event) {
     zoomTo(zoom - event.deltaY, x, y);
     renderFrame(gl, program);
 }
-function handleMouseMove(event) {
-    let x = event.pageX - dragOffsetX;
-    let y = event.pageY - dragOffsetY;
+function handlePointerDown(event) {
+    Gestures.addGesture(event);
+}
+function handlePointerUp(event) {
+    Gestures.removeGesture(event);
+}
+function handlePointerMove(event) {
+    Gestures.updateGestures(event);
+}
+function handleGestureBegin(pointerId) {
+    enterDrag(pointerId !== null && pointerId !== void 0 ? pointerId : -1);
+}
+function handleGestureEnd(pointerId) {
+    leaveDrag(pointerId);
+}
+function handleGestureMove(pointerId) {
+    let gesture = Gestures.getGesture(pointerId);
+    let x = gesture.lastEvent.pageX - gesture.startEvent.pageX;
+    let y = gesture.lastEvent.pageY - gesture.startEvent.pageY;
     if (!rotateActive) {
         // x /= finalZoom;
         // y /= finalZoom;
@@ -229,28 +246,33 @@ function handleResize() {
     [posX, posY] = shaderToCanvasSpace(finalPosX, finalPosY);
     renderFrame(gl, program);
 }
-function enterDrag(event) {
-    if (event.button !== 0) {
+function enterDrag(pointerId) {
+    var _a;
+    let gesture = (_a = Gestures.getGesture(pointerId)) !== null && _a !== void 0 ? _a : Gestures.activeGestures[0];
+    if (gesture.startEvent.button !== 0) {
         return;
     }
-    rotateActive = event.shiftKey;
-    document.addEventListener('mouseup', leaveDrag);
-    document.addEventListener('mousemove', handleMouseMove);
-    dragOffsetX = event.pageX;
-    dragOffsetY = event.pageY;
+    console.log(gesture.startEvent.pointerId);
+    rotateActive = gesture.startEvent.shiftKey;
+    // document.addEventListener('pointerup', leaveDrag);
+    // document.addEventListener('pointermove', handlePointerMove);
+    dragOffsetX = gesture.lastEvent.pageX;
+    dragOffsetY = gesture.lastEvent.pageY;
     if (rotateActive) {
         dragStartRot = rotation;
     }
     dragStartX = posX;
     dragStartY = posY;
 }
-function leaveDrag(event) {
-    if (event.button !== 0) {
+function leaveDrag(pointerId) {
+    const gesture = Gestures.getGesture(pointerId);
+    if (gesture.lastEvent.button !== 0) {
         return;
     }
+    console.log(pointerId);
     rotateActive = false;
-    document.removeEventListener('mouseup', this);
-    document.removeEventListener('mousemove', handleMouseMove);
+    // document.removeEventListener('pointerup', this);
+    // document.removeEventListener('pointermove', handlePointerMove);
 }
 function enterPreview() {
     // console.log('Entered preview');
@@ -343,7 +365,13 @@ function initializeLoop() {
     dimYInput.addEventListener('change', updateWithInput);
     downloadButton.addEventListener('click', renderDownload);
     canvas.addEventListener('wheel', handleScroll);
-    canvas.addEventListener('mousedown', enterDrag);
+    // canvas.addEventListener('pointerdown', enterDrag);
+    canvas.addEventListener('pointerdown', handlePointerDown);
+    window.addEventListener('pointermove', handlePointerMove);
+    window.addEventListener('pointerup', handlePointerUp);
+    Gestures.addEventListener('gestureBegin', handleGestureBegin);
+    Gestures.addEventListener('gestureMove', handleGestureMove);
+    Gestures.addEventListener('gestureEnd', handleGestureEnd);
     window.addEventListener('resize', handleResize);
 }
 function updateWithInput(event, simpleSet = true) {
