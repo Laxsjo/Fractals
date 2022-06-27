@@ -62,11 +62,13 @@ body {
 }
 
 canvas {
+	object-fit: contain;
+	contain: size;
+
 	width: 100%;
 	height: 100%;
 	box-sizing: border-box;
-
-	object-fit: contain;
+	aspect-ratio: initial;
 
 	border: 1px solid black;
 
