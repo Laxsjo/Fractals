@@ -358,7 +358,7 @@ function enterDrag(pointerId: number) {
 		return;
 	}
 
-	console.log(gesture.startEvent.pointerId);
+	// console.log(gesture.startEvent.pointerId);
 
 	rotateActive = gesture.startEvent.shiftKey;
 

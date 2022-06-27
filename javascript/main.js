@@ -252,7 +252,7 @@ function enterDrag(pointerId) {
     if (gesture.startEvent.button !== 0) {
         return;
     }
-    console.log(gesture.startEvent.pointerId);
+    // console.log(gesture.startEvent.pointerId);
     rotateActive = gesture.startEvent.shiftKey;
     // document.addEventListener('pointerup', leaveDrag);
     // document.addEventListener('pointermove', handlePointerMove);

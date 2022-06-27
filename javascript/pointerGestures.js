@@ -25,7 +25,7 @@ export var Gestures;
             return;
         fireEvent('gestureEnd', event.pointerId);
         _.pullAt(Gestures.activeGestures, i);
-        console.log(Gestures.activeGestures);
+        // console.log(activeGestures);
         if (Gestures.activeGestures.length === 0)
             return;
         for (const gesture of Gestures.activeGestures) {

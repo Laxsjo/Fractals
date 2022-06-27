@@ -36,7 +36,7 @@ export namespace Gestures {
 
 		_.pullAt(activeGestures, i);
 
-		console.log(activeGestures);
+		// console.log(activeGestures);
 
 		if (activeGestures.length === 0) return;
 
