@@ -82,6 +82,10 @@ abstract class Input {
 		return this.value;
 	}
 
+	public isValid(): boolean {
+		return true;
+	}
+
 	public reset() {
 		this.value = this.defaultValue;
 	}
@@ -90,6 +94,10 @@ abstract class Input {
 export class InputNumber extends Input {
 	public getValue(): number {
 		return Number(this.value);
+	}
+
+	public isValid(): boolean {
+		return !isNaN(Number(this.value));
 	}
 }
 
@@ -107,5 +115,9 @@ export class InputColor extends Input {
 		// console.log(this.value, '=', numValues);
 
 		return numValues;
+	}
+
+	public isValid(): boolean {
+		return true;
 	}
 }

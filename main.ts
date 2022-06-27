@@ -558,11 +558,17 @@ function updateWithInput(event?: Event, simpleSet: boolean = true) {
 
 	previewRender = previewInput.checked;
 
+	// console.group('===============================');
+
 	for (const input of UniformInputs.getInputs()) {
-		if (!isNaN(input.getValue()) && input.input.value !== '') {
+		// console.log(`${input.input.id}:`, input.input.value);
+
+		if (input.isValid() && input.input.value !== '') {
 			input.value = input.input.value;
 		}
 	}
+
+	// console.groupEnd();
 
 	// if (!isNaN(Number(iterationInput.value))) {
 	// 	iterations = Number(iterationInput.value);

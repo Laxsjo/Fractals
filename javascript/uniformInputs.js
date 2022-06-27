@@ -46,6 +46,9 @@ class Input {
     getValue() {
         return this.value;
     }
+    isValid() {
+        return true;
+    }
     reset() {
         this.value = this.defaultValue;
     }
@@ -53,6 +56,9 @@ class Input {
 export class InputNumber extends Input {
     getValue() {
         return Number(this.value);
+    }
+    isValid() {
+        return !isNaN(Number(this.value));
     }
 }
 export class InputColor extends Input {
@@ -63,6 +69,9 @@ export class InputColor extends Input {
         }), 3);
         // console.log(this.value, '=', numValues);
         return numValues;
+    }
+    isValid() {
+        return true;
     }
 }
 //# sourceMappingURL=uniformInputs.js.map

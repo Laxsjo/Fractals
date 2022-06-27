@@ -195,9 +195,8 @@ canvas {
   gap: 0.6ch;
   align-self: stretch;
   margin-left: 0.8rem;
-  text-orientation: sideways;
-  -ms-writing-mode: sideways-lr;
-      writing-mode: sideways-lr;
+  -ms-writing-mode: tb-lr;
+      writing-mode: vertical-lr;
 }
 .inputs > button::before, .inputs > button::after {
   content: "expand_more";
