@@ -155,17 +155,17 @@ canvas {
 	}
 
 	& > button {
-		display: flex;
-		flex-direction: row;
-		align-items: center;
-		justify-content: center;
+		display: grid;
+		grid-template-rows: min-content auto min-content;
+		grid-auto-flow: column;
+		// flex-direction: column;
+		justify-items: center;
+		align-content: center;
 		gap: 0.6ch;
 
 		align-self: stretch;
 
 		margin-left: 0.8rem;
-
-		writing-mode: vertical-lr;
 
 		&::before,
 		&::after {
@@ -173,7 +173,7 @@ canvas {
 
 			overflow: visible;
 
-			transform: rotate(0deg);
+			transform: rotate(-90deg);
 
 			transition: transform 0.3s;
 		}
@@ -182,8 +182,14 @@ canvas {
 			&::before,
 			&::after {
 				// content: "⯅";
-				transform: rotate(180deg);
+				transform: rotate(90deg);
 			}
+		}
+
+		& > span {
+			writing-mode: vertical-lr;
+
+			transform: rotate(180deg);
 		}
 	}
 
